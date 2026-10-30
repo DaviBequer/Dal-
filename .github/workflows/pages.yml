@@ -36,18 +36,17 @@ jobs:
           APP="index.html styles.css app.js sw.js version.js manifest.webmanifest icons"
           if git rev-parse -q --verify "refs/tags/v$V" >/dev/null; then
             if git diff --quiet "v$V" HEAD -- $APP; then
-              echo "App sem mudanças desde v$V; nada para publicar."
-              echo "publicar=false" >> "$GITHUB_OUTPUT"
+              echo "App sem mudanças desde v$V; republica sem criar tag."
+              echo "nova=false" >> "$GITHUB_OUTPUT"
             else
               echo "::error::O app mudou mas a versão continua $V. Aumente APP_VERSION em version.js e atualize o CHANGELOG.md."
               exit 1
             fi
           else
-            echo "publicar=true" >> "$GITHUB_OUTPUT"
+            echo "nova=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Publicar na branch gh-pages
-        if: steps.conferir.outputs.publicar == 'true'
         env:
           V: ${{ steps.versao.outputs.versao }}
         run: |
@@ -59,11 +58,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -qm "Publica versão $V"
+          git commit -qm "Publica versão $V (${GITHUB_SHA::7})"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
 
       - name: Criar tag da versão
-        if: steps.conferir.outputs.publicar == 'true'
+        if: steps.conferir.outputs.nova == 'true'
         env:
           V: ${{ steps.versao.outputs.versao }}
         run: |

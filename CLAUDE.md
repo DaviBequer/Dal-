@@ -17,4 +17,5 @@ inclua-o em `ASSETS` no `sw.js`.
 ## Publicação
 
 O workflow `.github/workflows/pages.yml` publica a branch padrão na branch `gh-pages`
-a cada push e cria a tag `v<versão>`. O workflow falha se a versão não foi alterada.
+a cada push e cria a tag `v<versão>` quando a versão é nova. O workflow falha se o app
+mudou sem a versão ter sido alterada.
