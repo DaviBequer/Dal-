@@ -1,0 +1,40 @@
+/* 4. Toon Pop — desenho animado premium: contorno macio, cores vibrantes, retícula no topo, tudo bem redondo */
+@import url('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@600;700;800&display=swap');
+html[data-theme="toon-pop"] {
+  --bg: #fbf6ff; --surface: #ffffff; --surface-2: #f3eafd; --text: #2a1d45; --muted: #75679a; --line: #2a1d45;
+  --accent: #ff3d7f; --accent-2: #ff9f1c; --accent-text: #fff;
+  --hero-bg: radial-gradient(rgba(255, 255, 255, .22) 1.6px, transparent 2px) 0 0 / 14px 14px, linear-gradient(140deg, #ff8a3d, #ff3d7f 60%, #b44dff);
+  --hero-text: #fff; --hero-muted: rgba(255, 255, 255, .88); --nav-bg: #ffffff;
+  --dia: #00b5d8; --escola: #ff9f1c; --alta: #ff3d5a; --media: #ff9f1c; --baixa: #1ec97a;
+  --shadow: 4px 5px 0 #2a1d45; --shadow-sm: 3px 4px 0 #2a1d45;
+  --font-display: "Bagel Fat One", "Trebuchet MS", sans-serif; --font-body: "Nunito", system-ui, sans-serif; --display-weight: 400;
+  --ring-hole: rgba(42, 29, 69, .35);
+  color-scheme: light;
+}
+html[data-theme="toon-pop"] body { font-weight: 600; }
+html[data-theme="toon-pop"] .hero { border-bottom: 3px solid #2a1d45; }
+html[data-theme="toon-pop"] .hero h1 { font-size: 1.75rem; text-shadow: 3px 3px 0 #2a1d45; }
+html[data-theme="toon-pop"] .brand-name { text-shadow: 2px 2px 0 #2a1d45; }
+html[data-theme="toon-pop"] .ring { border: 3px solid #2a1d45; background: conic-gradient(#ffe14d calc(var(--p) * 1%), rgba(255, 255, 255, .35) 0); }
+html[data-theme="toon-pop"] .day-pill { border: 2.5px solid #2a1d45; background: rgba(255, 255, 255, .25); }
+html[data-theme="toon-pop"] .day-pill.today { background: #ffe14d; color: #2a1d45; box-shadow: 2px 3px 0 #2a1d45; }
+html[data-theme="toon-pop"] .day-pill.today .dw { color: #2a1d45; }
+html[data-theme="toon-pop"] .task, html[data-theme="toon-pop"] .month-card, html[data-theme="toon-pop"] .subject-tile, html[data-theme="toon-pop"] .search,
+html[data-theme="toon-pop"] .chip-btn, html[data-theme="toon-pop"] .spotlight, html[data-theme="toon-pop"] .exam-card, html[data-theme="toon-pop"] .empty { border: 2.5px solid #2a1d45; }
+html[data-theme="toon-pop"] .chip-btn.active { background: #ffe14d; color: #2a1d45; }
+html[data-theme="toon-pop"] .task:nth-child(odd) { transform: rotate(-.4deg); }
+html[data-theme="toon-pop"] .task:nth-child(even) { transform: rotate(.4deg); }
+html[data-theme="toon-pop"] .badge { border: 2.5px solid #2a1d45; background: var(--c); color: #fff; font-size: 1rem; }
+html[data-theme="toon-pop"] .check { border: 2.5px solid #2a1d45; }
+html[data-theme="toon-pop"] .group h2 { font-size: 1.3rem; }
+html[data-theme="toon-pop"] .group.overdue h2::after { content: "OPA!"; font-size: .8rem; background: #ffe14d; color: #2a1d45; border: 2px solid #2a1d45; border-radius: 999px; padding: 0 8px; transform: rotate(-6deg); }
+html[data-theme="toon-pop"] .spotlight, html[data-theme="toon-pop"] .exam-card { box-shadow: 4px 5px 0 #2a1d45; }
+html[data-theme="toon-pop"] .countdown, html[data-theme="toon-pop"] .exam-count { background: #ffe14d; color: #2a1d45; border: 2.5px solid #2a1d45; }
+html[data-theme="toon-pop"] .bottom-nav { border: 2.5px solid #2a1d45; box-shadow: 4px 5px 0 #2a1d45; }
+html[data-theme="toon-pop"] .fab { border: 3px solid #2a1d45; box-shadow: 3px 4px 0 #2a1d45, 0 0 0 5px var(--bg); }
+html[data-theme="toon-pop"] .cal-day.selected .num { border: 2.5px solid #2a1d45; }
+html[data-theme="toon-pop"] dialog.sheet { border: 3px solid #2a1d45; border-bottom: 0; }
+html[data-theme="toon-pop"] .save-btn, html[data-theme="toon-pop"] .pill-btn:not(.soft):not(.danger) { border: 2.5px solid #2a1d45; box-shadow: 3px 4px 0 #2a1d45; }
+html[data-theme="toon-pop"] .cat-toggle input:checked + span { border: 2.5px solid #2a1d45; box-shadow: 3px 4px 0 #2a1d45; }
+html[data-theme="toon-pop"] .choice input:checked + span { background: #ffe14d; color: #2a1d45; box-shadow: inset 0 0 0 2.5px #2a1d45; }
+html[data-theme="toon-pop"] .toast { border: 2.5px solid #2a1d45; }

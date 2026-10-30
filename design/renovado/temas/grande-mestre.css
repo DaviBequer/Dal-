@@ -1,0 +1,41 @@
+/* 2. Grande Mestre — xadrez premium: topo esmeralda com tabuleiro em relevo, dourado, serifa moderna */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@500;600;700;800&display=swap');
+html[data-theme="grande-mestre"] {
+  --bg: #eef1ec; --surface: #ffffff; --surface-2: #e5ebe4; --text: #13241c; --muted: #66776d; --line: rgba(19, 36, 28, .1);
+  --accent: #1f5c45; --accent-2: #2f7a5d; --accent-text: #fdf8ea;
+  --hero-bg: linear-gradient(160deg, #123d2f, #0b2a20);
+  --hero-text: #fdf8ea; --hero-muted: rgba(253, 248, 234, .7); --nav-bg: rgba(255, 255, 255, .9);
+  --dia: #2f7a5d; --escola: #c9973e; --alta: #b8433b; --media: #c9973e; --baixa: #3f8f6a;
+  --shadow: 0 16px 34px -18px rgba(11, 42, 32, .35); --shadow-sm: 0 6px 18px -10px rgba(11, 42, 32, .28);
+  --font-display: "Fraunces", Georgia, serif; --font-body: "Manrope", system-ui, sans-serif; --display-weight: 700;
+  --ring-hole: rgba(0, 0, 0, .25);
+  color-scheme: light;
+}
+html[data-theme="grande-mestre"] .hero::before {
+  content: ""; position: absolute; right: -40px; top: -30px; width: 260px; height: 260px; border-radius: 40px; transform: rotate(18deg);
+  background: conic-gradient(rgba(255, 255, 255, .07) 25%, transparent 0 50%, rgba(255, 255, 255, .07) 0 75%, transparent 0) 0 0 / 52px 52px;
+  -webkit-mask: radial-gradient(circle at 60% 40%, #000 30%, transparent 70%); mask: radial-gradient(circle at 60% 40%, #000 30%, transparent 70%);
+}
+html[data-theme="grande-mestre"] .logo { background: #e3b65b; color: #0b2a20; }
+html[data-theme="grande-mestre"] .logo svg { display: none; }
+html[data-theme="grande-mestre"] .logo::before { content: "♞"; font-size: 1.25rem; line-height: 1; }
+html[data-theme="grande-mestre"] .version { background: rgba(227, 182, 91, .2); color: #f2d58c; }
+html[data-theme="grande-mestre"] .ring { background: conic-gradient(#e3b65b calc(var(--p) * 1%), rgba(255, 255, 255, .14) 0); }
+html[data-theme="grande-mestre"] .ring-num { color: #f2d58c; }
+html[data-theme="grande-mestre"] .day-pill { background: rgba(255, 255, 255, .07); }
+html[data-theme="grande-mestre"] .day-pill.today { background: #e3b65b; color: #0b2a20; }
+html[data-theme="grande-mestre"] .day-pill.today .dw { color: #0b2a20; }
+html[data-theme="grande-mestre"] .group h2, html[data-theme="grande-mestre"] .section-title h3 { font-size: 1.2rem; }
+html[data-theme="grande-mestre"] .task.prio-alta .task-kicker::before { content: "♛"; color: var(--alta); }
+html[data-theme="grande-mestre"] .task.prio-media .task-kicker::before { content: "♜"; color: var(--media); }
+html[data-theme="grande-mestre"] .task.prio-baixa .task-kicker::before { content: "♟"; color: var(--baixa); }
+html[data-theme="grande-mestre"] .badge { font-family: "Fraunces", serif; }
+html[data-theme="grande-mestre"] .spotlight { background: linear-gradient(140deg, #123d2f, #0b2a20); box-shadow: 0 16px 30px -16px #0b2a20; }
+html[data-theme="grande-mestre"] .spot-kicker::before { content: "♛ "; color: #e3b65b; }
+html[data-theme="grande-mestre"] .countdown { background: #e3b65b; color: #0b2a20; }
+html[data-theme="grande-mestre"] .calendar .cal-day:nth-child(even):not(.other) .num { background: var(--surface-2); }
+html[data-theme="grande-mestre"] .calendar .cal-day.selected .num { background: var(--accent); }
+html[data-theme="grande-mestre"] .fab { background: linear-gradient(140deg, #e3b65b, #c9973e); color: #0b2a20; box-shadow: 0 12px 24px -8px #c9973e, 0 0 0 6px var(--bg); }
+html[data-theme="grande-mestre"] .tab.active { color: #1f5c45; }
+html[data-theme="grande-mestre"] .save-btn { background: linear-gradient(140deg, #1f5c45, #123d2f); }
+html[data-theme="grande-mestre"] .cat-toggle input:checked + span { background: #1f5c45; }

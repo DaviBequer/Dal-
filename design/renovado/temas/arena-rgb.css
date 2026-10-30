@@ -1,0 +1,48 @@
+/* 5. Arena RGB — gamer premium: preto profundo, vidro, brilho RGB ciano-violeta-magenta, nível e XP no topo */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Exo+2:wght@500;600;700&display=swap');
+html[data-theme="arena-rgb"] {
+  --bg: #07080e; --surface: #10121c; --surface-2: #181b29; --text: #eaf2ff; --muted: #8590b0; --line: rgba(255, 255, 255, .08);
+  --accent: #22e6ff; --accent-2: #b44dff; --accent-text: #05060b;
+  --hero-bg: radial-gradient(circle at 15% 0%, rgba(34, 230, 255, .35), transparent 45%), radial-gradient(circle at 100% 60%, rgba(180, 77, 255, .4), transparent 50%), radial-gradient(circle at 50% 120%, rgba(255, 61, 168, .3), transparent 50%), #0c0e18;
+  --hero-text: #fff; --hero-muted: rgba(220, 230, 255, .7); --nav-bg: rgba(16, 18, 28, .85);
+  --dia: #22e6ff; --escola: #ffcc33; --alta: #ff3da8; --media: #ffcc33; --baixa: #3dffa2;
+  --shadow: 0 18px 40px -20px rgba(0, 0, 0, .9); --shadow-sm: 0 10px 24px -14px rgba(0, 0, 0, .9);
+  --font-display: "Orbitron", sans-serif; --font-body: "Exo 2", sans-serif; --display-weight: 800;
+  --ring-hole: rgba(7, 8, 14, .8);
+  color-scheme: dark;
+}
+html[data-theme="arena-rgb"] .hero { border: 1px solid rgba(255, 255, 255, .06); border-top: 0; }
+html[data-theme="arena-rgb"] .hero h1 { font-size: 1.15rem; line-height: 1.35; letter-spacing: .02em; }
+html[data-theme="arena-rgb"] .brand-name { font-size: .85rem; letter-spacing: .04em; }
+html[data-theme="arena-rgb"] .logo { background: linear-gradient(140deg, #22e6ff, #b44dff); color: #05060b; }
+html[data-theme="arena-rgb"] .version { background: rgba(34, 230, 255, .15); color: #22e6ff; }
+html[data-theme="arena-rgb"] body[data-view="hoje"] .hero-text::after {
+  content: "NÍVEL 7  ·  620 / 1000 XP"; display: block; margin-top: 10px; padding: 6px 10px 14px; border-radius: 12px; font-size: .7rem; letter-spacing: .08em; font-weight: 700;
+  background: linear-gradient(90deg, #22e6ff, #b44dff 62%, rgba(255, 255, 255, .1) 62%) bottom 6px left 10px / calc(100% - 20px) 4px no-repeat, rgba(255, 255, 255, .06);
+  color: #cfe8ff; border: 1px solid rgba(255, 255, 255, .08);
+}
+html[data-theme="arena-rgb"] .ring { background: conic-gradient(#22e6ff, #b44dff calc(var(--p) * 1%), rgba(255, 255, 255, .1) 0); box-shadow: 0 0 26px rgba(34, 230, 255, .25); }
+html[data-theme="arena-rgb"] .ring-num { font-size: 1rem; }
+html[data-theme="arena-rgb"] .day-pill { background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .07); }
+html[data-theme="arena-rgb"] .day-pill .dn { font-size: .9rem; }
+html[data-theme="arena-rgb"] .day-pill.today { background: linear-gradient(160deg, #22e6ff, #b44dff); color: #05060b; }
+html[data-theme="arena-rgb"] .day-pill.today .dw { color: #05060b; }
+html[data-theme="arena-rgb"] .task, html[data-theme="arena-rgb"] .month-card, html[data-theme="arena-rgb"] .subject-tile, html[data-theme="arena-rgb"] .search, html[data-theme="arena-rgb"] .chip-btn {
+  background: linear-gradient(160deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .015)), var(--surface); border: 1px solid rgba(255, 255, 255, .07);
+}
+html[data-theme="arena-rgb"] .task { position: relative; }
+html[data-theme="arena-rgb"] .task::before { content: ""; position: absolute; left: 0; top: 18%; bottom: 18%; width: 3px; border-radius: 3px; background: var(--c); box-shadow: 0 0 12px var(--c); }
+html[data-theme="arena-rgb"] .task-side::after { content: "+10 XP"; font-size: .66rem; font-weight: 700; letter-spacing: .04em; color: #b44dff; }
+html[data-theme="arena-rgb"] .task.done .task-side::after { content: "XP ✓"; color: #3dffa2; }
+html[data-theme="arena-rgb"] .badge { font-family: "Orbitron", sans-serif; font-size: .8rem; }
+html[data-theme="arena-rgb"] .group h2, html[data-theme="arena-rgb"] .section-title h3 { font-size: .9rem; letter-spacing: .06em; text-transform: uppercase; }
+html[data-theme="arena-rgb"] .chip-btn.active { background: linear-gradient(140deg, #22e6ff, #b44dff); color: #05060b; border-color: transparent; }
+html[data-theme="arena-rgb"] .spot-kicker::before { content: "⚔ CHEFÃO · "; }
+html[data-theme="arena-rgb"] .spotlight { box-shadow: 0 0 34px -10px var(--c); border: 1px solid rgba(255, 255, 255, .12); }
+html[data-theme="arena-rgb"] .spot-text strong, html[data-theme="arena-rgb"] .exam-info strong { font-size: 1.05rem; letter-spacing: .02em; }
+html[data-theme="arena-rgb"] .cal-day.selected .num { box-shadow: 0 0 16px rgba(34, 230, 255, .6); }
+html[data-theme="arena-rgb"] .bottom-nav { border: 1px solid rgba(255, 255, 255, .08); }
+html[data-theme="arena-rgb"] .tab.active { color: #22e6ff; text-shadow: 0 0 10px rgba(34, 230, 255, .6); }
+html[data-theme="arena-rgb"] .fab { box-shadow: 0 0 28px rgba(34, 230, 255, .55), 0 0 0 6px var(--bg); }
+html[data-theme="arena-rgb"] dialog.sheet { background: #0d0f18; border-top: 1px solid rgba(34, 230, 255, .35); }
+html[data-theme="arena-rgb"] .choice input:checked + span { background: linear-gradient(140deg, #22e6ff, #b44dff); color: #05060b; }

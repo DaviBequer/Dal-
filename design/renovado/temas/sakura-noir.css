@@ -1,0 +1,37 @@
+/* 1. Sakura Noir — anime premium: noite roxa, vidro, rosa sakura e violeta */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Zen+Maru+Gothic:wght@500;700&display=swap');
+html[data-theme="sakura-noir"] {
+  --bg: #0e0a1c; --surface: #191330; --surface-2: #241b45; --text: #f6f1ff; --muted: #a79ccc; --line: rgba(255, 255, 255, .08);
+  --accent: #ff5fa2; --accent-2: #9b6bff; --accent-text: #fff;
+  --hero-bg: radial-gradient(circle at 90% 10%, rgba(255, 95, 162, .55), transparent 45%), radial-gradient(circle at 0% 100%, rgba(155, 107, 255, .5), transparent 50%), linear-gradient(160deg, #241056, #120a2b);
+  --hero-text: #fff; --hero-muted: rgba(255, 230, 245, .75); --nav-bg: rgba(25, 19, 48, .82);
+  --dia: #4fd8ff; --escola: #ffc35c; --alta: #ff5f86; --media: #ffc35c; --baixa: #5ef2b6;
+  --shadow: 0 18px 40px -18px rgba(0, 0, 0, .7); --shadow-sm: 0 8px 22px -12px rgba(0, 0, 0, .65);
+  --font-display: "Unbounded", sans-serif; --font-body: "Zen Maru Gothic", sans-serif; --display-weight: 700;
+  --ring-hole: rgba(14, 10, 28, .55);
+  color-scheme: dark;
+}
+html[data-theme="sakura-noir"] body { background: radial-gradient(circle at 100% 40%, rgba(155, 107, 255, .12), transparent 40%), var(--bg); }
+html[data-theme="sakura-noir"] .hero::before {
+  content: "桜"; position: absolute; right: 108px; top: 54px; font-size: 7rem; line-height: 1; color: rgba(255, 255, 255, .06); font-family: "Zen Maru Gothic";
+}
+html[data-theme="sakura-noir"] .hero::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 6px 4px at 20% 30%, rgba(255, 182, 213, .7), transparent), radial-gradient(ellipse 5px 3px at 70% 18%, rgba(255, 182, 213, .6), transparent), radial-gradient(ellipse 4px 3px at 85% 70%, rgba(255, 182, 213, .5), transparent), radial-gradient(ellipse 5px 3px at 40% 85%, rgba(255, 182, 213, .45), transparent);
+}
+html[data-theme="sakura-noir"] .hero h1 { font-size: 1.35rem; letter-spacing: -.01em; }
+html[data-theme="sakura-noir"] .ring { background: conic-gradient(#ff5fa2, #9b6bff calc(var(--p) * 1%), rgba(255, 255, 255, .14) 0); }
+html[data-theme="sakura-noir"] .day-pill { background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .08); }
+html[data-theme="sakura-noir"] .day-pill.today { background: linear-gradient(160deg, #ff5fa2, #9b6bff); color: #fff; border-color: transparent; }
+html[data-theme="sakura-noir"] .day-pill.today .dw { color: #fff; }
+html[data-theme="sakura-noir"] .task, html[data-theme="sakura-noir"] .month-card, html[data-theme="sakura-noir"] .subject-tile, html[data-theme="sakura-noir"] .search, html[data-theme="sakura-noir"] .chip-btn {
+  background: linear-gradient(160deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02)), var(--surface); border: 1px solid rgba(255, 255, 255, .07);
+}
+html[data-theme="sakura-noir"] .chip-btn.active { background: #f6f1ff; color: #0e0a1c; }
+html[data-theme="sakura-noir"] .group h2::after { content: "・タスク"; font-family: "Zen Maru Gothic"; font-size: .7rem; color: var(--muted); font-weight: 500; }
+html[data-theme="sakura-noir"] .task.done .check { color: #fff; }
+html[data-theme="sakura-noir"] .cal-day.today .num { color: #ff8cc0; }
+html[data-theme="sakura-noir"] .bottom-nav { border: 1px solid rgba(255, 255, 255, .08); }
+html[data-theme="sakura-noir"] .fab { box-shadow: 0 0 26px rgba(255, 95, 162, .6), 0 0 0 6px var(--bg); }
+html[data-theme="sakura-noir"] dialog.sheet { background: #160f2c; border-top: 1px solid rgba(255, 95, 162, .4); }
+html[data-theme="sakura-noir"] .choice input:checked + span { background: #f6f1ff; color: #0e0a1c; }
