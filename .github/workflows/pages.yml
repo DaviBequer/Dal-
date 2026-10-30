@@ -7,6 +7,7 @@ on:
 permissions:
   contents: write
   pages: write
+  id-token: write
 
 concurrency:
   group: pages
@@ -16,6 +17,9 @@ jobs:
   publicar:
     if: github.ref_name == github.event.repository.default_branch
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -47,41 +51,21 @@ jobs:
             echo "nova=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Publicar na branch gh-pages
-        env:
-          V: ${{ steps.versao.outputs.versao }}
+      - name: Montar o site
         run: |
           mkdir _site
           cp -r index.html styles.css app.js sw.js version.js manifest.webmanifest icons _site/
           touch _site/.nojekyll
-          cd _site
-          git init -q -b gh-pages
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -qm "Publica versão $V (${GITHUB_SHA::7})"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
 
-      - name: Pedir build do Pages e conferir o site no ar
-        env:
-          V: ${{ steps.versao.outputs.versao }}
-          GH_TOKEN: ${{ github.token }}
-          OWNER: ${{ github.repository_owner }}
-        run: |
-          gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Não foi possível pedir o build (segue conferindo)."
-          URL="https://${OWNER,,}.github.io/${{ github.event.repository.name }}/"
-          for i in $(seq 1 40); do
-            GOT=$(curl -fsS "${URL}version.js?t=$(date +%s)" 2>/dev/null | sed -n "s/.*APP_VERSION = '\([^']*\)'.*/\1/p") || true
-            if [ "$GOT" = "$V" ]; then
-              echo "Site no ar: $URL (versão $V)"
-              exit 0
-            fi
-            echo "Aguardando… (site responde: '${GOT:-nada}')"
-            sleep 15
-          done
-          gh api "repos/${{ github.repository }}/pages" || true
-          echo "::error::O site $URL não mostrou a versão $V a tempo."
-          exit 1
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Publicar
+        id: deploy
+        uses: actions/deploy-pages@v4
 
       - name: Criar tag da versão
         if: steps.conferir.outputs.nova == 'true'
