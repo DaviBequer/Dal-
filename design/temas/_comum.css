@@ -1,0 +1,6 @@
+/* Ajustes comuns a todos os temas (entram no styles.css quando um tema for escolhido) */
+.brand { min-width: 0; }
+.brand h1 { white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.version { flex: none; }
+.add-subject input:not([type="color"]) { flex: 1; min-width: 0; }
+.add-subject .btn { flex: none; }

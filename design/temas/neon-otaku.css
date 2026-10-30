@@ -1,0 +1,53 @@
+/* 1. Neon Otaku — noite de anime: céu índigo, neon rosa e ciano, títulos com katakana */
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap');
+html[data-theme="neon-otaku"] {
+  --bg: #120d2b; --surface: #1d1644; --surface-2: #2a2160; --text: #f4f0ff; --muted: #a99fd6;
+  --border: #3b2f80; --primary: #ff3d9a; --primary-text: #fff; --dia: #3de0ff; --escola: #ffb547;
+  --alta: #ff3d6e; --media: #ffb547; --baixa: #4dffb8; --danger: #ff5c8a; --radius: 16px;
+  --shadow: 0 0 0 1px rgba(255, 61, 154, .08), 0 8px 24px rgba(0, 0, 0, .35);
+  color-scheme: dark;
+}
+html[data-theme="neon-otaku"] body {
+  font-family: "M PLUS Rounded 1c", system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 85% -10%, rgba(255, 61, 154, .35), transparent 45%),
+    radial-gradient(circle at -10% 30%, rgba(61, 224, 255, .18), transparent 40%),
+    radial-gradient(rgba(255, 255, 255, .5) 1px, transparent 1.5px) 0 0 / 46px 46px,
+    var(--bg);
+  background-attachment: fixed;
+}
+html[data-theme="neon-otaku"] .brand h1, html[data-theme="neon-otaku"] h2, html[data-theme="neon-otaku"] .stat strong {
+  font-family: "Dela Gothic One", "M PLUS Rounded 1c", sans-serif; font-weight: 400; letter-spacing: .01em;
+}
+html[data-theme="neon-otaku"] .brand h1 { font-size: 1.2rem; text-shadow: 0 0 18px rgba(255, 61, 154, .7); }
+html[data-theme="neon-otaku"] .logo { background: linear-gradient(135deg, #ff3d9a, #8b5cff); box-shadow: 0 0 16px rgba(255, 61, 154, .6); border-radius: 12px; transform: rotate(-6deg); }
+html[data-theme="neon-otaku"] .version { background: #3de0ff; color: #120d2b; }
+html[data-theme="neon-otaku"] .tabs { border-bottom-color: #2a2160; }
+html[data-theme="neon-otaku"] .tab.active { color: #fff; border-bottom: 3px solid var(--primary); text-shadow: 0 0 10px rgba(255, 61, 154, .8); }
+html[data-theme="neon-otaku"] .btn.primary { background: linear-gradient(135deg, #ff3d9a, #ff7a45); box-shadow: 0 0 18px rgba(255, 61, 154, .55); border-radius: 999px; }
+html[data-theme="neon-otaku"] .btn { border-radius: 999px; background: var(--surface-2); border-color: var(--border); }
+html[data-theme="neon-otaku"] .btn.ghost { background: transparent; }
+html[data-theme="neon-otaku"] .stat { background: linear-gradient(160deg, #241a58, #1a1340); border-color: #3b2f80; position: relative; overflow: hidden; }
+html[data-theme="neon-otaku"] .stat strong { font-size: 2rem; color: #3de0ff; text-shadow: 0 0 12px rgba(61, 224, 255, .6); }
+html[data-theme="neon-otaku"] .stat.warn strong { color: #ff5c8a; text-shadow: 0 0 12px rgba(255, 92, 138, .6); }
+html[data-theme="neon-otaku"] .group h2 { color: #ff8cc6; letter-spacing: .06em; font-size: 1rem; }
+html[data-theme="neon-otaku"] .group h2::after { content: " ・ タスク"; font-family: "M PLUS Rounded 1c"; color: var(--muted); font-size: .75rem; }
+html[data-theme="neon-otaku"] .task { border: 1px solid var(--border); border-left-width: 4px; box-shadow: 0 0 14px -6px var(--dia), var(--shadow); }
+html[data-theme="neon-otaku"] .task.escola { box-shadow: 0 0 14px -6px var(--subject-color, var(--escola)), var(--shadow); }
+html[data-theme="neon-otaku"] .task .check { border-color: #6c5fc4; border-radius: 8px; transform: rotate(45deg); width: 20px; height: 20px; }
+html[data-theme="neon-otaku"] .task.done .check { background: #4dffb8; border-color: #4dffb8; color: #120d2b; }
+html[data-theme="neon-otaku"] .task .check { line-height: 1; }
+html[data-theme="neon-otaku"] .chip { background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .08); }
+html[data-theme="neon-otaku"] .chip.prova { background: rgba(255, 61, 110, .18); color: #ff8cae; border-color: rgba(255, 61, 110, .4); }
+html[data-theme="neon-otaku"] .calendar { background: rgba(29, 22, 68, .85); border-color: var(--border); }
+html[data-theme="neon-otaku"] .cal-day.today .num { box-shadow: 0 0 12px rgba(255, 61, 154, .8); }
+html[data-theme="neon-otaku"] .cal-day.selected { border-color: #3de0ff; box-shadow: inset 0 0 10px rgba(61, 224, 255, .35); }
+html[data-theme="neon-otaku"] .dot { box-shadow: 0 0 6px currentColor; }
+html[data-theme="neon-otaku"] .exams { background: linear-gradient(135deg, rgba(255, 61, 110, .22), rgba(139, 92, 255, .18)); border-color: rgba(255, 61, 110, .5); }
+html[data-theme="neon-otaku"] .exams h3 { color: #ff8cae; }
+html[data-theme="neon-otaku"] .subject-card { border-top-width: 0; box-shadow: inset 0 3px 0 var(--subject-color), 0 0 20px -10px var(--subject-color); }
+html[data-theme="neon-otaku"] input, html[data-theme="neon-otaku"] select, html[data-theme="neon-otaku"] textarea { background: #150f33; border-color: var(--border); border-radius: 12px; }
+html[data-theme="neon-otaku"] dialog { background: linear-gradient(170deg, #241a58, #160f36); border: 1px solid #ff3d9a; box-shadow: 0 0 40px rgba(255, 61, 154, .35); border-radius: 22px; }
+html[data-theme="neon-otaku"] dialog h2::after { content: " 新しい"; color: #3de0ff; font-size: .8rem; }
+html[data-theme="neon-otaku"] .segmented label:has(input:checked) { border-color: #3de0ff; background: rgba(61, 224, 255, .12); box-shadow: 0 0 12px rgba(61, 224, 255, .35); }
+html[data-theme="neon-otaku"] .toast { background: #ff3d9a; color: #fff; border-radius: 999px; }

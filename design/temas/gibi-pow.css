@@ -1,0 +1,69 @@
+/* 4. Gibi Pow! — página de desenho animado/HQ: retícula, contorno grosso, balões de fala, cartões levemente tortos */
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap');
+html[data-theme="gibi-pow"] {
+  --bg: #ffe14d; --surface: #fffdf5; --surface-2: #fff3b8; --text: #111; --muted: #4a4536;
+  --border: #111; --primary: #ff3b30; --primary-text: #fff; --dia: #00a6ff; --escola: #ff8a00;
+  --alta: #ff3b30; --media: #ff8a00; --baixa: #00c46a; --danger: #ff3b30; --radius: 4px;
+  --shadow: 5px 5px 0 #111;
+  color-scheme: light;
+}
+html[data-theme="gibi-pow"] body {
+  font-family: "Comic Neue", "Comic Sans MS", system-ui, sans-serif; font-weight: 700;
+  background: radial-gradient(#f2c200 1.6px, transparent 2px) 0 0 / 12px 12px, var(--bg);
+}
+html[data-theme="gibi-pow"] .brand h1, html[data-theme="gibi-pow"] h2, html[data-theme="gibi-pow"] h3,
+html[data-theme="gibi-pow"] .stat strong, html[data-theme="gibi-pow"] .tab, html[data-theme="gibi-pow"] .btn.primary {
+  font-family: "Bangers", "Comic Neue", sans-serif; font-weight: 400; letter-spacing: .05em;
+}
+html[data-theme="gibi-pow"] .brand h1 { font-size: 1.6rem; color: #ff3b30; -webkit-text-stroke: 1.5px #111; paint-order: stroke fill; text-shadow: 3px 3px 0 #111; transform: rotate(-2deg); }
+html[data-theme="gibi-pow"] .version { background: #00a6ff; color: #fff; border: 2px solid #111; border-radius: 3px; -webkit-text-stroke: 0; text-shadow: none; font-family: "Comic Neue"; }
+html[data-theme="gibi-pow"] .today-label { color: #111; }
+html[data-theme="gibi-pow"] .logo { background: #fff; color: #111; border: 3px solid #111; border-radius: 50%; box-shadow: 3px 3px 0 #111; }
+html[data-theme="gibi-pow"] .btn { border: 3px solid #111; border-radius: 4px; box-shadow: 3px 3px 0 #111; background: #fff; font-weight: 700; }
+html[data-theme="gibi-pow"] .btn.primary { background: #ff3b30; font-size: 1.15rem; transform: rotate(1.5deg); }
+html[data-theme="gibi-pow"] .tabs { border-bottom: 3px solid #111; gap: 0; }
+html[data-theme="gibi-pow"] .tab { color: #111; font-size: 1.15rem; border: 3px solid transparent; border-bottom: 0; border-radius: 6px 6px 0 0; margin-bottom: -3px; }
+html[data-theme="gibi-pow"] .tab.active { background: #fff; border-color: #111; border-bottom: 3px solid #fff; }
+html[data-theme="gibi-pow"] .stat, html[data-theme="gibi-pow"] .task, html[data-theme="gibi-pow"] .calendar,
+html[data-theme="gibi-pow"] .subject-card, html[data-theme="gibi-pow"] .exams { border: 3px solid #111; box-shadow: 5px 5px 0 #111; border-radius: 4px; }
+html[data-theme="gibi-pow"] .stat:nth-child(odd) { transform: rotate(-1.2deg); }
+html[data-theme="gibi-pow"] .stat:nth-child(even) { transform: rotate(1deg); }
+html[data-theme="gibi-pow"] .stat strong { font-size: 2.4rem; color: #00a6ff; -webkit-text-stroke: 1px #111; paint-order: stroke fill; }
+html[data-theme="gibi-pow"] .stat.warn strong { color: #ff3b30; }
+html[data-theme="gibi-pow"] .stat span { color: #111; text-transform: uppercase; font-size: .75rem; }
+html[data-theme="gibi-pow"] .group h2 {
+  display: inline-block; background: #fff; color: #111; border: 3px solid #111; padding: 2px 12px 0; font-size: 1.2rem;
+  border-radius: 20px; position: relative; box-shadow: 3px 3px 0 #111;
+}
+html[data-theme="gibi-pow"] .group.overdue h2 { background: #ff3b30; color: #fff; }
+html[data-theme="gibi-pow"] .group.overdue h2::after { content: "POW!"; position: absolute; right: -54px; top: -8px; font-size: 1rem; color: #ffe14d; -webkit-text-stroke: 1px #111; transform: rotate(12deg); }
+html[data-theme="gibi-pow"] .task { border-left-width: 3px; background: #fff; }
+html[data-theme="gibi-pow"] .task:nth-child(even) { transform: rotate(.6deg); }
+html[data-theme="gibi-pow"] .task:nth-child(odd) { transform: rotate(-.5deg); }
+html[data-theme="gibi-pow"] .task::before { content: ""; flex: none; width: 8px; align-self: stretch; margin: -10px 0 -10px -12px; background: var(--dia); border-right: 3px solid #111; }
+html[data-theme="gibi-pow"] .task.escola::before { background: var(--subject-color, var(--escola)); }
+html[data-theme="gibi-pow"] .task .check { border: 3px solid #111; border-radius: 50%; width: 26px; height: 26px; color: #111; }
+html[data-theme="gibi-pow"] .task.done .check { background: #00c46a; border-color: #111; color: #fff; }
+html[data-theme="gibi-pow"] .chip { border: 2px solid #111; border-radius: 3px; background: #fff3b8; color: #111; }
+html[data-theme="gibi-pow"] .chip.prova { background: #ff3b30; color: #fff; font-family: "Bangers"; letter-spacing: .06em; font-weight: 400; }
+html[data-theme="gibi-pow"] .chip.late { background: #111; color: #ffe14d; }
+html[data-theme="gibi-pow"] .prio { border: 2px solid #111; width: 10px; height: 10px; }
+html[data-theme="gibi-pow"] .empty { background: #fff; border: 3px dashed #111; color: #111; border-radius: 20px; }
+html[data-theme="gibi-pow"] .cal-header h2 { font-size: 1.6rem; }
+html[data-theme="gibi-pow"] .cal-dow { color: #111; font-family: "Bangers"; font-size: .95rem; font-weight: 400; letter-spacing: .05em; }
+html[data-theme="gibi-pow"] .cal-day { border: 2px solid #111; border-radius: 2px; background: #fff; }
+html[data-theme="gibi-pow"] .cal-day.other { background: #fff3b8; }
+html[data-theme="gibi-pow"] .cal-day.today .num { background: #ff3b30; border: 2px solid #111; }
+html[data-theme="gibi-pow"] .cal-day.selected { background: #bfe8ff; border-width: 3px; }
+html[data-theme="gibi-pow"] .dot { border: 1.5px solid #111; width: 8px; height: 8px; }
+html[data-theme="gibi-pow"] .exams { background: #fff; position: relative; }
+html[data-theme="gibi-pow"] .exams h3 { color: #ff3b30; font-size: 1.4rem; }
+html[data-theme="gibi-pow"] .subject-card { border-top-width: 10px; border-top-color: var(--subject-color); }
+html[data-theme="gibi-pow"] input, html[data-theme="gibi-pow"] select, html[data-theme="gibi-pow"] textarea { border: 3px solid #111; border-radius: 4px; background: #fff; font-weight: 700; }
+html[data-theme="gibi-pow"] dialog { border: 4px solid #111; border-radius: 6px; box-shadow: 8px 8px 0 #111; background: #fffdf5; }
+html[data-theme="gibi-pow"] dialog h2 { font-size: 1.8rem; color: #00a6ff; -webkit-text-stroke: 1px #111; paint-order: stroke fill; }
+html[data-theme="gibi-pow"] dialog label { color: #111; }
+html[data-theme="gibi-pow"] .segmented label { border: 3px solid #111; border-radius: 4px; }
+html[data-theme="gibi-pow"] .segmented label:has(input:checked) { background: #ffe14d; border-color: #111; }
+html[data-theme="gibi-pow"] .footer { color: #111; }
+html[data-theme="gibi-pow"] .toast { background: #fff; color: #111; border: 3px solid #111; border-radius: 22px; box-shadow: 4px 4px 0 #111; }

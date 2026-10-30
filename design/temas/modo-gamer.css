@@ -1,0 +1,76 @@
+/* 5. Modo Gamer — tela de jogo/arcade: HUD escuro, verde neon, fonte pixel, tarefas como missões */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Chakra+Petch:wght@500;600;700&family=VT323&display=swap');
+html[data-theme="modo-gamer"] {
+  --bg: #0a0e13; --surface: #111820; --surface-2: #1a2430; --text: #e6f2ea; --muted: #7d9488;
+  --border: #22313f; --primary: #39ff88; --primary-text: #04130a; --dia: #39ff88; --escola: #ffd23f;
+  --alta: #ff4d6d; --media: #ffd23f; --baixa: #39ff88; --danger: #ff4d6d; --radius: 2px;
+  --shadow: none;
+  color-scheme: dark;
+}
+html[data-theme="modo-gamer"] body {
+  font-family: "Chakra Petch", system-ui, sans-serif; font-weight: 500;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .025) 0 1px, transparent 1px 3px),
+    linear-gradient(rgba(57, 255, 136, .06) 1px, transparent 1px) 0 0 / 32px 32px,
+    linear-gradient(90deg, rgba(57, 255, 136, .06) 1px, transparent 1px) 0 0 / 32px 32px,
+    var(--bg);
+}
+html[data-theme="modo-gamer"] .brand h1, html[data-theme="modo-gamer"] h2, html[data-theme="modo-gamer"] h3,
+html[data-theme="modo-gamer"] .tab, html[data-theme="modo-gamer"] .btn.primary { font-family: "Press Start 2P", monospace; font-weight: 400; }
+html[data-theme="modo-gamer"] .brand h1 { font-size: .72rem; line-height: 1.6; color: #39ff88; text-shadow: 0 0 8px rgba(57, 255, 136, .7); }
+html[data-theme="modo-gamer"] .version { font-family: "VT323", monospace; font-size: 1rem; background: #ff4dd8; color: #0a0e13; border-radius: 0; padding: 0 6px; }
+html[data-theme="modo-gamer"] .today-label { font-family: "VT323", monospace; font-size: 1.05rem; white-space: nowrap; color: #7d9488; }
+html[data-theme="modo-gamer"] .logo { background: #39ff88; color: #04130a; border-radius: 0; box-shadow: 4px 4px 0 #157a3e; }
+html[data-theme="modo-gamer"] .btn { border-radius: 0; border: 2px solid #39ff88; background: transparent; color: #39ff88; }
+html[data-theme="modo-gamer"] .btn.primary { background: #39ff88; color: #04130a; font-size: .62rem; padding: 10px 12px; box-shadow: 4px 4px 0 #157a3e; }
+html[data-theme="modo-gamer"] .btn.danger-text { border-color: #ff4d6d; color: #ff4d6d; }
+html[data-theme="modo-gamer"] .tabs { border-bottom: 2px solid #22313f; }
+html[data-theme="modo-gamer"] .tab { font-size: .58rem; color: #7d9488; padding: 12px 10px; }
+html[data-theme="modo-gamer"] .tab.active { color: #39ff88; border-bottom: 3px solid #39ff88; text-shadow: 0 0 6px rgba(57, 255, 136, .8); }
+html[data-theme="modo-gamer"] .tab.active::before { content: "▶ "; }
+html[data-theme="modo-gamer"] .stat { border: 2px solid #22313f; border-radius: 0; background: rgba(17, 24, 32, .9); clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%); }
+html[data-theme="modo-gamer"] .stat strong { font-family: "VT323", monospace; font-size: 2.6rem; line-height: 1; color: #39ff88; text-shadow: 0 0 10px rgba(57, 255, 136, .6); font-weight: 400; }
+html[data-theme="modo-gamer"] .stat.warn strong { color: #ff4d6d; text-shadow: 0 0 10px rgba(255, 77, 109, .6); }
+html[data-theme="modo-gamer"] .stat:nth-child(4) strong { color: #ffd23f; text-shadow: 0 0 10px rgba(255, 210, 63, .5); }
+html[data-theme="modo-gamer"] .stat span { text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; }
+html[data-theme="modo-gamer"] .stats::after {
+  content: "NÍVEL 7  ▰▰▰▰▰▰▱▱▱▱  620/1000 XP"; grid-column: 1 / -1; font-family: "VT323", monospace; font-size: 1.15rem;
+  color: #ff4dd8; border: 2px solid #ff4dd8; padding: 4px 10px; letter-spacing: .04em; text-shadow: 0 0 6px rgba(255, 77, 216, .6);
+}
+html[data-theme="modo-gamer"] .group h2 { font-size: .62rem; color: #ffd23f; letter-spacing: .05em; margin-bottom: 12px; }
+html[data-theme="modo-gamer"] .group h2::before { content: "// MISSÕES · "; color: #7d9488; }
+html[data-theme="modo-gamer"] .group.overdue h2 { color: #ff4d6d; }
+html[data-theme="modo-gamer"] .task { border-radius: 0; border: 1px solid #22313f; border-left: 3px solid var(--dia); background: rgba(17, 24, 32, .92); }
+html[data-theme="modo-gamer"] .task::after { content: "+10 XP"; font-family: "VT323", monospace; font-size: 1.05rem; color: #ff4dd8; flex: none; }
+html[data-theme="modo-gamer"] .task.done::after { content: "✔ XP"; color: #39ff88; }
+html[data-theme="modo-gamer"] .task .check { border-radius: 0; border: 2px solid #39ff88; width: 20px; height: 20px; }
+html[data-theme="modo-gamer"] .task.done .check { background: #39ff88; color: #04130a; }
+html[data-theme="modo-gamer"] .task-title { font-weight: 600; }
+html[data-theme="modo-gamer"] .chip { border-radius: 0; background: #1a2430; color: #b9cfc2; border: 1px solid #22313f; }
+html[data-theme="modo-gamer"] .chip.prova { background: transparent; color: #ff4d6d; border-color: #ff4d6d; text-transform: uppercase; letter-spacing: .06em; }
+html[data-theme="modo-gamer"] .chip.prova::before { content: "☠"; }
+html[data-theme="modo-gamer"] .chip.late { background: transparent; border-color: #ff4d6d; }
+html[data-theme="modo-gamer"] .prio { border-radius: 0; }
+html[data-theme="modo-gamer"] .empty { border: 2px dashed #22313f; border-radius: 0; font-family: "VT323", monospace; font-size: 1.2rem; }
+html[data-theme="modo-gamer"] .cal-header h2 { font-size: .75rem; color: #39ff88; }
+html[data-theme="modo-gamer"] .calendar { border-radius: 0; border: 2px solid #22313f; background: rgba(17, 24, 32, .92); }
+html[data-theme="modo-gamer"] .cal-dow { font-family: "VT323", monospace; font-size: 1rem; color: #ffd23f; font-weight: 400; }
+html[data-theme="modo-gamer"] .cal-day { border-radius: 0; border: 1px solid #1a2430; }
+html[data-theme="modo-gamer"] .cal-day .num { font-family: "VT323", monospace; font-size: 1.15rem; border-radius: 0; }
+html[data-theme="modo-gamer"] .cal-day.today .num { box-shadow: 0 0 10px rgba(57, 255, 136, .7); }
+html[data-theme="modo-gamer"] .cal-day.selected { border: 2px solid #39ff88; }
+html[data-theme="modo-gamer"] .dot { border-radius: 0; }
+html[data-theme="modo-gamer"] .exams { border-radius: 0; background: rgba(255, 77, 109, .08); border: 2px solid #ff4d6d; }
+html[data-theme="modo-gamer"] .exams h3 { font-size: 0; color: #ff4d6d; }
+html[data-theme="modo-gamer"] .exams h3::before { content: "⚠ CHEFÕES À VISTA: PROVAS"; font-size: .62rem; line-height: 1.8; }
+html[data-theme="modo-gamer"] .subject-card { border-radius: 0; border: 1px solid #22313f; border-top: 3px solid var(--subject-color); background: rgba(17, 24, 32, .92); }
+html[data-theme="modo-gamer"] .subject-card h3 { font-size: .62rem; line-height: 1.6; color: var(--subject-color); }
+html[data-theme="modo-gamer"] .subject-card .task::after { content: none; }
+html[data-theme="modo-gamer"] input, html[data-theme="modo-gamer"] select, html[data-theme="modo-gamer"] textarea { border-radius: 0; background: #0a0e13; border: 2px solid #22313f; color: #e6f2ea; }
+html[data-theme="modo-gamer"] dialog { border-radius: 0; border: 2px solid #39ff88; background: #0d1319; box-shadow: 0 0 0 4px #0a0e13, 0 0 30px rgba(57, 255, 136, .3); }
+html[data-theme="modo-gamer"] dialog h2 { font-size: .8rem; color: #39ff88; }
+html[data-theme="modo-gamer"] dialog h2::before { content: "> "; }
+html[data-theme="modo-gamer"] .segmented label { border-radius: 0; border: 2px solid #22313f; }
+html[data-theme="modo-gamer"] .segmented label:has(input:checked) { border-color: #39ff88; background: rgba(57, 255, 136, .1); }
+html[data-theme="modo-gamer"] .footer { font-family: "VT323", monospace; font-size: 1.05rem; }
+html[data-theme="modo-gamer"] .toast { background: #39ff88; color: #04130a; border-radius: 0; font-family: "VT323", monospace; font-size: 1.2rem; }
