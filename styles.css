@@ -52,6 +52,8 @@ h3 { font-size: 1rem; }
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   max-width: 960px; margin: 0 auto; padding: 16px 16px 8px;
 }
+.topbar-actions { display: flex; align-items: center; gap: 8px; flex: none; }
+.topbar-actions .btn { white-space: nowrap; }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand h1 { font-size: 1.4rem; }
 .logo {
@@ -199,6 +201,7 @@ input, select, textarea {
 input[type="color"] { width: 44px; padding: 2px; height: 38px; flex: none; }
 input[type="radio"] { width: auto; }
 textarea { resize: vertical; }
+.hint { font-size: .75rem; color: var(--muted); }
 
 dialog {
   border: 0; border-radius: 16px; padding: 0; width: min(520px, calc(100vw - 32px));
@@ -238,6 +241,10 @@ dialog label { display: flex; flex-direction: column; gap: 4px; font-size: .85re
   transition: transform .25s; pointer-events: none; max-width: calc(100vw - 32px);
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 440px) {
+  .hide-sm { display: none; }
+}
 
 @media (max-width: 560px) {
   .topbar .btn.primary { padding: 8px 12px; }

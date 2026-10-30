@@ -20,6 +20,10 @@ const KIND_LABELS = {
   outro: 'Outro',
 };
 
+const REMINDER_LABELS = {
+  0: 'Na hora', 10: '10 min antes', 30: '30 min antes', 60: '1 h antes', 1440: '1 dia antes',
+};
+
 const PRIORITY_LABELS = { alta: 'Alta', media: 'Média', baixa: 'Baixa' };
 const PRIORITY_ORDER = { alta: 0, media: 1, baixa: 2 };
 
@@ -45,6 +49,7 @@ function save() {
   } catch (e) {
     toast('Não foi possível salvar no navegador.');
   }
+  if (typeof syncReminders === 'function') syncReminders();
 }
 
 const state = load();
@@ -146,6 +151,7 @@ function taskHTML(t, { showDate = true } = {}) {
     chips.push(`<span class="chip ${late ? 'late' : ''}">📅 ${relativeDate(t.date)}</span>`);
   }
   if (t.time) chips.push(`<span class="chip">🕒 ${t.time}</span>`);
+  if (t.date && t.reminder) chips.push(`<span class="chip">🔔 ${REMINDER_LABELS[t.reminder] || ''}</span>`);
   if (t.repeat) chips.push(`<span class="chip">🔁 ${t.repeat === 'diario' ? 'Diária' : 'Semanal'}</span>`);
 
   const style = subj ? ` style="--subject-color:${escapeHTML(subj.color)}"` : '';
@@ -364,7 +370,7 @@ function updateSchoolFields() {
 function openForm(task = null, defaults = {}) {
   editingId = task ? task.id : null;
   form.reset();
-  const data = task || { category: 'dia', priority: 'media', kind: 'licao', ...defaults };
+  const data = task || { category: 'dia', priority: 'media', kind: 'licao', reminder: '0', ...defaults };
   $('#formTitle').textContent = task ? 'Editar tarefa' : 'Nova tarefa';
   $('#deleteBtn').hidden = !task;
 
@@ -376,6 +382,7 @@ function openForm(task = null, defaults = {}) {
   form.time.value = data.time || '';
   form.priority.value = data.priority || 'media';
   form.repeat.value = data.repeat || '';
+  form.reminder.value = data.reminder || '';
   form.notes.value = data.notes || '';
   updateSchoolFields();
   dialog.returnValue = '';
@@ -402,6 +409,7 @@ dialog.addEventListener('close', () => {
     time: form.time.value,
     priority: form.priority.value,
     repeat: form.repeat.value,
+    reminder: form.reminder.value,
     notes: form.notes.value.trim(),
   };
 
@@ -587,6 +595,155 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
     document.addEventListener('visibilitychange', () => { if (!document.hidden) reg.update(); });
   }).catch((e) => console.warn('Service worker não registrado.', e));
 }
+
+// ---------- Lembretes ----------
+// O app não tem servidor: os lembretes são disparados pela página enquanto ela está aberta
+// e, onde o navegador permite (Chrome/Android com o app instalado), pelo service worker
+// em segundo plano via Periodic Background Sync. Os dois usam a mesma "tag" por lembrete,
+// então uma notificação repetida substitui a anterior em vez de duplicar.
+const NOTIFY_KEY = 'dal.notify';
+const NOTIFIED_KEY = 'dal.notified';
+const REMINDER_WINDOW = 12 * 3600000; // lembretes perdidos há mais que isso são ignorados
+const DATA_CACHE = 'dal-data';
+
+function notifySupported() {
+  return 'Notification' in window;
+}
+
+function notifyEnabled() {
+  try {
+    return notifySupported() && Notification.permission === 'granted' && localStorage.getItem(NOTIFY_KEY) === '1';
+  } catch (e) {
+    return false;
+  }
+}
+
+function reminderBody(t, at) {
+  const parts = [];
+  if (t.category === 'escola') {
+    const s = subjectById(t.subject);
+    parts.push(KIND_LABELS[t.kind] || 'Escola');
+    if (s) parts.push(s.name);
+  } else {
+    parts.push('Dia a dia');
+  }
+  const sameDay = toISO(new Date(at)) === t.date;
+  const when = sameDay ? 'Hoje' : relativeFrom(t.date, toISO(new Date(at)));
+  parts.push(t.time ? `${when} às ${t.time}` : when);
+  return parts.join(' · ');
+}
+
+function relativeFrom(iso, fromIso) {
+  const n = Math.round((fromISO(iso) - fromISO(fromIso)) / 86400000);
+  if (n === 1) return 'Amanhã';
+  return formatDate(iso, { weekday: 'long', day: 'numeric', month: 'short' });
+}
+
+function reminderList() {
+  return state.tasks
+    .filter((t) => !t.done && t.date && t.reminder !== undefined && t.reminder !== '')
+    .map((t) => {
+      const at = new Date(`${t.date}T${t.time || '08:00'}`).getTime() - Number(t.reminder) * 60000;
+      return { key: `${t.id}@${at}`, at, title: t.title, body: reminderBody(t, at) };
+    });
+}
+
+function loadNotified() {
+  try { return JSON.parse(localStorage.getItem(NOTIFIED_KEY)) || {}; } catch (e) { return {}; }
+}
+
+function saveNotified(map) {
+  const cutoff = Date.now() - 3 * 86400000;
+  for (const k of Object.keys(map)) if (map[k] < cutoff) delete map[k];
+  try { localStorage.setItem(NOTIFIED_KEY, JSON.stringify(map)); } catch (e) { /* ignora */ }
+}
+
+async function showNotification(title, options) {
+  const opts = { icon: 'icons/icon-192.png', badge: 'icons/icon-192.png', lang: 'pt-BR', ...options };
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    const reg = await navigator.serviceWorker.getRegistration();
+    if (reg) return reg.showNotification(title, opts);
+  }
+  return new Notification(title, opts);
+}
+
+function checkReminders() {
+  if (!notifyEnabled()) return;
+  const now = Date.now();
+  const notified = loadNotified();
+  const due = reminderList().filter((r) => r.at <= now && now - r.at < REMINDER_WINDOW && !notified[r.key]);
+  for (const r of due) {
+    notified[r.key] = now;
+    showNotification(r.title, { body: r.body, tag: r.key }).catch((e) => console.warn(e));
+  }
+  if (due.length) {
+    saveNotified(notified);
+    if (!document.hidden) toast(`🔔 ${due[0].title}`);
+  }
+}
+
+// Guarda os próximos lembretes onde o service worker consegue ler (ele não acessa o localStorage)
+function syncReminders() {
+  checkReminders();
+  if (!('caches' in window) || location.protocol === 'file:') return;
+  const data = { enabled: notifyEnabled(), list: reminderList() };
+  caches.open(DATA_CACHE)
+    .then((c) => c.put(new URL('reminders.json', location.href).href, new Response(JSON.stringify(data))))
+    .catch(() => {});
+}
+
+async function registerBackgroundCheck() {
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    if (!('periodicSync' in reg)) return;
+    const status = await navigator.permissions.query({ name: 'periodic-background-sync' });
+    if (status.state === 'granted') {
+      await reg.periodicSync.register('dal-lembretes', { minInterval: 60 * 60 * 1000 });
+    }
+  } catch (e) { /* não suportado neste navegador */ }
+}
+
+function updateNotifyButton() {
+  const on = notifyEnabled();
+  const btn = $('#notifyBtn');
+  btn.textContent = on ? '🔔' : '🔕';
+  const label = on ? 'Desativar notificações' : 'Ativar notificações';
+  btn.setAttribute('aria-label', label);
+  btn.title = label;
+}
+
+$('#notifyBtn').addEventListener('click', async () => {
+  if (!notifySupported()) {
+    toast(/iPhone|iPad/.test(navigator.userAgent)
+      ? 'No iPhone, instale o app na Tela de Início para receber notificações.'
+      : 'Este navegador não suporta notificações.');
+    return;
+  }
+  if (notifyEnabled()) {
+    try { localStorage.setItem(NOTIFY_KEY, '0'); } catch (e) { /* ignora */ }
+    updateNotifyButton();
+    syncReminders();
+    toast('Notificações desativadas');
+    return;
+  }
+  const perm = await Notification.requestPermission();
+  if (perm !== 'granted') {
+    toast('Permissão negada. Libere as notificações nas configurações do navegador.');
+    return;
+  }
+  try { localStorage.setItem(NOTIFY_KEY, '1'); } catch (e) { /* ignora */ }
+  updateNotifyButton();
+  syncReminders();
+  registerBackgroundCheck();
+  showNotification('Notificações ativadas', { body: 'Você vai receber os lembretes das suas tarefas.', tag: 'dal-ativado' })
+    .catch(() => {});
+});
+
+updateNotifyButton();
+syncReminders();
+if (notifyEnabled() && 'serviceWorker' in navigator && location.protocol !== 'file:') registerBackgroundCheck();
+setInterval(checkReminders, 20000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) checkReminders(); });
 
 // ---------- Início ----------
 let initialView = 'hoje';

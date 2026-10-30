@@ -13,6 +13,16 @@ Acesse **https://davibequer.github.io/Dal-/** e instale como app:
 
 O app funciona offline. Quando sai uma versão nova, aparece o aviso *Nova versão disponível* com o botão **Atualizar**.
 
+## Notificações
+
+Toque no 🔔 no topo e permita as notificações. Como o app não tem servidor, o navegador decide quando ele pode rodar:
+
+- **Com o app aberto** (ou em uma aba aberta): o lembrete chega na hora certa.
+- **App fechado, Android/Chrome com o app instalado:** o app confere os lembretes em segundo plano periodicamente (o Chrome decide a frequência, em geral algumas vezes por dia), então o aviso pode chegar com atraso.
+- **iPhone:** é preciso instalar o app na Tela de Início (iOS 16.4+); com o app fechado os lembretes só aparecem quando ele for aberto.
+
+Lembretes perdidos há até 12 horas aparecem assim que o app é aberto.
+
 ## Versões
 
 O número da versão fica em `version.js`, aparece no topo do app e muda a cada atualização.
@@ -26,6 +36,7 @@ automaticamente no GitHub Pages e cria a tag `v<versão>`.
 - **Escola** — tarefas agrupadas por matéria, com destaque para as próximas provas e contagem regressiva.
 - **Todas** — busca e filtros por categoria e status; limpar concluídas.
 - Tarefas com categoria (🏠 Dia a dia / 🎒 Escola), matéria, tipo (lição, trabalho, prova, estudar), data, horário, prioridade, anotações e repetição (diária ou semanal).
+- **Lembretes** por tarefa (na hora, 10 min, 30 min, 1 hora ou 1 dia antes), com notificações. Ative no botão 🔔 do topo.
 - Matérias personalizáveis (nome e cor).
 - Tema claro e escuro automático, layout adaptado para celular.
 

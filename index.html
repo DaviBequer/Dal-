@@ -22,7 +22,10 @@
         <p class="today-label" id="todayLabel"></p>
       </div>
     </div>
-    <button class="btn primary" id="addBtn" type="button">+ Nova tarefa</button>
+    <div class="topbar-actions">
+      <button class="btn icon" id="notifyBtn" type="button" aria-label="Ativar notificações" title="Ativar notificações">🔕</button>
+      <button class="btn primary" id="addBtn" type="button" aria-label="Nova tarefa">+ Nova<span class="hide-sm"> tarefa</span></button>
+    </div>
   </header>
 
   <nav class="tabs" role="tablist">
@@ -144,6 +147,18 @@
           </select>
         </label>
       </div>
+
+      <label>Lembrete
+        <select name="reminder">
+          <option value="">Sem lembrete</option>
+          <option value="0">Na hora</option>
+          <option value="10">10 minutos antes</option>
+          <option value="30">30 minutos antes</option>
+          <option value="60">1 hora antes</option>
+          <option value="1440">1 dia antes</option>
+        </select>
+        <small class="hint" id="reminderHint">Sem horário, o lembrete usa 08:00 do dia.</small>
+      </label>
 
       <label>Anotações
         <textarea name="notes" rows="3" maxlength="1000" placeholder="Detalhes, páginas, materiais…"></textarea>
