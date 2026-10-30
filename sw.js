@@ -13,13 +13,15 @@ const ASSETS = [
   'icons/icon-192.png',
   'icons/icon-512.png',
   'icons/maskable-512.png',
-  'icons/apple-touch-icon.png',
 ];
 
 self.addEventListener('install', (event) => {
-  // Busca direto da rede para não guardar arquivos antigos do cache HTTP
+  // Busca direto da rede para não guardar arquivos antigos do cache HTTP.
+  // skipWaiting: a versão nova assume sem o usuário precisar clicar em nada.
   event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(ASSETS.map((url) => new Request(url, { cache: 'reload' })))),
+    caches.open(CACHE)
+      .then((cache) => cache.addAll(ASSETS.map((url) => new Request(url, { cache: 'reload' }))))
+      .then(() => self.skipWaiting()),
   );
 });
 
@@ -29,10 +31,6 @@ self.addEventListener('activate', (event) => {
       .then((keys) => Promise.all(keys.filter((k) => k.startsWith('dal-') && k !== CACHE && k !== DATA_CACHE).map((k) => caches.delete(k))))
       .then(() => self.clients.claim()),
   );
-});
-
-self.addEventListener('message', (event) => {
-  if (event.data === 'skipWaiting') self.skipWaiting();
 });
 
 self.addEventListener('fetch', (event) => {

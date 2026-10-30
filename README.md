@@ -1,4 +1,4 @@
-# Dal — Tarefas e Agenda
+# Dalê Tarefas
 
 App de tarefas com agenda, focado nas tarefas do **dia a dia** e da **escola**.
 Funciona direto no navegador, sem instalação e sem servidor: os dados ficam salvos no próprio navegador (`localStorage`).
@@ -8,10 +8,9 @@ Funciona direto no navegador, sem instalação e sem servidor: os dados ficam sa
 Acesse **https://davibequer.github.io/Dal-/** e instale como app:
 
 - **Android (Chrome):** menu ⋮ → *Instalar app* / *Adicionar à tela inicial*.
-- **iPhone (Safari):** botão Compartilhar → *Adicionar à Tela de Início*.
 - **Computador (Chrome/Edge):** ícone de instalar na barra de endereço.
 
-O app funciona offline. Quando sai uma versão nova, aparece o aviso *Nova versão disponível* com o botão **Atualizar**.
+O app funciona offline e se atualiza sozinho quando sai uma versão nova.
 
 ## Notificações
 
@@ -19,13 +18,12 @@ Toque no 🔔 no topo e permita as notificações. Como o app não tem servidor,
 
 - **Com o app aberto** (ou em uma aba aberta): o lembrete chega na hora certa.
 - **App fechado, Android/Chrome com o app instalado:** o app confere os lembretes em segundo plano periodicamente (o Chrome decide a frequência, em geral algumas vezes por dia), então o aviso pode chegar com atraso.
-- **iPhone:** é preciso instalar o app na Tela de Início (iOS 16.4+); com o app fechado os lembretes só aparecem quando ele for aberto.
 
 Lembretes perdidos há até 12 horas aparecem assim que o app é aberto.
 
 ## Versões
 
-O número da versão fica em `version.js`, aparece no topo do app e muda a cada atualização.
+A versão é um número inteiro (v1, v2, v3…) definido em `version.js`; aparece ao lado do nome e sobe a cada atualização.
 O histórico está em [`CHANGELOG.md`](CHANGELOG.md). Cada push na branch principal publica o app
 automaticamente no GitHub Pages e cria a tag `v<versão>`.
 

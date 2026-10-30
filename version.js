@@ -1,2 +1,2 @@
-// Versão do app. Aumente a cada atualização publicada (veja CHANGELOG.md).
-self.APP_VERSION = '1.1.0';
+// Versão do app: número inteiro (1, 2, 3…). Aumente em 1 a cada atualização publicada.
+self.APP_VERSION = '1';

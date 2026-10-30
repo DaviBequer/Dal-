@@ -558,41 +558,33 @@ $('#appVersion').textContent = `v${APP_VERSION}`;
 $('#footerVersion').textContent = APP_VERSION;
 
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-  // Recarrega só quando o usuário pediu a atualização (não na primeira instalação)
-  let updateRequested = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (!updateRequested) return;
-    updateRequested = false;
+  // Atualização automática: o service worker novo assume sozinho e a página recarrega.
+  // Se um formulário estiver aberto, espera ele fechar para não perder o que foi digitado.
+  let hadController = !!navigator.serviceWorker.controller;
+  let pendingReload = false;
+  const reloadWhenIdle = () => {
+    if (document.querySelector('dialog[open]')) {
+      pendingReload = true;
+      return;
+    }
     location.reload();
+  };
+  document.querySelectorAll('dialog').forEach((d) => d.addEventListener('close', () => {
+    if (pendingReload) setTimeout(reloadWhenIdle, 300);
+  }));
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    // Na primeira instalação não há o que recarregar; nas seguintes, sim
+    if (!hadController) {
+      hadController = true;
+      return;
+    }
+    reloadWhenIdle();
   });
 
   navigator.serviceWorker.register('sw.js').then((reg) => {
-    const offerUpdate = (worker) => {
-      // Lê a versão nova direto do servidor para mostrar no aviso
-      fetch('version.js', { cache: 'no-store' })
-        .then((r) => r.text())
-        .then((txt) => {
-          const m = txt.match(/APP_VERSION = '([^']+)'/);
-          if (m) $('#updateText').textContent = `Nova versão ${m[1]} disponível`;
-        })
-        .catch(() => {});
-      $('#updateBar').hidden = false;
-      $('#updateBtn').onclick = () => {
-        updateRequested = true;
-        worker.postMessage('skipWaiting');
-      };
-    };
-
-    if (reg.waiting && navigator.serviceWorker.controller) offerUpdate(reg.waiting);
-    reg.addEventListener('updatefound', () => {
-      const worker = reg.installing;
-      worker.addEventListener('statechange', () => {
-        if (worker.state === 'installed' && navigator.serviceWorker.controller) offerUpdate(worker);
-      });
-    });
-
-    // Procura atualizações ao voltar para o app
+    // Procura versão nova ao voltar para o app e a cada 30 minutos
     document.addEventListener('visibilitychange', () => { if (!document.hidden) reg.update(); });
+    setInterval(() => reg.update(), 30 * 60000);
   }).catch((e) => console.warn('Service worker não registrado.', e));
 }
 
@@ -714,9 +706,7 @@ function updateNotifyButton() {
 
 $('#notifyBtn').addEventListener('click', async () => {
   if (!notifySupported()) {
-    toast(/iPhone|iPad/.test(navigator.userAgent)
-      ? 'No iPhone, instale o app na Tela de Início para receber notificações.'
-      : 'Este navegador não suporta notificações.');
+    toast('Este navegador não suporta notificações.');
     return;
   }
   if (notifyEnabled()) {
