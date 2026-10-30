@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dal — Tarefas e Agenda</title>
+  <meta name="description" content="App de tarefas com agenda para o dia a dia e para a escola.">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">✓</span>
+      <div>
+        <h1>Dal</h1>
+        <p class="today-label" id="todayLabel"></p>
+      </div>
+    </div>
+    <button class="btn primary" id="addBtn" type="button">+ Nova tarefa</button>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-view="hoje" role="tab">Hoje</button>
+    <button class="tab" data-view="agenda" role="tab">Agenda</button>
+    <button class="tab" data-view="escola" role="tab">Escola</button>
+    <button class="tab" data-view="todas" role="tab">Todas</button>
+  </nav>
+
+  <main>
+    <!-- HOJE -->
+    <section class="view active" id="view-hoje">
+      <div class="stats" id="stats"></div>
+      <div id="hojeLists"></div>
+    </section>
+
+    <!-- AGENDA -->
+    <section class="view" id="view-agenda">
+      <div class="cal-header">
+        <button class="btn icon" id="prevMonth" type="button" aria-label="Mês anterior">‹</button>
+        <h2 id="monthTitle"></h2>
+        <button class="btn icon" id="nextMonth" type="button" aria-label="Próximo mês">›</button>
+        <button class="btn ghost small" id="goToday" type="button">Hoje</button>
+      </div>
+      <div class="calendar" id="calendar"></div>
+      <div class="day-panel">
+        <div class="day-panel-head">
+          <h3 id="dayTitle"></h3>
+          <button class="btn ghost small" id="addOnDay" type="button">+ Adicionar neste dia</button>
+        </div>
+        <ul class="task-list" id="dayTasks"></ul>
+      </div>
+    </section>
+
+    <!-- ESCOLA -->
+    <section class="view" id="view-escola">
+      <div class="section-head">
+        <h2>Matérias</h2>
+        <button class="btn ghost small" id="manageSubjects" type="button">Gerenciar matérias</button>
+      </div>
+      <div id="examsBox"></div>
+      <div class="subjects-grid" id="subjectsGrid"></div>
+    </section>
+
+    <!-- TODAS -->
+    <section class="view" id="view-todas">
+      <div class="filters">
+        <input type="search" id="search" placeholder="Buscar tarefas…" aria-label="Buscar tarefas">
+        <select id="filterCat" aria-label="Filtrar por categoria">
+          <option value="">Todas as categorias</option>
+          <option value="dia">Dia a dia</option>
+          <option value="escola">Escola</option>
+        </select>
+        <select id="filterStatus" aria-label="Filtrar por status">
+          <option value="pendentes">Pendentes</option>
+          <option value="concluidas">Concluídas</option>
+          <option value="">Todas</option>
+        </select>
+      </div>
+      <ul class="task-list" id="allTasks"></ul>
+      <button class="btn ghost small danger-text" id="clearDone" type="button">Apagar tarefas concluídas</button>
+    </section>
+  </main>
+
+  <!-- MODAL TAREFA -->
+  <dialog id="taskDialog">
+    <form id="taskForm" method="dialog">
+      <h2 id="formTitle">Nova tarefa</h2>
+
+      <label>Título
+        <input name="title" required maxlength="120" placeholder="Ex.: Lição de matemática pág. 42">
+      </label>
+
+      <fieldset class="segmented">
+        <legend>Categoria</legend>
+        <label><input type="radio" name="category" value="dia" checked> 🏠 Dia a dia</label>
+        <label><input type="radio" name="category" value="escola"> 🎒 Escola</label>
+      </fieldset>
+
+      <div class="school-fields" id="schoolFields">
+        <div class="row">
+          <label>Matéria
+            <select name="subject" id="subjectSelect"></select>
+          </label>
+          <label>Tipo
+            <select name="kind">
+              <option value="licao">Lição de casa</option>
+              <option value="trabalho">Trabalho</option>
+              <option value="prova">Prova</option>
+              <option value="estudo">Estudar</option>
+              <option value="outro">Outro</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <label>Data
+          <input type="date" name="date">
+        </label>
+        <label>Horário
+          <input type="time" name="time">
+        </label>
+      </div>
+
+      <div class="row">
+        <label>Prioridade
+          <select name="priority">
+            <option value="baixa">Baixa</option>
+            <option value="media" selected>Média</option>
+            <option value="alta">Alta</option>
+          </select>
+        </label>
+        <label>Repetir
+          <select name="repeat">
+            <option value="">Não repetir</option>
+            <option value="diario">Todo dia</option>
+            <option value="semanal">Toda semana</option>
+          </select>
+        </label>
+      </div>
+
+      <label>Anotações
+        <textarea name="notes" rows="3" maxlength="1000" placeholder="Detalhes, páginas, materiais…"></textarea>
+      </label>
+
+      <div class="dialog-actions">
+        <button class="btn ghost danger-text" id="deleteBtn" type="button" hidden>Excluir</button>
+        <span class="spacer"></span>
+        <button class="btn ghost" value="cancel" formnovalidate type="submit">Cancelar</button>
+        <button class="btn primary" value="save" type="submit">Salvar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- MODAL MATÉRIAS -->
+  <dialog id="subjectsDialog">
+    <form method="dialog" id="subjectsForm">
+      <h2>Matérias</h2>
+      <ul class="subject-edit-list" id="subjectEditList"></ul>
+      <div class="row add-subject">
+        <input id="newSubjectName" placeholder="Nova matéria" maxlength="40">
+        <input id="newSubjectColor" type="color" value="#4f46e5" aria-label="Cor da matéria">
+        <button class="btn ghost small" id="addSubjectBtn" type="button">Adicionar</button>
+      </div>
+      <div class="dialog-actions">
+        <span class="spacer"></span>
+        <button class="btn primary" type="submit">Pronto</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
