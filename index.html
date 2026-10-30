@@ -6,6 +6,11 @@
   <title>Dal — Tarefas e Agenda</title>
   <meta name="description" content="App de tarefas com agenda para o dia a dia e para a escola.">
   <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Dal">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,7 +18,7 @@
     <div class="brand">
       <span class="logo" aria-hidden="true">✓</span>
       <div>
-        <h1>Dal</h1>
+        <h1>Dal <span class="version" id="appVersion"></span></h1>
         <p class="today-label" id="todayLabel"></p>
       </div>
     </div>
@@ -170,8 +175,16 @@
     </form>
   </dialog>
 
+  <div class="update-bar" id="updateBar" hidden>
+    <span id="updateText">Nova versão disponível</span>
+    <button class="btn small" id="updateBtn" type="button">Atualizar</button>
+  </div>
+
+  <footer class="footer">Dal · versão <span id="footerVersion"></span></footer>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <script src="version.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

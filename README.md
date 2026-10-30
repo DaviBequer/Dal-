@@ -5,7 +5,19 @@ Funciona direto no navegador, sem instalação e sem servidor: os dados ficam sa
 
 ## Como usar
 
-Abra o arquivo `index.html` no navegador. Para publicar online, ative o GitHub Pages neste repositório (Settings → Pages → branch principal).
+Acesse **https://davibequer.github.io/Dal-/** e instale como app:
+
+- **Android (Chrome):** menu ⋮ → *Instalar app* / *Adicionar à tela inicial*.
+- **iPhone (Safari):** botão Compartilhar → *Adicionar à Tela de Início*.
+- **Computador (Chrome/Edge):** ícone de instalar na barra de endereço.
+
+O app funciona offline. Quando sai uma versão nova, aparece o aviso *Nova versão disponível* com o botão **Atualizar**.
+
+## Versões
+
+O número da versão fica em `version.js`, aparece no topo do app e muda a cada atualização.
+O histórico está em [`CHANGELOG.md`](CHANGELOG.md). Cada push na branch principal publica o app
+automaticamente no GitHub Pages e cria a tag `v<versão>`.
 
 ## Funcionalidades
 

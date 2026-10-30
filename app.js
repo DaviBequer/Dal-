@@ -544,6 +544,50 @@ $('#clearDone').addEventListener('click', () => {
 // Atualiza ao virar o dia com o app aberto
 document.addEventListener('visibilitychange', () => { if (!document.hidden) render(); });
 
+// ---------- Versão e PWA ----------
+const APP_VERSION = self.APP_VERSION || '';
+$('#appVersion').textContent = `v${APP_VERSION}`;
+$('#footerVersion').textContent = APP_VERSION;
+
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  // Recarrega só quando o usuário pediu a atualização (não na primeira instalação)
+  let updateRequested = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!updateRequested) return;
+    updateRequested = false;
+    location.reload();
+  });
+
+  navigator.serviceWorker.register('sw.js').then((reg) => {
+    const offerUpdate = (worker) => {
+      // Lê a versão nova direto do servidor para mostrar no aviso
+      fetch('version.js', { cache: 'no-store' })
+        .then((r) => r.text())
+        .then((txt) => {
+          const m = txt.match(/APP_VERSION = '([^']+)'/);
+          if (m) $('#updateText').textContent = `Nova versão ${m[1]} disponível`;
+        })
+        .catch(() => {});
+      $('#updateBar').hidden = false;
+      $('#updateBtn').onclick = () => {
+        updateRequested = true;
+        worker.postMessage('skipWaiting');
+      };
+    };
+
+    if (reg.waiting && navigator.serviceWorker.controller) offerUpdate(reg.waiting);
+    reg.addEventListener('updatefound', () => {
+      const worker = reg.installing;
+      worker.addEventListener('statechange', () => {
+        if (worker.state === 'installed' && navigator.serviceWorker.controller) offerUpdate(worker);
+      });
+    });
+
+    // Procura atualizações ao voltar para o app
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) reg.update(); });
+  }).catch((e) => console.warn('Service worker não registrado.', e));
+}
+
 // ---------- Início ----------
 let initialView = 'hoje';
 try { initialView = localStorage.getItem('dal.view') || 'hoje'; } catch (e) { /* ignora */ }

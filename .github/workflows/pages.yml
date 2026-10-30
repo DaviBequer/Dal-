@@ -1,0 +1,71 @@
+name: Publicar no GitHub Pages
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    if: github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ler versão
+        id: versao
+        run: |
+          V=$(sed -n "s/.*APP_VERSION = '\([^']*\)'.*/\1/p" version.js)
+          test -n "$V" || { echo "::error::Versão não encontrada em version.js"; exit 1; }
+          echo "versao=$V" >> "$GITHUB_OUTPUT"
+          echo "Versão: $V"
+
+      - name: Conferir se a versão foi aumentada
+        id: conferir
+        env:
+          V: ${{ steps.versao.outputs.versao }}
+        run: |
+          APP="index.html styles.css app.js sw.js version.js manifest.webmanifest icons"
+          if git rev-parse -q --verify "refs/tags/v$V" >/dev/null; then
+            if git diff --quiet "v$V" HEAD -- $APP; then
+              echo "App sem mudanças desde v$V; nada para publicar."
+              echo "publicar=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "::error::O app mudou mas a versão continua $V. Aumente APP_VERSION em version.js e atualize o CHANGELOG.md."
+              exit 1
+            fi
+          else
+            echo "publicar=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publicar na branch gh-pages
+        if: steps.conferir.outputs.publicar == 'true'
+        env:
+          V: ${{ steps.versao.outputs.versao }}
+        run: |
+          mkdir _site
+          cp -r index.html styles.css app.js sw.js version.js manifest.webmanifest icons _site/
+          touch _site/.nojekyll
+          cd _site
+          git init -q -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -qm "Publica versão $V"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
+
+      - name: Criar tag da versão
+        if: steps.conferir.outputs.publicar == 'true'
+        env:
+          V: ${{ steps.versao.outputs.versao }}
+        run: |
+          git tag "v$V"
+          git push origin "v$V"

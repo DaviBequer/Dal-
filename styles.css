@@ -58,6 +58,10 @@ h3 { font-size: 1rem; }
   display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px;
   background: var(--primary); color: var(--primary-text); font-weight: 700; font-size: 1.2rem;
 }
+.version {
+  font-size: .7rem; font-weight: 600; color: var(--muted); background: var(--surface-2);
+  border-radius: 999px; padding: 2px 8px; vertical-align: middle;
+}
 .today-label { margin: 0; color: var(--muted); font-size: .85rem; }
 
 /* Tabs */
@@ -216,6 +220,16 @@ dialog label { display: flex; flex-direction: column; gap: 4px; font-size: .85re
 .school-fields[hidden] { display: none; }
 .dialog-actions { display: flex; gap: 8px; margin-top: 4px; }
 .spacer { flex: 1; }
+
+/* Atualização e rodapé */
+.update-bar {
+  position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 10;
+  width: min(480px, calc(100vw - 32px)); justify-content: space-between;
+  display: flex; align-items: center; gap: 12px; background: var(--primary); color: var(--primary-text);
+  padding: 8px 8px 8px 16px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+}
+.update-bar[hidden] { display: none; }
+.footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 24px 16px 32px; }
 
 /* Toast */
 .toast {
