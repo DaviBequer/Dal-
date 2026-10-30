@@ -135,33 +135,37 @@ function toast(msg) {
 }
 
 // ---------- Renderização de tarefas ----------
+const icon = (id) => `<svg class="ico"><use href="#i-${id}"/></svg>`;
+
+function taskColor(t) {
+  const subj = t.category === 'escola' ? subjectById(t.subject) : null;
+  return subj ? subj.color : (t.category === 'escola' ? 'var(--escola)' : 'var(--dia)');
+}
+
 function taskHTML(t, { showDate = true } = {}) {
   const subj = t.category === 'escola' ? subjectById(t.subject) : null;
   const late = !t.done && t.date && diffDays(t.date) < 0;
-  const chips = [];
-
-  chips.push(`<span class="chip"><span class="prio ${t.priority}"></span>${PRIORITY_LABELS[t.priority]}</span>`);
-  if (t.category === 'escola') {
-    if (subj) chips.push(`<span class="chip">${escapeHTML(subj.name)}</span>`);
-    chips.push(`<span class="chip ${t.kind === 'prova' ? 'prova' : ''}">${KIND_LABELS[t.kind] || 'Outro'}</span>`);
-  } else {
-    chips.push('<span class="chip">🏠 Dia a dia</span>');
-  }
-  if (showDate && t.date) {
-    chips.push(`<span class="chip ${late ? 'late' : ''}">📅 ${relativeDate(t.date)}</span>`);
-  }
-  if (t.time) chips.push(`<span class="chip">🕒 ${t.time}</span>`);
-  if (t.date && t.reminder) chips.push(`<span class="chip">🔔 ${REMINDER_LABELS[t.reminder] || ''}</span>`);
-  if (t.repeat) chips.push(`<span class="chip">🔁 ${t.repeat === 'diario' ? 'Diária' : 'Semanal'}</span>`);
-
-  const style = subj ? ` style="--subject-color:${escapeHTML(subj.color)}"` : '';
+  const isExam = t.category === 'escola' && t.kind === 'prova';
+  const label = t.category === 'escola'
+    ? `${subj ? escapeHTML(subj.name) : 'Escola'} · ${KIND_LABELS[t.kind] || 'Outro'}`
+    : 'Dia a dia';
+  const badge = subj ? escapeHTML(subj.name.slice(0, 2)) : (t.category === 'escola' ? icon('book') : icon('house'));
+  const meta = [];
+  if (showDate && t.date) meta.push(`<span class="${late ? 'late' : ''}">${icon('cal')}${relativeDate(t.date)}</span>`);
+  if (t.date && t.reminder) meta.push(`<span>${icon('bell')}${REMINDER_LABELS[t.reminder] || ''}</span>`);
+  if (t.repeat) meta.push(`<span>${icon('repeat')}${t.repeat === 'diario' ? 'Diária' : 'Semanal'}</span>`);
   return `
-    <li class="task ${t.category} ${t.done ? 'done' : ''}" data-id="${t.id}"${style}>
-      <button class="check" type="button" data-action="toggle" aria-label="${t.done ? 'Desmarcar' : 'Concluir'} tarefa">${t.done ? '✓' : ''}</button>
+    <li class="task ${t.category} ${t.done ? 'done' : ''} ${isExam ? 'exam' : ''} prio-${t.priority}" data-id="${t.id}" style="--c:${escapeHTML(taskColor(t))}">
+      <span class="badge" aria-hidden="true">${badge}</span>
       <div class="task-body" data-action="edit">
-        <div class="task-title">${escapeHTML(t.title)}</div>
-        <div class="task-meta">${chips.join('')}</div>
-        ${t.notes ? `<div class="task-notes">${escapeHTML(t.notes)}</div>` : ''}
+        <span class="task-kicker">${label}${isExam ? ' <b class="exam-tag">PROVA</b>' : ''}</span>
+        <span class="task-title">${escapeHTML(t.title)}</span>
+        ${meta.length ? `<span class="task-meta">${meta.join('')}</span>` : ''}
+        ${t.notes ? `<span class="task-notes">${escapeHTML(t.notes)}</span>` : ''}
+      </div>
+      <div class="task-side">
+        ${t.time ? `<span class="time">${t.time}</span>` : ''}
+        <button class="check" type="button" data-action="toggle" aria-label="${t.done ? 'Desmarcar' : 'Concluir'} tarefa">${icon('check')}</button>
       </div>
     </li>`;
 }
@@ -171,32 +175,83 @@ function listHTML(tasks, opts, emptyMsg = 'Nada por aqui.') {
   return `<ul class="task-list">${sortTasks(tasks).map((t) => taskHTML(t, opts)).join('')}</ul>`;
 }
 
+function setHero({ kicker = '', title = '', sub = '', ring = null, week = false }) {
+  $('#heroKicker').textContent = kicker;
+  $('#heroTitle').textContent = title;
+  $('#heroSub').textContent = sub;
+  $('#ring').hidden = !ring;
+  if (ring) {
+    $('#ring').style.setProperty('--p', ring.total ? Math.round((ring.done / ring.total) * 100) : 0);
+    $('#ringNum').textContent = `${ring.done}/${ring.total}`;
+  }
+  $('#week').hidden = !week;
+}
+
+function greeting() {
+  const h = new Date().getHours();
+  return h < 12 ? 'Bom dia!' : h < 18 ? 'Boa tarde!' : 'Boa noite!';
+}
+
 // ---------- View: Hoje ----------
+let hojeFilter = '';
+
+function renderWeek() {
+  const today = todayISO();
+  let html = '';
+  for (let i = -1; i < 6; i++) {
+    const iso = addDays(today, i);
+    const n = state.tasks.filter((t) => t.date === iso && !t.done).length;
+    const d = fromISO(iso);
+    html += `<button type="button" class="day-pill ${i === 0 ? 'today' : ''}" data-date="${iso}">
+      <span class="dw">${d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '')}</span>
+      <span class="dn">${d.getDate()}</span>
+      <span class="dd">${n ? '•'.repeat(Math.min(n, 3)) : ''}</span></button>`;
+  }
+  $('#week').innerHTML = html;
+}
+
 function renderHoje() {
   const today = todayISO();
-  const pending = state.tasks.filter((t) => !t.done);
+  const match = (t) => !hojeFilter || t.category === hojeFilter;
+  const pending = state.tasks.filter((t) => !t.done && match(t));
   const overdue = pending.filter((t) => t.date && t.date < today);
-  const todays = state.tasks.filter((t) => t.date === today);
-  const week = pending.filter((t) => t.date && t.date > today && t.date <= addDays(today, 7));
+  const todaysAll = state.tasks.filter((t) => t.date === today);
+  const todays = todaysAll.filter(match);
+  const soon = pending.filter((t) => t.date && t.date > today && t.date <= addDays(today, 7));
   const noDate = pending.filter((t) => !t.date);
-  const exams = pending.filter((t) => t.kind === 'prova' && t.category === 'escola' && t.date && t.date >= today);
+  const left = todaysAll.filter((t) => !t.done).length;
 
-  const doneToday = todays.filter((t) => t.done).length;
-  $('#stats').innerHTML = `
-    <div class="stat"><strong>${todays.length - doneToday}</strong><span>para hoje</span></div>
-    <div class="stat"><strong>${doneToday}</strong><span>concluídas hoje</span></div>
-    <div class="stat ${overdue.length ? 'warn' : ''}"><strong>${overdue.length}</strong><span>atrasadas</span></div>
-    <div class="stat"><strong>${exams.length}</strong><span>provas à frente</span></div>`;
+  setHero({
+    kicker: greeting(),
+    title: cap(new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })),
+    sub: left ? `${left} ${left === 1 ? 'tarefa' : 'tarefas'} para hoje` : 'Tudo feito por hoje',
+    ring: { done: todaysAll.length - left, total: todaysAll.length },
+    week: true,
+  });
+  renderWeek();
+
+  const exam = sortTasks(state.tasks.filter((t) => !t.done && t.category === 'escola' && t.kind === 'prova' && t.date && t.date >= today))[0];
+  if (exam) {
+    const s = subjectById(exam.subject);
+    const n = diffDays(exam.date);
+    $('#spotlight').innerHTML = `
+      <article class="spotlight" data-id="${exam.id}" style="--c:${escapeHTML(s ? s.color : 'var(--alta)')}">
+        <div class="spot-text" data-action="edit">
+          <span class="spot-kicker">Próxima prova</span>
+          <strong>${escapeHTML(s ? s.name : exam.title)}</strong>
+          <span>${escapeHTML(exam.title)} · ${formatDate(exam.date, { weekday: 'short', day: 'numeric', month: 'short' })}</span>
+        </div>
+        <div class="countdown"><b>${n}</b><span>${n === 1 ? 'dia' : 'dias'}</span></div>
+      </article>`;
+  } else {
+    $('#spotlight').innerHTML = '';
+  }
 
   let html = '';
-  if (overdue.length) {
-    html += `<div class="group overdue"><h2>Atrasadas</h2>${listHTML(overdue)}</div>`;
-  }
-  html += `<div class="group"><h2>Hoje</h2>${listHTML(todays, { showDate: false }, 'Nenhuma tarefa para hoje. Aproveite! 🎉')}</div>`;
-  html += `<div class="group"><h2>Próximos 7 dias</h2>${listHTML(week, {}, 'Semana tranquila.')}</div>`;
-  if (noDate.length) {
-    html += `<div class="group"><h2>Sem data</h2>${listHTML(noDate)}</div>`;
-  }
+  if (overdue.length) html += `<section class="group overdue"><h2>Atrasadas <span class="count">${overdue.length}</span></h2>${listHTML(overdue)}</section>`;
+  html += `<section class="group"><h2>Hoje <span class="count">${todays.length}</span></h2>${listHTML(todays, { showDate: false }, 'Nada para hoje. Aproveite!')}</section>`;
+  html += `<section class="group"><h2>Próximos dias <span class="count">${soon.length}</span></h2>${listHTML(soon, {}, 'Semana tranquila.')}</section>`;
+  if (noDate.length) html += `<section class="group"><h2>Sem data <span class="count">${noDate.length}</span></h2>${listHTML(noDate)}</section>`;
   $('#hojeLists').innerHTML = html;
 }
 
@@ -215,10 +270,10 @@ function renderAgenda() {
   for (const t of state.tasks) {
     if (t.date) (byDate[t.date] ||= []).push(t);
   }
+  const monthCount = Object.keys(byDate).filter((d) => fromISO(d).getMonth() === cal.month).reduce((n, d) => n + byDate[d].length, 0);
+  setHero({ kicker: 'Agenda', title: cap(first.toLocaleDateString('pt-BR', { month: 'long' })), sub: `${monthCount} tarefas neste mês` });
 
-  const dows = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-  let html = dows.map((d) => `<div class="cal-dow">${d}</div>`).join('');
-
+  let html = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((d) => `<div class="cal-dow">${d}</div>`).join('');
   const start = new Date(first);
   start.setDate(1 - first.getDay());
   const today = todayISO();
@@ -231,82 +286,79 @@ function renderAgenda() {
     if (d.getMonth() !== cal.month) classes.push('other');
     if (iso === today) classes.push('today');
     if (iso === cal.selected) classes.push('selected');
-    const dots = tasks.slice(0, 6).map((t) => {
-      const c = t.kind === 'prova' && t.category === 'escola' ? 'prova' : t.category;
-      return `<span class="dot ${c} ${t.done ? 'done' : ''}"></span>`;
-    }).join('');
-    const label = `${formatDate(iso, { day: 'numeric', month: 'long' })}, ${tasks.length} tarefa(s)`;
-    html += `<button type="button" class="${classes.join(' ')}" data-date="${iso}" aria-label="${label}">
+    if (tasks.some((t) => t.kind === 'prova' && !t.done)) classes.push('has-exam');
+    const dots = tasks.slice(0, 3).map((t) => `<span class="dot ${t.done ? 'done' : ''}" style="background:${escapeHTML(taskColor(t))}"></span>`).join('');
+    html += `<button type="button" class="${classes.join(' ')}" data-date="${iso}" aria-label="${formatDate(iso, { day: 'numeric', month: 'long' })}, ${tasks.length} tarefa(s)">
       <span class="num">${d.getDate()}</span><span class="dots">${dots}</span></button>`;
-    // Para depois da última semana do mês
     if (i % 7 === 6 && i >= 27 && d.getMonth() !== cal.month) break;
   }
   $('#calendar').innerHTML = html;
 
   $('#dayTitle').textContent = cap(formatDate(cal.selected, { weekday: 'long', day: 'numeric', month: 'long' }));
-  const dayTasks = byDate[cal.selected] || [];
+  const dayTasks = sortTasks(byDate[cal.selected] || []);
   $('#dayTasks').innerHTML = dayTasks.length
-    ? sortTasks(dayTasks).map((t) => taskHTML(t, { showDate: false })).join('')
+    ? dayTasks.map((t) => `<li class="tl-item"><span class="tl-time">${t.time || 'Dia todo'}</span><span class="tl-line" style="--c:${escapeHTML(taskColor(t))}"></span><ul class="task-list">${taskHTML(t, { showDate: false })}</ul></li>`).join('')
     : '<li class="empty">Nenhuma tarefa neste dia.</li>';
 }
 
 // ---------- View: Escola ----------
+let escolaSubject = '';
+
 function renderEscola() {
   const today = todayISO();
   const school = state.tasks.filter((t) => t.category === 'escola');
+  const pending = school.filter((t) => !t.done);
+  const exams = sortTasks(pending.filter((t) => t.kind === 'prova' && t.date && t.date >= today));
+  setHero({ kicker: 'Escola', title: 'Seus estudos', sub: `${pending.length} pendentes · ${exams.length} ${exams.length === 1 ? 'prova' : 'provas'} chegando` });
 
-  const exams = sortTasks(school.filter((t) => !t.done && t.kind === 'prova' && t.date && t.date >= today));
   $('#examsBox').innerHTML = exams.length
-    ? `<div class="exams"><h3>📝 Próximas provas</h3><ul>${exams.map((t) => {
+    ? exams.map((t) => {
         const s = subjectById(t.subject);
         const n = diffDays(t.date);
-        const when = n === 0 ? 'hoje' : n === 1 ? 'amanhã' : `em ${n} dias`;
-        return `<li><strong>${escapeHTML(s ? s.name : 'Sem matéria')}</strong> — ${escapeHTML(t.title)} · ${formatDate(t.date)} (${when})</li>`;
-      }).join('')}</ul></div>`
-    : '';
+        return `<article class="exam-card" data-id="${t.id}" style="--c:${escapeHTML(s ? s.color : 'var(--alta)')}">
+          <div class="exam-count"><b>${n}</b><span>${n === 1 ? 'dia' : 'dias'}</span></div>
+          <div class="exam-info" data-action="edit"><strong>${escapeHTML(s ? s.name : 'Prova')}</strong><span>${escapeHTML(t.title)}</span><span class="exam-date">${formatDate(t.date, { weekday: 'short', day: 'numeric', month: 'short' })}</span></div>
+        </article>`;
+      }).join('')
+    : '<p class="empty">Nenhuma prova marcada.</p>';
 
-  const cards = state.subjects.map((s) => {
-    const tasks = school.filter((t) => t.subject === s.id && !t.done);
-    return `
-      <article class="subject-card" style="--subject-color:${escapeHTML(s.color)}">
-        <header><h3>${escapeHTML(s.name)}</h3><span class="count">${tasks.length} pendente(s)</span></header>
-        ${listHTML(tasks, {}, 'Tudo em dia ✨')}
-        <button class="btn ghost small" type="button" data-add-subject="${s.id}">+ Tarefa de ${escapeHTML(s.name)}</button>
-      </article>`;
-  });
+  $('#subjectsGrid').innerHTML = state.subjects.map((s) => {
+    const all = school.filter((t) => t.subject === s.id);
+    const open = all.filter((t) => !t.done).length;
+    const pct = all.length ? Math.round(((all.length - open) / all.length) * 100) : 0;
+    return `<button type="button" class="subject-tile ${escolaSubject === s.id ? 'active' : ''}" data-subject="${s.id}" style="--c:${escapeHTML(s.color)}">
+      <span class="tile-badge">${escapeHTML(s.name.slice(0, 2))}</span>
+      <span class="tile-name">${escapeHTML(s.name)}</span>
+      <span class="tile-count">${open ? `${open} pendente${open > 1 ? 's' : ''}` : 'Em dia'}</span>
+      <span class="tile-bar"><i style="width:${pct}%"></i></span>
+    </button>`;
+  }).join('');
 
-  const orphan = school.filter((t) => !t.done && !subjectById(t.subject));
-  if (orphan.length) {
-    cards.push(`<article class="subject-card" style="--subject-color:var(--muted)">
-      <header><h3>Sem matéria</h3><span class="count">${orphan.length} pendente(s)</span></header>
-      ${listHTML(orphan)}</article>`);
-  }
-
-  $('#subjectsGrid').innerHTML = cards.join('') ||
-    '<p class="empty">Cadastre suas matérias em “Gerenciar matérias”.</p>';
+  const subj = subjectById(escolaSubject);
+  $('#schoolListTitle').textContent = subj ? `Tarefas de ${subj.name}` : 'Lições e trabalhos';
+  const list = pending.filter((t) => (subj ? t.subject === subj.id : t.kind !== 'prova'));
+  $('#schoolList').innerHTML = listHTML(list, {}, 'Tudo em dia ✨');
 }
 
 // ---------- View: Todas ----------
+const todasFilter = { status: 'pendentes', cat: '' };
+
 function renderTodas() {
   const q = $('#search').value.trim().toLowerCase();
-  const cat = $('#filterCat').value;
-  const status = $('#filterStatus').value;
-
   const list = state.tasks.filter((t) => {
-    if (cat && t.category !== cat) return false;
-    if (status === 'pendentes' && t.done) return false;
-    if (status === 'concluidas' && !t.done) return false;
+    if (todasFilter.cat && t.category !== todasFilter.cat) return false;
+    if (todasFilter.status === 'pendentes' && t.done) return false;
+    if (todasFilter.status === 'concluidas' && !t.done) return false;
     if (q) {
       const subj = subjectById(t.subject);
-      const hay = `${t.title} ${t.notes || ''} ${subj ? subj.name : ''}`.toLowerCase();
-      if (!hay.includes(q)) return false;
+      if (!`${t.title} ${t.notes || ''} ${subj ? subj.name : ''}`.toLowerCase().includes(q)) return false;
     }
     return true;
   });
-
-  $('#allTasks').innerHTML = list.length
-    ? sortTasks(list).map((t) => taskHTML(t)).join('')
-    : '<li class="empty">Nenhuma tarefa encontrada.</li>';
+  setHero({ kicker: 'Todas', title: 'Suas tarefas', sub: `${state.tasks.filter((t) => !t.done).length} pendentes · ${state.tasks.filter((t) => t.done).length} concluídas` });
+  document.querySelectorAll('#statusChips [data-status]').forEach((b) => b.classList.toggle('active', b.dataset.status === todasFilter.status));
+  document.querySelectorAll('#statusChips [data-cat]').forEach((b) => b.classList.toggle('active', b.dataset.cat === todasFilter.cat));
+  $('#allTasks').innerHTML = listHTML(list, {}, 'Nenhuma tarefa encontrada.');
   $('#clearDone').hidden = !state.tasks.some((t) => t.done);
 }
 
@@ -314,14 +366,12 @@ function renderTodas() {
 let currentView = 'hoje';
 
 function render() {
-  $('#todayLabel').textContent = cap(new Date().toLocaleDateString('pt-BR', {
-    weekday: 'long', day: 'numeric', month: 'long',
-  }));
   ({ hoje: renderHoje, agenda: renderAgenda, escola: renderEscola, todas: renderTodas })[currentView]();
 }
 
 function switchView(view) {
   currentView = view;
+  document.body.dataset.view = view;
   document.querySelectorAll('.tab').forEach((b) => {
     const active = b.dataset.view === view;
     b.classList.toggle('active', active);
@@ -329,6 +379,7 @@ function switchView(view) {
   });
   document.querySelectorAll('.view').forEach((v) => v.classList.toggle('active', v.id === `view-${view}`));
   try { localStorage.setItem('dal.view', view); } catch (e) { /* ignora */ }
+  window.scrollTo(0, 0);
   render();
 }
 
@@ -358,9 +409,10 @@ const form = $('#taskForm');
 let editingId = null;
 
 function fillSubjectSelect(selected) {
+  const sel = selected || (state.subjects[0] && state.subjects[0].id);
   $('#subjectSelect').innerHTML = state.subjects.length
-    ? state.subjects.map((s) => `<option value="${s.id}" ${s.id === selected ? 'selected' : ''}>${escapeHTML(s.name)}</option>`).join('')
-    : '<option value="">(cadastre uma matéria)</option>';
+    ? state.subjects.map((s) => `<label class="choice subj" style="--c:${escapeHTML(s.color)}"><input type="radio" name="subject" value="${s.id}" ${s.id === sel ? 'checked' : ''}><span><i></i>${escapeHTML(s.name)}</span></label>`).join('')
+    : '<p class="hint">Cadastre uma matéria na aba Escola.</p>';
 }
 
 function updateSchoolFields() {
@@ -376,13 +428,17 @@ function openForm(task = null, defaults = {}) {
 
   fillSubjectSelect(data.subject);
   form.title.value = data.title || '';
-  form.category.value = data.category;
-  form.kind.value = data.kind || 'licao';
+  // Marca a opção pelo valor (inclusive a de valor vazio, que form.x.value = '' não marca)
+  const setChoice = (name, value) => {
+    form.querySelectorAll(`input[name="${name}"]`).forEach((r) => { r.checked = r.value === value; });
+  };
+  setChoice('category', data.category);
+  setChoice('kind', data.kind || 'licao');
   form.date.value = data.date || '';
   form.time.value = data.time || '';
-  form.priority.value = data.priority || 'media';
-  form.repeat.value = data.repeat || '';
-  form.reminder.value = data.reminder || '';
+  setChoice('priority', data.priority || 'media');
+  setChoice('repeat', data.repeat || '');
+  setChoice('reminder', data.reminder || '');
   form.notes.value = data.notes || '';
   updateSchoolFields();
   dialog.returnValue = '';
@@ -438,10 +494,10 @@ const subjectsDialog = $('#subjectsDialog');
 
 function renderSubjectEditor() {
   $('#subjectEditList').innerHTML = state.subjects.map((s) => `
-    <li data-id="${s.id}">
+    <li data-id="${s.id}" style="--c:${escapeHTML(s.color)}">
       <input type="color" value="${escapeHTML(s.color)}" data-subject-color aria-label="Cor de ${escapeHTML(s.name)}">
       <span>${escapeHTML(s.name)}</span>
-      <button class="btn ghost small danger-text" type="button" data-remove-subject>Remover</button>
+      <button class="icon-btn small" type="button" data-remove-subject aria-label="Remover ${escapeHTML(s.name)}"><svg><use href="#i-x"/></svg></button>
     </li>`).join('') || '<li class="empty">Nenhuma matéria cadastrada.</li>';
 }
 
@@ -506,6 +562,12 @@ document.querySelector('main').addEventListener('click', (e) => {
     openForm(null, { category: 'escola', subject: addSubj.dataset.addSubject });
     return;
   }
+  const tile = e.target.closest('.subject-tile');
+  if (tile) {
+    escolaSubject = escolaSubject === tile.dataset.subject ? '' : tile.dataset.subject;
+    renderEscola();
+    return;
+  }
   const day = e.target.closest('.cal-day');
   if (day) {
     cal.selected = day.dataset.date;
@@ -515,7 +577,7 @@ document.querySelector('main').addEventListener('click', (e) => {
     return;
   }
   const actionEl = e.target.closest('[data-action]');
-  const taskEl = e.target.closest('.task');
+  const taskEl = e.target.closest('.task, .spotlight, .exam-card');
   if (!actionEl || !taskEl) return;
   const id = taskEl.dataset.id;
   if (actionEl.dataset.action === 'toggle') toggleTask(id);
@@ -539,7 +601,30 @@ $('#goToday').addEventListener('click', () => {
 });
 $('#addOnDay').addEventListener('click', () => openForm(null, { date: cal.selected }));
 
-['#search', '#filterCat', '#filterStatus'].forEach((sel) => $(sel).addEventListener('input', renderTodas));
+$('#search').addEventListener('input', renderTodas);
+$('#statusChips').addEventListener('click', (e) => {
+  const b = e.target.closest('.chip-btn');
+  if (!b) return;
+  if ('status' in b.dataset) todasFilter.status = b.dataset.status;
+  if ('cat' in b.dataset) todasFilter.cat = todasFilter.cat === b.dataset.cat ? '' : b.dataset.cat;
+  renderTodas();
+});
+$('#hojeFilter').addEventListener('click', (e) => {
+  const b = e.target.closest('.chip-btn');
+  if (!b) return;
+  hojeFilter = b.dataset.hf;
+  document.querySelectorAll('#hojeFilter .chip-btn').forEach((x) => x.classList.toggle('active', x === b));
+  renderHoje();
+});
+$('#week').addEventListener('click', (e) => {
+  const b = e.target.closest('.day-pill');
+  if (!b) return;
+  cal.selected = b.dataset.date;
+  const d = fromISO(cal.selected);
+  cal.month = d.getMonth();
+  cal.year = d.getFullYear();
+  switchView('agenda');
+});
 
 $('#clearDone').addEventListener('click', () => {
   const n = state.tasks.filter((t) => t.done).length;
@@ -555,7 +640,6 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) rend
 // ---------- Versão e PWA ----------
 const APP_VERSION = self.APP_VERSION || '';
 $('#appVersion').textContent = `v${APP_VERSION}`;
-$('#footerVersion').textContent = APP_VERSION;
 
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   // Atualização automática: o service worker novo assume sozinho e a página recarrega.
@@ -698,7 +782,7 @@ async function registerBackgroundCheck() {
 function updateNotifyButton() {
   const on = notifyEnabled();
   const btn = $('#notifyBtn');
-  btn.textContent = on ? '🔔' : '🔕';
+  btn.classList.toggle('on', on);
   const label = on ? 'Desativar notificações' : 'Ativar notificações';
   btn.setAttribute('aria-label', label);
   btn.title = label;

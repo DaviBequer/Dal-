@@ -27,6 +27,10 @@ A versão é um número inteiro (v1, v2, v3…) definido em `version.js`; aparec
 O histórico está em [`CHANGELOG.md`](CHANGELOG.md). Cada push na branch principal publica o app
 automaticamente no GitHub Pages e cria a tag `v<versão>`.
 
+## Visual
+
+Estilo **Grande Mestre** (xadrez): topo esmeralda, detalhes dourados e peças marcando a prioridade (♛ alta, ♜ média, ♟ baixa). Navegação embaixo com o botão **+** no centro. Fontes Fraunces e Manrope guardadas em `fonts/` para funcionar offline.
+
 ## Funcionalidades
 
 - **Hoje** — resumo do dia: tarefas de hoje, atrasadas, próximos 7 dias, tarefas sem data e contador de provas.

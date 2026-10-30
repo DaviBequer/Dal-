@@ -13,6 +13,9 @@ const ASSETS = [
   'icons/icon-192.png',
   'icons/icon-512.png',
   'icons/maskable-512.png',
+  'icons/icon.svg',
+  'fonts/fraunces-700.woff2',
+  'fonts/manrope.woff2',
 ];
 
 self.addEventListener('install', (event) => {

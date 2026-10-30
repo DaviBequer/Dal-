@@ -2,6 +2,14 @@
 
 A partir da v1 a versão é um número inteiro que sobe a cada atualização.
 
+## v2 — 2026-10-30
+- App renovado com o estilo **Grande Mestre** (xadrez): verde esmeralda, dourado e peças marcando a prioridade.
+- Navegação embaixo com botão + no centro; topo com saudação, progresso do dia e semana.
+- Próxima prova em destaque com contagem regressiva; filtro Tudo / Dia a dia / Escola.
+- Agenda com linha do tempo do dia; Escola com carrossel de provas e blocos de matéria.
+- Nova tarefa e Matérias abrem de baixo, com botões no lugar das listas.
+- Fontes guardadas no app (funciona offline).
+
 ## v1 — 2026-10-30
 - Novo nome: **Dalê Tarefas**.
 - Versão no formato v1, v2, v3… ao lado do nome.

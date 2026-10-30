@@ -38,7 +38,7 @@ jobs:
         env:
           V: ${{ steps.versao.outputs.versao }}
         run: |
-          APP="index.html styles.css app.js sw.js version.js manifest.webmanifest icons"
+          APP="index.html styles.css app.js sw.js version.js manifest.webmanifest icons fonts"
           if git rev-parse -q --verify "refs/tags/v$V" >/dev/null; then
             if git diff --quiet "v$V" HEAD -- $APP; then
               echo "App sem mudanças desde v$V; republica sem criar tag."
@@ -54,7 +54,7 @@ jobs:
       - name: Montar o site
         run: |
           mkdir _site
-          cp -r index.html styles.css app.js sw.js version.js manifest.webmanifest icons _site/
+          cp -r index.html styles.css app.js sw.js version.js manifest.webmanifest icons fonts _site/
           touch _site/.nojekyll
 
       - uses: actions/configure-pages@v5
