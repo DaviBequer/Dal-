@@ -2,6 +2,11 @@
 
 A partir da v1 a versão é um número inteiro que sobe a cada atualização.
 
+## v10 — 2026-10-31
+- Modo Profissional com o Oceano **Marinha** (O5): fundo claro, mais azul-marinho e detalhes em latão
+  (amarelo queimado), logo de âncora, leme de navio girando no topo e âncora balançando no bloco de Hoje.
+- Uma **baleia gigante** passa devagar ao fundo do topo, junto com as bolhas subindo.
+
 ## v9 — 2026-10-31
 - O botão Salvar das janelas fica sempre visível, preso no rodapé, acima do teclado.
 - Botão voltar do Android como no Instagram: fecha a janela aberta, volta para "Hoje" e, em "Hoje",

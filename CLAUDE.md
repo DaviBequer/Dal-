@@ -24,7 +24,7 @@ janelas pretas do sistema. Use as janelas próprias do app (`askConfirm`, `#date
 
 - **Escola** (padrão): dados em `localStorage['dal.v1']`, tema Grande Mestre (`:root` no `styles.css`).
 - **Profissional**: dados em `localStorage['dal.pro']`, tema em `html[data-mode="pro"]` no fim do `styles.css`
-  (layout Bento + cores Oceano). Textos e tipos de cada modo ficam em `MODES` no `app.js`.
+  (layout Bento + Oceano "Marinha": azul-marinho e latão, baleia e leme no topo — bloco no fim do arquivo). Textos e tipos de cada modo ficam em `MODES` no `app.js`.
 
 ## Quando publicar direto e quando perguntar (pedido do usuário)
 

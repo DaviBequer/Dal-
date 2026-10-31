@@ -1081,10 +1081,10 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) chec
 // ---------- Modo (Escola / Profissional) e configurações ----------
 function applyMode() {
   document.documentElement.dataset.mode = MODE;
-  document.querySelector('meta[name="theme-color"]').content = MODE === 'pro' ? '#0f4c5c' : '#123d2f';
+  document.querySelector('meta[name="theme-color"]').content = MODE === 'pro' ? '#07142a' : '#123d2f';
   document.querySelectorAll('[data-l]').forEach((el) => { el.textContent = M[el.dataset.l]; });
   document.querySelector('.tab[data-view="escola"] use').setAttribute('href', `#i-${M.tabIcon}`);
-  document.querySelector('.logo use').setAttribute('href', MODE === 'pro' ? '#o-wave' : '#i-check');
+  document.querySelector('.logo use').setAttribute('href', MODE === 'pro' ? '#o-anchor' : '#i-check');
   document.querySelector('.cat-toggle label:nth-child(2) use').setAttribute('href', `#i-${M.tabIcon}`);
   form.title.placeholder = M.placeholder;
   $('#kindRow').innerHTML = Object.entries(M.kinds).map(([v, l]) =>
