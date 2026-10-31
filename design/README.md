@@ -30,3 +30,9 @@ Grande Mestre Bento, Sakura Neon, Arena XP, Galáxia e Mundo Bloco.
 
 Alternativas de cor para o modo Profissional publicado (Oceano), aplicadas com `data-btheme` no `<html>`:
 Grafite, Executivo, Papel Branco, Foco e Vinho.
+
+## Cinco versões do Oceano (`oceano-v/`)
+
+`gerar.py` cria `variantes.css` (Abismo, Barbatana, Arraia, Kraken, Marinha), com criaturas em SVG
+(tubarão, barbatana, arraia, polvo, tentáculos, leme, âncora) e efeitos de água. `montar_demo.py` monta a
+página de demonstração ao vivo a partir do app atual. Aplicadas com `data-otheme` no `<html>`.
