@@ -909,6 +909,7 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
       pendingReload = true;
       return;
     }
+    saveUI();
     location.reload();
   };
   document.querySelectorAll('dialog').forEach((d) => d.addEventListener('close', () => {
@@ -1128,7 +1129,113 @@ $('#notifySwitch').addEventListener('click', async () => {
 
 applyMode();
 
+// ---------- Teclado: a janela fica acima dele ----------
+// Em navegadores que não encolhem a página com o teclado, empurra a janela para cima.
+if (window.visualViewport) {
+  const updateKeyboard = () => {
+    const vv = window.visualViewport;
+    const kb = Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
+    document.documentElement.style.setProperty('--kb', `${kb > 80 ? kb : 0}px`);
+  };
+  window.visualViewport.addEventListener('resize', updateKeyboard);
+  window.visualViewport.addEventListener('scroll', updateKeyboard);
+}
+// Ao focar um campo dentro da janela, rola até ele para não ficar atrás do teclado
+document.addEventListener('focusin', (e) => {
+  if (e.target.closest('dialog.sheet') && e.target.matches('input, textarea')) {
+    setTimeout(() => e.target.scrollIntoView({ block: 'center', behavior: 'smooth' }), 300);
+  }
+});
+
+// ---------- Botão voltar do Android (como no Instagram) ----------
+// 1º voltar: fecha a janela aberta, ou volta para "Hoje"; em "Hoje" avisa e só sai se apertar de novo.
+let exitArmed = false;
+let exitTimer;
+function armBackGuard() {
+  try { history.pushState({ dal: 'guard' }, ''); } catch (e) { /* ignora */ }
+}
+window.addEventListener('popstate', () => {
+  if (exitArmed) {
+    history.back(); // segundo toque: sai do app
+    return;
+  }
+  const open = [...document.querySelectorAll('dialog[open]')].pop();
+  if (open) {
+    open.close();
+  } else if (currentView !== 'hoje') {
+    switchView('hoje');
+  } else {
+    exitArmed = true;
+    toast('Toque em voltar de novo para sair');
+    clearTimeout(exitTimer);
+    exitTimer = setTimeout(() => { exitArmed = false; }, 2000);
+  }
+  armBackGuard();
+});
+
+// ---------- Voltar de onde parou ----------
+// Guarda aba, rolagem, filtros, dia da agenda e a tarefa sendo digitada; restaura ao reabrir.
+const UI_KEY = 'dal.ui';
+const UI_MAX_AGE = 12 * 3600000;
+
+function formDraft() {
+  if (!dialog.open) return null;
+  const val = (name) => { const el = form.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; };
+  return {
+    editingId, title: form.title.value, category: val('category'), subject: val('subject'), kind: val('kind'),
+    date: form.date.value, time: form.time.value, priority: val('priority'), repeat: val('repeat'), reminder: val('reminder'), notes: form.notes.value,
+  };
+}
+
+function saveUI() {
+  const ui = {
+    t: Date.now(), mode: MODE, view: currentView, scroll: Math.round(window.scrollY),
+    cal: { year: cal.year, month: cal.month, selected: cal.selected },
+    hojeFilter, escolaSubject, todas: { ...todasFilter, q: $('#search').value },
+    draft: formDraft(),
+  };
+  try { localStorage.setItem(UI_KEY, JSON.stringify(ui)); } catch (e) { /* ignora */ }
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden) saveUI(); });
+window.addEventListener('pagehide', saveUI);
+
+function restoreUI() {
+  let ui = null;
+  try { ui = JSON.parse(localStorage.getItem(UI_KEY)); } catch (e) { /* ignora */ }
+  if (!ui || ui.mode !== MODE || Date.now() - ui.t > UI_MAX_AGE) return false;
+  if (ui.cal) Object.assign(cal, ui.cal);
+  hojeFilter = ui.hojeFilter || '';
+  document.querySelectorAll('#hojeFilter .chip-btn').forEach((x) => x.classList.toggle('active', x.dataset.hf === hojeFilter));
+  escolaSubject = ui.escolaSubject || '';
+  if (ui.todas) {
+    todasFilter.status = ui.todas.status ?? 'pendentes';
+    todasFilter.cat = ui.todas.cat || '';
+    $('#search').value = ui.todas.q || '';
+  }
+  switchView(['hoje', 'agenda', 'escola', 'todas'].includes(ui.view) ? ui.view : 'hoje');
+  requestAnimationFrame(() => window.scrollTo(0, ui.scroll || 0));
+  const d = ui.draft;
+  if (d) {
+    const task = d.editingId ? state.tasks.find((x) => x.id === d.editingId) : null;
+    if (d.editingId && !task) return true;
+    openForm(task, {});
+    editingId = task ? task.id : null;
+    form.title.value = d.title || '';
+    for (const name of ['category', 'subject', 'kind', 'priority', 'repeat', 'reminder']) {
+      form.querySelectorAll(`input[name="${name}"]`).forEach((r) => { r.checked = r.value === (d[name] || ''); });
+    }
+    form.date.value = d.date || '';
+    form.time.value = d.time || '';
+    form.notes.value = d.notes || '';
+    updateSchoolFields();
+    updatePickerLabels();
+  }
+  return true;
+}
+
 // ---------- Início ----------
 let initialView = 'hoje';
 try { initialView = localStorage.getItem('dal.view') || 'hoje'; } catch (e) { /* ignora */ }
-switchView(['hoje', 'agenda', 'escola', 'todas'].includes(initialView) ? initialView : 'hoje');
+if (!restoreUI()) switchView(['hoje', 'agenda', 'escola', 'todas'].includes(initialView) ? initialView : 'hoje');
+try { history.replaceState({ dal: 'base' }, ''); } catch (e) { /* ignora */ }
+armBackGuard();

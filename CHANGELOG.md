@@ -2,6 +2,13 @@
 
 A partir da v1 a versão é um número inteiro que sobe a cada atualização.
 
+## v9 — 2026-10-31
+- O botão Salvar das janelas fica sempre visível, preso no rodapé, acima do teclado.
+- Botão voltar do Android como no Instagram: fecha a janela aberta, volta para "Hoje" e, em "Hoje",
+  só sai do app se apertar voltar duas vezes seguidas (avisa "Toque em voltar de novo para sair").
+- Ao voltar para o app (mesmo se o Android o fechou), ele abre onde você estava: aba, rolagem, filtros,
+  dia da agenda e a tarefa que estava sendo digitada.
+
 ## v8 — 2026-10-31
 - Modo Escola com animações de xadrez: numa faixa de tabuleiro no topo, o cavalo pula em "L", o peão avança, a torre desliza e o
   bispo anda na diagonal; no bloco de Hoje o cavalo dá pulinhos e passa um brilho dourado; a contagem da
