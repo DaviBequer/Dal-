@@ -1,9 +1,38 @@
 'use strict';
 
 // ---------- Armazenamento ----------
-const STORAGE_KEY = 'dal.v1';
+// Dois mundos: Escola (padrão) e Profissional. Cada modo guarda as próprias tarefas e grupos.
+const MODE_KEY = 'dal.mode';
+function getMode() {
+  try { return localStorage.getItem(MODE_KEY) === 'pro' ? 'pro' : 'escola'; } catch (e) { return 'escola'; }
+}
+const MODE = getMode();
+const STORAGE_KEY = MODE === 'pro' ? 'dal.pro' : 'dal.v1';
 
-const DEFAULT_SUBJECTS = [
+const MODES = {
+  escola: {
+    catA: 'Dia a dia', catB: 'Escola', tabB: 'Escola', tabIcon: 'book', group: 'Matéria', groups: 'Matérias',
+    kinds: { licao: 'Lição', trabalho: 'Trabalho', prova: 'Prova', estudo: 'Estudar', outro: 'Outro' }, defaultKind: 'licao',
+    examKind: 'prova', examTag: 'PROVA', spotlight: 'Próxima prova', carousel: 'Provas chegando', noExam: 'Nenhuma prova marcada.',
+    heroB: 'Seus estudos', examWord: ['prova', 'provas'], listTitle: 'Lições e trabalhos', placeholder: 'O que você precisa fazer?',
+  },
+  pro: {
+    catA: 'Casa', catB: 'Trabalho', tabB: 'Trabalho', tabIcon: 'brief', group: 'Projeto', groups: 'Projetos',
+    kinds: { tarefa: 'Tarefa', reuniao: 'Reunião', entrega: 'Entrega', ligacao: 'Ligação', pagamento: 'Pagamento' }, defaultKind: 'tarefa',
+    examKind: 'entrega', examTag: 'PRAZO', spotlight: 'Próximo prazo', carousel: 'Prazos chegando', noExam: 'Nenhum prazo marcado.',
+    heroB: 'Seu trabalho', examWord: ['prazo', 'prazos'], listTitle: 'Tarefas de trabalho', placeholder: 'Qual é a próxima ação?',
+  },
+};
+const M = MODES[MODE];
+
+const DEFAULT_PROJECTS = [
+  { id: 'cli', name: 'Clientes', color: '#4f6bff' },
+  { id: 'equ', name: 'Equipe', color: '#f59e0b' },
+  { id: 'fin', name: 'Financeiro', color: '#2f7a5d' },
+  { id: 'cur', name: 'Cursos', color: '#06b6d4' },
+];
+
+const DEFAULT_SUBJECTS_ESCOLA = [
   { id: 'mat', name: 'Matemática', color: '#4f46e5' },
   { id: 'por', name: 'Português', color: '#e11d48' },
   { id: 'cie', name: 'Ciências', color: '#10b981' },
@@ -12,7 +41,10 @@ const DEFAULT_SUBJECTS = [
   { id: 'ing', name: 'Inglês', color: '#a855f7' },
 ];
 
+const DEFAULT_SUBJECTS = MODE === 'pro' ? DEFAULT_PROJECTS : DEFAULT_SUBJECTS_ESCOLA;
+
 const KIND_LABELS = {
+  ...MODES.pro.kinds,
   licao: 'Lição de casa',
   trabalho: 'Trabalho',
   prova: 'Prova',
@@ -145,10 +177,10 @@ function taskColor(t) {
 function taskHTML(t, { showDate = true } = {}) {
   const subj = t.category === 'escola' ? subjectById(t.subject) : null;
   const late = !t.done && t.date && diffDays(t.date) < 0;
-  const isExam = t.category === 'escola' && t.kind === 'prova';
+  const isExam = t.category === 'escola' && t.kind === M.examKind;
   const label = t.category === 'escola'
-    ? `${subj ? escapeHTML(subj.name) : 'Escola'} · ${KIND_LABELS[t.kind] || 'Outro'}`
-    : 'Dia a dia';
+    ? `${subj ? escapeHTML(subj.name) : M.catB} · ${M.kinds[t.kind] || KIND_LABELS[t.kind] || 'Outro'}`
+    : M.catA;
   const badge = subj ? escapeHTML(subj.name.slice(0, 2)) : (t.category === 'escola' ? icon('book') : icon('house'));
   const meta = [];
   if (showDate && t.date) meta.push(`<span class="${late ? 'late' : ''}">${icon('cal')}${relativeDate(t.date)}</span>`);
@@ -158,7 +190,7 @@ function taskHTML(t, { showDate = true } = {}) {
     <li class="task ${t.category} ${t.done ? 'done' : ''} ${isExam ? 'exam' : ''} prio-${t.priority}" data-id="${t.id}" style="--c:${escapeHTML(taskColor(t))}">
       <span class="badge" aria-hidden="true">${badge}</span>
       <div class="task-body" data-action="edit">
-        <span class="task-kicker">${label}${isExam ? ' <b class="exam-tag">PROVA</b>' : ''}</span>
+        <span class="task-kicker">${label}${isExam ? ` <b class="exam-tag">${M.examTag}</b>` : ''}</span>
         <span class="task-title">${escapeHTML(t.title)}</span>
         ${meta.length ? `<span class="task-meta">${meta.join('')}</span>` : ''}
         ${t.notes ? `<span class="task-notes">${escapeHTML(t.notes)}</span>` : ''}
@@ -185,11 +217,30 @@ function setHero({ kicker = '', title = '', sub = '', ring = null, week = false 
     $('#ringNum').textContent = `${ring.done}/${ring.total}`;
   }
   $('#week').hidden = !week;
+  $('#kpis').hidden = !week;
+}
+
+function renderKpis() {
+  const today = todayISO();
+  const pending = state.tasks.filter((t) => !t.done);
+  const items = [
+    ['Hoje', pending.filter((t) => t.date === today).length],
+    ['Atrasadas', pending.filter((t) => t.date && t.date < today).length],
+    ['Semana', pending.filter((t) => t.date && t.date > today && t.date <= addDays(today, 7)).length],
+    [cap(M.examWord[1]), pending.filter((t) => t.kind === M.examKind && t.date && t.date >= today).length],
+  ];
+  $('#kpis').innerHTML = items.map(([l, n], i) => `<div class="kpi ${i === 1 && n ? 'warn' : ''}"><b>${n}</b><span>${l}</span></div>`).join('');
+}
+
+function userName() {
+  try { return (localStorage.getItem('dal.name') || '').trim(); } catch (e) { return ''; }
 }
 
 function greeting() {
   const h = new Date().getHours();
-  return h < 12 ? 'Bom dia!' : h < 18 ? 'Boa tarde!' : 'Boa noite!';
+  const g = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  const n = userName();
+  return n ? `${g}, ${n}!` : `${g}!`;
 }
 
 // ---------- View: Hoje ----------
@@ -229,15 +280,16 @@ function renderHoje() {
     week: true,
   });
   renderWeek();
+  renderKpis();
 
-  const exam = sortTasks(state.tasks.filter((t) => !t.done && t.category === 'escola' && t.kind === 'prova' && t.date && t.date >= today))[0];
+  const exam = sortTasks(state.tasks.filter((t) => !t.done && t.category === 'escola' && t.kind === M.examKind && t.date && t.date >= today))[0];
   if (exam) {
     const s = subjectById(exam.subject);
     const n = diffDays(exam.date);
     $('#spotlight').innerHTML = `
       <article class="spotlight" data-id="${exam.id}" style="--c:${escapeHTML(s ? s.color : 'var(--alta)')}">
         <div class="spot-text" data-action="edit">
-          <span class="spot-kicker">Próxima prova</span>
+          <span class="spot-kicker">${M.spotlight}</span>
           <strong>${escapeHTML(s ? s.name : exam.title)}</strong>
           <span>${escapeHTML(exam.title)} · ${formatDate(exam.date, { weekday: 'short', day: 'numeric', month: 'short' })}</span>
         </div>
@@ -286,7 +338,7 @@ function renderAgenda() {
     if (d.getMonth() !== cal.month) classes.push('other');
     if (iso === today) classes.push('today');
     if (iso === cal.selected) classes.push('selected');
-    if (tasks.some((t) => t.kind === 'prova' && !t.done)) classes.push('has-exam');
+    if (tasks.some((t) => t.kind === M.examKind && !t.done)) classes.push('has-exam');
     const dots = tasks.slice(0, 3).map((t) => `<span class="dot ${t.done ? 'done' : ''}" style="background:${escapeHTML(taskColor(t))}"></span>`).join('');
     html += `<button type="button" class="${classes.join(' ')}" data-date="${iso}" aria-label="${formatDate(iso, { day: 'numeric', month: 'long' })}, ${tasks.length} tarefa(s)">
       <span class="num">${d.getDate()}</span><span class="dots">${dots}</span></button>`;
@@ -308,8 +360,8 @@ function renderEscola() {
   const today = todayISO();
   const school = state.tasks.filter((t) => t.category === 'escola');
   const pending = school.filter((t) => !t.done);
-  const exams = sortTasks(pending.filter((t) => t.kind === 'prova' && t.date && t.date >= today));
-  setHero({ kicker: 'Escola', title: 'Seus estudos', sub: `${pending.length} pendentes · ${exams.length} ${exams.length === 1 ? 'prova' : 'provas'} chegando` });
+  const exams = sortTasks(pending.filter((t) => t.kind === M.examKind && t.date && t.date >= today));
+  setHero({ kicker: M.tabB, title: M.heroB, sub: `${pending.length} pendentes · ${exams.length} ${M.examWord[exams.length === 1 ? 0 : 1]} chegando` });
 
   $('#examsBox').innerHTML = exams.length
     ? exams.map((t) => {
@@ -320,7 +372,7 @@ function renderEscola() {
           <div class="exam-info" data-action="edit"><strong>${escapeHTML(s ? s.name : 'Prova')}</strong><span>${escapeHTML(t.title)}</span><span class="exam-date">${formatDate(t.date, { weekday: 'short', day: 'numeric', month: 'short' })}</span></div>
         </article>`;
       }).join('')
-    : '<p class="empty">Nenhuma prova marcada.</p>';
+    : `<p class="empty">${M.noExam}</p>`;
 
   $('#subjectsGrid').innerHTML = state.subjects.map((s) => {
     const all = school.filter((t) => t.subject === s.id);
@@ -335,8 +387,8 @@ function renderEscola() {
   }).join('');
 
   const subj = subjectById(escolaSubject);
-  $('#schoolListTitle').textContent = subj ? `Tarefas de ${subj.name}` : 'Lições e trabalhos';
-  const list = pending.filter((t) => (subj ? t.subject === subj.id : t.kind !== 'prova'));
+  $('#schoolListTitle').textContent = subj ? `Tarefas de ${subj.name}` : M.listTitle;
+  const list = pending.filter((t) => (subj ? t.subject === subj.id : t.kind !== M.examKind));
   $('#schoolList').innerHTML = listHTML(list, {}, 'Tudo em dia ✨');
 }
 
@@ -412,7 +464,7 @@ function fillSubjectSelect(selected) {
   const sel = selected || (state.subjects[0] && state.subjects[0].id);
   $('#subjectSelect').innerHTML = state.subjects.length
     ? state.subjects.map((s) => `<label class="choice subj" style="--c:${escapeHTML(s.color)}"><input type="radio" name="subject" value="${s.id}" ${s.id === sel ? 'checked' : ''}><span><i></i>${escapeHTML(s.name)}</span></label>`).join('')
-    : '<p class="hint">Cadastre uma matéria na aba Escola.</p>';
+    : `<p class="hint">Cadastre ${M.group === 'Projeto' ? 'um projeto' : 'uma matéria'} na aba ${M.tabB}.</p>`;
 }
 
 function updateSchoolFields() {
@@ -422,7 +474,7 @@ function updateSchoolFields() {
 function openForm(task = null, defaults = {}) {
   editingId = task ? task.id : null;
   form.reset();
-  const data = task || { category: 'dia', priority: 'media', kind: 'licao', reminder: '0', ...defaults };
+  const data = task || { category: 'dia', priority: 'media', kind: M.defaultKind, reminder: '0', ...defaults };
   $('#formTitle').textContent = task ? 'Editar tarefa' : 'Nova tarefa';
   $('#deleteBtn').hidden = !task;
 
@@ -433,7 +485,7 @@ function openForm(task = null, defaults = {}) {
     form.querySelectorAll(`input[name="${name}"]`).forEach((r) => { r.checked = r.value === value; });
   };
   setChoice('category', data.category);
-  setChoice('kind', data.kind || 'licao');
+  setChoice('kind', data.kind || M.defaultKind);
   form.date.value = data.date || '';
   form.time.value = data.time || '';
   updatePickerLabels();
@@ -519,8 +571,9 @@ document.querySelectorAll('dialog.small-sheet').forEach((dlg) => {
   });
 });
 
-function askConfirm({ title, text = '', yes = 'Excluir' }) {
+function askConfirm({ title, text = '', yes = 'Excluir', tone = 'danger' }) {
   const dlg = $('#confirmDialog');
+  dlg.classList.toggle('neutral', tone !== 'danger');
   $('#confirmTitle').textContent = title;
   $('#confirmText').textContent = text;
   $('#confirmYes').textContent = yes;
@@ -646,7 +699,7 @@ function renderSubjectEditor() {
       <button class="color-dot" type="button" data-subject-color style="--dot:${escapeHTML(s.color)}" aria-label="Mudar a cor de ${escapeHTML(s.name)}"></button>
       <span>${escapeHTML(s.name)}</span>
       <button class="icon-btn small" type="button" data-remove-subject aria-label="Remover ${escapeHTML(s.name)}"><svg><use href="#i-x"/></svg></button>
-    </li>`).join('') || '<li class="empty">Nenhuma matéria cadastrada.</li>';
+    </li>`).join('') || `<li class="empty">Nenhum item em ${M.groups}.</li>`;
 }
 
 $('#manageSubjects').addEventListener('click', () => {
@@ -659,7 +712,7 @@ $('#addSubjectBtn').addEventListener('click', () => {
   const name = input.value.trim();
   if (!name) return input.focus();
   if (state.subjects.some((s) => s.name.toLowerCase() === name.toLowerCase())) {
-    toast('Essa matéria já existe');
+    toast(`Já existe ${M.group.toLowerCase()} com esse nome`);
     return;
   }
   state.subjects.push({ id: uid(), name, color: $('#newSubjectColor').dataset.color });
@@ -693,8 +746,8 @@ $('#subjectEditList').addEventListener('click', async (e) => {
   const subj = subjectById(id);
   const used = state.tasks.filter((t) => t.subject === id).length;
   const ok = await askConfirm({
-    title: `Remover ${subj ? subj.name : 'matéria'}?`,
-    text: used ? `${used} tarefa(s) dessa matéria ficarão como “Sem matéria”.` : 'A matéria sai da lista.',
+    title: `Remover ${subj ? subj.name : M.group.toLowerCase()}?`,
+    text: used ? `${used} tarefa(s) ficarão sem ${M.group.toLowerCase()}.` : `Sai da lista de ${M.groups.toLowerCase()}.`,
     yes: 'Remover',
   });
   if (!ok) return;
@@ -857,10 +910,10 @@ function reminderBody(t, at) {
   const parts = [];
   if (t.category === 'escola') {
     const s = subjectById(t.subject);
-    parts.push(KIND_LABELS[t.kind] || 'Escola');
+    parts.push(M.kinds[t.kind] || KIND_LABELS[t.kind] || M.catB);
     if (s) parts.push(s.name);
   } else {
-    parts.push('Dia a dia');
+    parts.push(M.catA);
   }
   const sameDay = toISO(new Date(at)) === t.date;
   const when = sameDay ? 'Hoje' : relativeFrom(t.date, toISO(new Date(at)));
@@ -977,6 +1030,56 @@ syncReminders();
 if (notifyEnabled() && 'serviceWorker' in navigator && location.protocol !== 'file:') registerBackgroundCheck();
 setInterval(checkReminders, 20000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) checkReminders(); });
+
+// ---------- Modo (Escola / Profissional) e configurações ----------
+function applyMode() {
+  document.documentElement.dataset.mode = MODE;
+  document.querySelector('meta[name="theme-color"]').content = MODE === 'pro' ? '#0f4c5c' : '#123d2f';
+  document.querySelectorAll('[data-l]').forEach((el) => { el.textContent = M[el.dataset.l]; });
+  document.querySelector('.tab[data-view="escola"] use').setAttribute('href', `#i-${M.tabIcon}`);
+  document.querySelector('.cat-toggle label:nth-child(2) use').setAttribute('href', `#i-${M.tabIcon}`);
+  form.title.placeholder = M.placeholder;
+  $('#kindRow').innerHTML = Object.entries(M.kinds).map(([v, l]) =>
+    `<label class="choice"><input type="radio" name="kind" value="${v}" ${v === M.defaultKind ? 'checked' : ''}><span>${l}</span></label>`).join('');
+}
+
+function renderSettings() {
+  document.querySelectorAll('#modeSwitch [data-mode]').forEach((b) => b.classList.toggle('on', b.dataset.mode === MODE));
+  $('#userName').value = userName();
+  const on = notifyEnabled();
+  $('#notifySwitch').classList.toggle('on', on);
+  $('#notifySwitch').setAttribute('aria-checked', on);
+  $('#settingsVersion').textContent = `v${APP_VERSION}`;
+}
+
+$('#settingsBtn').addEventListener('click', () => {
+  renderSettings();
+  $('#settingsDialog').showModal();
+});
+$('#modeSwitch').addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-mode]');
+  if (!b || b.dataset.mode === MODE) return;
+  const pro = b.dataset.mode === 'pro';
+  const ok = await askConfirm({
+    title: pro ? 'Mudar para o modo Profissional?' : 'Mudar para o modo Escola?',
+    text: 'Cada modo tem as próprias tarefas. As do modo atual ficam guardadas e voltam quando você trocar de novo.',
+    yes: 'Mudar',
+    tone: 'neutral',
+  });
+  if (!ok) return;
+  try { localStorage.setItem(MODE_KEY, b.dataset.mode); } catch (err) { /* ignora */ }
+  location.reload();
+});
+$('#userName').addEventListener('input', (e) => {
+  try { localStorage.setItem('dal.name', e.target.value.trim()); } catch (err) { /* ignora */ }
+  if (currentView === 'hoje') renderHoje();
+});
+$('#notifySwitch').addEventListener('click', async () => {
+  await $('#notifyBtn').click();
+  setTimeout(renderSettings, 300);
+});
+
+applyMode();
 
 // ---------- Início ----------
 let initialView = 'hoje';

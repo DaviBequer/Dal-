@@ -16,6 +16,7 @@ const ASSETS = [
   'icons/icon.svg',
   'fonts/fraunces-700.woff2',
   'fonts/manrope.woff2',
+  'fonts/lexend.woff2',
 ];
 
 self.addEventListener('install', (event) => {

@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>Dalê Tarefas</title>
   <meta name="description" content="App de tarefas com agenda para o dia a dia e para a escola.">
   <meta name="theme-color" content="#123d2f">
@@ -11,6 +11,7 @@
   <link rel="preload" href="fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/fraunces-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
+  <script>try { if (localStorage.getItem('dal.mode') === 'pro') document.documentElement.dataset.mode = 'pro'; } catch (e) {}</script>
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -28,6 +29,7 @@
     <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-x" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-brief" viewBox="0 0 24 24"><rect x="3.5" y="7" width="17" height="12.5" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3.5 12.5h17" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
   </svg>
 
@@ -38,7 +40,10 @@
         <span class="brand-name">Dalê Tarefas</span>
         <span class="version" id="appVersion"></span>
       </div>
-      <button class="icon-btn" id="notifyBtn" type="button" aria-label="Ativar notificações"><svg><use href="#i-bell"/></svg></button>
+      <div class="hero-actions">
+        <button class="icon-btn" id="notifyBtn" type="button" aria-label="Ativar notificações"><svg><use href="#i-bell"/></svg></button>
+        <button class="icon-btn" id="settingsBtn" type="button" aria-label="Configurações"><svg><use href="#i-gear"/></svg></button>
+      </div>
     </div>
     <div class="hero-body">
       <div class="hero-text">
@@ -48,6 +53,7 @@
       </div>
       <div class="ring" id="ring" hidden><span class="ring-num" id="ringNum"></span><span class="ring-label">feitas</span></div>
     </div>
+    <div class="kpis" id="kpis" hidden></div>
     <div class="week" id="week" hidden></div>
   </header>
 
@@ -56,8 +62,8 @@
       <div id="spotlight"></div>
       <div class="chips" id="hojeFilter">
         <button class="chip-btn active" data-hf="" type="button">Tudo</button>
-        <button class="chip-btn" data-hf="dia" type="button">Dia a dia</button>
-        <button class="chip-btn" data-hf="escola" type="button">Escola</button>
+        <button class="chip-btn" data-hf="dia" type="button" data-l="catA">Dia a dia</button>
+        <button class="chip-btn" data-hf="escola" type="button" data-l="catB">Escola</button>
       </div>
       <div id="hojeLists"></div>
     </section>
@@ -80,10 +86,10 @@
     </section>
 
     <section class="view" id="view-escola">
-      <div class="section-title"><h3>Provas chegando</h3></div>
+      <div class="section-title"><h3 data-l="carousel">Provas chegando</h3></div>
       <div class="carousel" id="examsBox"></div>
       <div class="section-title">
-        <h3>Matérias</h3>
+        <h3 data-l="groups">Matérias</h3>
         <button class="pill-btn soft" id="manageSubjects" type="button"><svg><use href="#i-gear"/></svg>Editar</button>
       </div>
       <div class="subject-tiles" id="subjectsGrid"></div>
@@ -98,8 +104,8 @@
         <button class="chip-btn" data-status="concluidas" type="button">Concluídas</button>
         <button class="chip-btn" data-status="" type="button">Todas</button>
         <span class="chip-sep"></span>
-        <button class="chip-btn" data-cat="dia" type="button">Dia a dia</button>
-        <button class="chip-btn" data-cat="escola" type="button">Escola</button>
+        <button class="chip-btn" data-cat="dia" type="button" data-l="catA">Dia a dia</button>
+        <button class="chip-btn" data-cat="escola" type="button" data-l="catB">Escola</button>
       </div>
       <div id="allTasks"></div>
       <button class="pill-btn danger" id="clearDone" type="button">Apagar concluídas</button>
@@ -110,7 +116,7 @@
     <button class="tab active" data-view="hoje" role="tab" type="button"><svg><use href="#i-home"/></svg><span>Hoje</span></button>
     <button class="tab" data-view="agenda" role="tab" type="button"><svg><use href="#i-cal"/></svg><span>Agenda</span></button>
     <button class="fab" id="addBtn" type="button" aria-label="Nova tarefa"><svg><use href="#i-plus"/></svg></button>
-    <button class="tab" data-view="escola" role="tab" type="button"><svg><use href="#i-book"/></svg><span>Escola</span></button>
+    <button class="tab" data-view="escola" role="tab" type="button"><svg><use href="#i-book"/></svg><span data-l="tabB">Escola</span></button>
     <button class="tab" data-view="todas" role="tab" type="button"><svg><use href="#i-list"/></svg><span>Todas</span></button>
   </nav>
 
@@ -124,21 +130,15 @@
       <input class="title-input" name="title" required maxlength="120" placeholder="O que você precisa fazer?" aria-label="Título">
 
       <div class="cat-toggle">
-        <label><input type="radio" name="category" value="dia" checked><span><svg><use href="#i-house"/></svg>Dia a dia</span></label>
-        <label><input type="radio" name="category" value="escola"><span><svg><use href="#i-book"/></svg>Escola</span></label>
+        <label><input type="radio" name="category" value="dia" checked><span><svg><use href="#i-house"/></svg><b data-l="catA">Dia a dia</b></span></label>
+        <label><input type="radio" name="category" value="escola"><span><svg><use href="#i-book"/></svg><b data-l="catB">Escola</b></span></label>
       </div>
 
       <div class="school-fields" id="schoolFields">
-        <p class="field-label">Matéria</p>
+        <p class="field-label" data-l="group">Matéria</p>
         <div class="choice-row" id="subjectSelect"></div>
         <p class="field-label">Tipo</p>
-        <div class="choice-row">
-          <label class="choice"><input type="radio" name="kind" value="licao" checked><span>Lição</span></label>
-          <label class="choice"><input type="radio" name="kind" value="trabalho"><span>Trabalho</span></label>
-          <label class="choice"><input type="radio" name="kind" value="prova"><span>Prova</span></label>
-          <label class="choice"><input type="radio" name="kind" value="estudo"><span>Estudar</span></label>
-          <label class="choice"><input type="radio" name="kind" value="outro"><span>Outro</span></label>
-        </div>
+        <div class="choice-row" id="kindRow"></div>
       </div>
 
       <div class="when-row">
@@ -185,7 +185,7 @@
     <form method="dialog" id="subjectsForm">
       <span class="grabber" aria-hidden="true"></span>
       <div class="sheet-head">
-        <h2>Matérias</h2>
+        <h2 data-l="groups">Matérias</h2>
         <button class="icon-btn small" type="submit" aria-label="Fechar"><svg><use href="#i-x"/></svg></button>
       </div>
       <ul class="subject-edit-list" id="subjectEditList"></ul>
@@ -196,6 +196,22 @@
       </div>
       <button class="save-btn" type="submit">Pronto</button>
     </form>
+  </dialog>
+
+  <dialog id="settingsDialog" class="sheet small-sheet">
+    <div class="sheet-inner">
+      <span class="grabber" aria-hidden="true"></span>
+      <div class="sheet-head"><h2>Configurações</h2><button class="icon-btn small" type="button" data-close aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
+      <p class="field-label">Modo do app</p>
+      <div class="mode-switch" id="modeSwitch">
+        <button type="button" data-mode="escola"><svg><use href="#i-book"/></svg><b>Escola</b><small>Matérias, lições e provas</small></button>
+        <button type="button" data-mode="pro"><svg><use href="#i-brief"/></svg><b>Profissional</b><small>Projetos, prazos e casa</small></button>
+      </div>
+      <p class="field-label">Seu nome</p>
+      <input class="title-input" id="userName" maxlength="30" placeholder="Para a saudação no topo">
+      <div class="setting-row"><span><b>Notificações</b><small>Lembretes das tarefas</small></span><button type="button" class="switch" id="notifySwitch" role="switch" aria-checked="false"><i></i></button></div>
+      <div class="setting-row"><span><b>Versão</b><small>Atualiza sozinho</small></span><span class="version-pill" id="settingsVersion"></span></div>
+    </div>
   </dialog>
 
   <!-- Janelas próprias (no lugar das janelas do sistema) -->

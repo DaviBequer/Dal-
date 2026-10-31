@@ -1,5 +1,6 @@
 /* Fontes locais (funcionam offline) */
 @font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 700; font-display: swap; src: url('fonts/fraunces-700.woff2') format('woff2'); }
+@font-face { font-family: 'Lexend'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('fonts/lexend.woff2') format('woff2'); }
 @font-face { font-family: 'Manrope'; font-style: normal; font-weight: 500 800; font-display: swap; src: url('fonts/manrope.woff2') format('woff2'); }
 
 /* Dalê Tarefas — layout renovado: topo com saudação e progresso, navegação inferior com botão central,
@@ -412,3 +413,101 @@ dialog.small-sheet { max-height: 88vh; }
 }
 .color-dot.big { width: 54px; height: 54px; }
 .color-dot.on { box-shadow: 0 0 0 3px var(--surface), 0 0 0 6px var(--dot); }
+
+/* ---------- Configurações e modo ---------- */
+.hero-actions { display: flex; gap: 8px; }
+.kpis { display: none; }
+.kpi b { font-family: var(--font-display); font-weight: var(--display-weight); font-size: 1.5rem; line-height: 1; display: block; }
+.kpi span { font-size: .72rem; color: var(--hero-muted); font-weight: 600; }
+.kpi.warn b { color: var(--alta); }
+.mode-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mode-switch button {
+  border: 2px solid transparent; border-radius: var(--r-lg); padding: 14px; display: grid; gap: 4px; justify-items: start; text-align: left; cursor: pointer;
+  background: var(--surface-2); color: var(--text);
+}
+.mode-switch button small { color: var(--muted); font-size: .76rem; }
+.mode-switch button.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+.mode-switch button.on svg { color: var(--accent); }
+.setting-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: var(--r-md); background: var(--surface-2); }
+.setting-row span { display: grid; }
+.setting-row small { color: var(--muted); font-size: .78rem; }
+.switch { width: 52px; height: 30px; border-radius: 999px; border: 0; padding: 3px; cursor: pointer; background: color-mix(in srgb, var(--muted) 35%, transparent); display: flex; }
+.switch i { width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, .2); transition: transform .2s; }
+.switch.on { background: var(--accent); }
+.switch.on i { transform: translateX(22px); }
+.version-pill { font-weight: 800; padding: 4px 12px; border-radius: 999px; background: var(--surface); }
+#confirmDialog.neutral .confirm-icon { display: none; }
+#confirmDialog.neutral #confirmYes { background: var(--accent); color: var(--accent-text); }
+
+/* ---------- Cara de app: sem seleção de texto, sem zoom, janelas animadas ---------- */
+html { touch-action: manipulation; -webkit-text-size-adjust: 100%; }
+body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; overscroll-behavior-y: none; }
+input, textarea { -webkit-user-select: text; user-select: text; }
+img, svg { -webkit-user-drag: none; }
+button, a, label { -webkit-tap-highlight-color: transparent; }
+:focus:not(:focus-visible) { outline: none; }
+dialog.sheet:focus-visible { outline: none; }
+dialog.sheet[open] { animation: sheet-up .32s cubic-bezier(.2, .9, .25, 1); }
+dialog.sheet::backdrop { background: color-mix(in srgb, var(--scrim, #0b2a20) 58%, transparent); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+dialog.sheet[open]::backdrop { animation: scrim-in .25s ease-out; }
+@keyframes sheet-up { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes scrim-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { dialog.sheet[open], dialog.sheet[open]::backdrop { animation: none; } }
+
+/* ================================================================
+   MODO PROFISSIONAL — layout "Bento" (P3) com as cores do Oceano (P4)
+   Ativo quando <html data-mode="pro">. Substitui o tema Grande Mestre.
+   ================================================================ */
+html[data-mode="pro"] {
+  --bg: #f1f6f7; --surface: #ffffff; --surface-2: #e7f0f2; --text: #0f2e36; --muted: #5d7880; --line: #dbe7ea;
+  --accent: #0f6f7c; --accent-2: #13909d; --accent-text: #ffffff;
+  --hero-bg: radial-gradient(ellipse 140% 60% at 50% 120%, rgba(255, 255, 255, .14), transparent 60%), linear-gradient(160deg, #0f4c5c, #138592);
+  --hero-text: #ffffff; --hero-muted: rgba(225, 245, 248, .82); --nav-bg: #0f4c5c;
+  --dia: #ff7a59; --escola: #138592; --alta: #e5484d; --media: #f6a33a; --baixa: #2bb38c;
+  --coral: #ff7a59; --coral-2: #e9573a; --scrim: #0a3540; --ring-hole: rgba(10, 50, 60, .45);
+  --shadow: 0 14px 30px -18px rgba(15, 76, 92, .38); --shadow-sm: 0 6px 16px -10px rgba(15, 76, 92, .28);
+  --font-display: "Lexend", system-ui, sans-serif; --font-body: "Lexend", system-ui, sans-serif; --display-weight: 600;
+}
+html[data-mode="pro"] body { font-weight: 400; }
+/* sem enfeites de xadrez */
+html[data-mode="pro"] .hero::before, html[data-mode="pro"] .logo::before,
+html[data-mode="pro"] .task .task-kicker::before, html[data-mode="pro"] .spot-kicker::before { content: none !important; }
+html[data-mode="pro"] .logo { background: var(--coral); color: #fff; }
+html[data-mode="pro"] .logo svg { display: block; }
+html[data-mode="pro"] .version { background: rgba(255, 255, 255, .18); color: #fff; }
+/* topo com curva e os números em blocos subindo sobre ele */
+html[data-mode="pro"] .hero { overflow: visible; border-radius: 0 0 50% 50% / 0 0 34px 34px; }
+html[data-mode="pro"] body[data-view="hoje"] .hero { padding-bottom: 70px; }
+html[data-mode="pro"] .hero h1 { font-size: 1.4rem; }
+html[data-mode="pro"] .ring { background: conic-gradient(#ffb4a0 calc(var(--p) * 1%), rgba(255, 255, 255, .16) 0); }
+html[data-mode="pro"] .ring-num { color: #fff; }
+html[data-mode="pro"] .week { display: none !important; }
+html[data-mode="pro"] .kpis { display: grid; grid-template-columns: 1.2fr 1fr 1fr; grid-template-rows: auto auto; gap: 10px; position: absolute; left: 16px; right: 16px; bottom: -118px; z-index: 2; }
+html[data-mode="pro"] .kpi { background: var(--surface); color: var(--text); border-radius: 22px; padding: 12px 14px; box-shadow: var(--shadow); }
+html[data-mode="pro"] .kpi span { color: var(--muted); }
+html[data-mode="pro"] .kpi:first-child { grid-row: span 2; display: grid; align-content: end; color: #fff; background: linear-gradient(150deg, var(--coral), var(--coral-2)); }
+html[data-mode="pro"] .kpi:first-child b { font-size: 2.6rem; }
+html[data-mode="pro"] .kpi:first-child span { color: rgba(255, 255, 255, .88); }
+html[data-mode="pro"] .kpi:nth-child(4) { grid-column: span 2; }
+html[data-mode="pro"] body[data-view="hoje"] main { padding-top: 136px; }
+/* tarefas e blocos */
+html[data-mode="pro"] .task { border-left: 5px solid var(--c); border-radius: 20px; }
+html[data-mode="pro"] .task-title { font-weight: 500; }
+html[data-mode="pro"] .badge { border-radius: 14px; }
+html[data-mode="pro"] .subject-tile { border-radius: 24px; }
+html[data-mode="pro"] .chip-btn.active { background: var(--accent); color: #fff; }
+html[data-mode="pro"] .spotlight { background: linear-gradient(135deg, var(--coral), var(--coral-2)); box-shadow: 0 16px 30px -16px var(--coral-2); }
+html[data-mode="pro"] .countdown { background: rgba(255, 255, 255, .2); color: #fff; }
+html[data-mode="pro"] .exam-tag { background: var(--coral-2); }
+/* agenda sem quadriculado */
+html[data-mode="pro"] .calendar .cal-day:nth-child(even):not(.other):not(.selected):not(.today) .num { background: transparent; }
+html[data-mode="pro"] .calendar .cal-day.today:not(.selected) .num { background: var(--surface-2); color: var(--accent); }
+html[data-mode="pro"] .calendar .cal-day.selected .num { background: var(--accent); color: #fff; }
+/* navegação escura com o + coral */
+html[data-mode="pro"] .bottom-nav { background: #0f4c5c; }
+html[data-mode="pro"] .tab { color: rgba(225, 245, 248, .6); }
+html[data-mode="pro"] .tab.active { color: #ffb4a0; }
+html[data-mode="pro"] .fab { color: #fff; background: linear-gradient(140deg, var(--coral), var(--coral-2)); box-shadow: 0 12px 24px -8px var(--coral), 0 0 0 6px var(--bg); }
+/* formulários */
+html[data-mode="pro"] .save-btn { background: linear-gradient(140deg, #0f6f7c, #0f4c5c); }
+html[data-mode="pro"] .cat-toggle input:checked + span { background: var(--accent); }

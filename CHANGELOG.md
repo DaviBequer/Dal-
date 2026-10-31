@@ -2,6 +2,13 @@
 
 A partir da v1 a versão é um número inteiro que sobe a cada atualização.
 
+## v5 — 2026-10-31
+- Novo **modo Profissional** (Configurações → Modo do app): Casa + Trabalho, Projetos, tipos Tarefa,
+  Reunião, Entrega, Ligação e Pagamento, destaque "Próximo prazo". Visual próprio: layout Bento com as
+  cores do Oceano (azul-petróleo e coral). Cada modo guarda as próprias tarefas.
+- Tela de **Configurações** (engrenagem no topo): modo do app, seu nome na saudação, notificações e versão.
+- Cara de app: não seleciona texto ao segurar, sem zoom, janelas sobem de baixo com animação e fundo na cor do app.
+
 ## v4 — 2026-10-31
 - Correção: o dia selecionado e o dia de hoje na Agenda perdiam o destaque em algumas posições do calendário.
 
