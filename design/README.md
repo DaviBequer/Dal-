@@ -20,3 +20,8 @@ Protótipo do app com troca de modo em Configurações (Escola / Profissional). 
 Casa + Trabalho, Projetos, tipos Tarefa/Reunião/Entrega/Ligação/Pagamento e destaque "Próximo prazo".
 Cada modo guarda as próprias tarefas (`dal.v1` para Escola, `dal.pro` para Profissional).
 `pro/temas/` traz cinco designs para adultos (Executivo, Papel Branco, Bento Grafite, Oceano, Foco).
+
+## Escola no layout Bento (`escola-bento/`)
+
+Cinco temas para o modo Escola sobre o layout Bento (`_bento.css`), aplicados com `data-etheme` no `<html>`:
+Grande Mestre Bento, Sakura Neon, Arena XP, Galáxia e Mundo Bloco.

@@ -1,0 +1,26 @@
+/* E4. Galáxia — espaço: azul profundo com estrelas, planeta no topo, bloco "Hoje" em degradê de nebulosa */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@600;700;800&display=swap');
+html[data-etheme="galaxia"] {
+  --bg: #0b1030; --surface: #141a44; --surface-2: #1d2558; --text: #eef0ff; --muted: #9aa3d6; --line: rgba(255, 255, 255, .08);
+  --accent: #7c8cff; --accent-2: #b06bff; --accent-text: #fff;
+  --hero-bg: radial-gradient(circle at 84% 58%, #ffb86b 0 30px, #f08a4b 31px 32px, transparent 33px), radial-gradient(circle at 84% 58%, transparent 38px, rgba(255, 220, 170, .35) 39px 41px, transparent 42px),
+    radial-gradient(1.2px 1.2px at 12% 30%, #fff, transparent), radial-gradient(1px 1px at 40% 15%, #fff, transparent), radial-gradient(1.4px 1.4px at 62% 60%, #fff, transparent), radial-gradient(1px 1px at 30% 75%, #fff, transparent), radial-gradient(1.2px 1.2px at 75% 85%, #fff, transparent),
+    linear-gradient(170deg, #1a1f63, #0b1030);
+  --hero-text: #fff; --hero-muted: rgba(220, 225, 255, .75); --dia: #4fd1ff; --escola: #ffb86b; --alta: #ff6b9a; --media: #ffb86b; --baixa: #5ef2b6;
+  --k1: #7c8cff; --k2: #d06bff; --s1: #ff7a9a; --s2: #b33d8f; --ring: #ffb86b; --nav-solid: #141a44; --tab-muted: #8a93c9; --tab-on: #ffb86b;
+  --shadow: 0 16px 34px -18px rgba(0, 0, 0, .7); --shadow-sm: 0 8px 22px -12px rgba(0, 0, 0, .6); --scrim: #0b1030;
+  --font-display: "Baloo 2", sans-serif; --font-body: "Nunito", sans-serif; --display-weight: 800;
+  color-scheme: dark;
+}
+html[data-etheme="galaxia"] body { background: radial-gradient(1px 1px at 20% 40%, rgba(255, 255, 255, .5), transparent), radial-gradient(1px 1px at 80% 70%, rgba(255, 255, 255, .4), transparent), var(--bg); background-attachment: fixed; }
+html[data-etheme="galaxia"] .hero { border-radius: 0 0 36px 36px; }
+html[data-etheme="galaxia"] .hero h1 { font-size: 1.55rem; }
+html[data-etheme="galaxia"] .ring { display: none; }
+html[data-etheme="galaxia"] .kpi:first-child::before { content: "🚀"; font-size: 1.6rem; }
+html[data-etheme="galaxia"] .task, html[data-etheme="galaxia"] .kpi:not(:first-child), html[data-etheme="galaxia"] .month-card, html[data-etheme="galaxia"] .subject-tile, html[data-etheme="galaxia"] .search, html[data-etheme="galaxia"] .chip-btn { border: 1px solid var(--line); }
+html[data-etheme="galaxia"] .task { border-left: 5px solid var(--c); }
+html[data-etheme="galaxia"] .spot-kicker::before { content: "☄ " !important; }
+html[data-etheme="galaxia"] .bottom-nav { border: 1px solid var(--line); }
+html[data-etheme="galaxia"] dialog.sheet { background: #10163c; }
+html[data-etheme="galaxia"] .choice input:checked + span { background: #ffb86b; color: #0b1030; }
+html[data-etheme="galaxia"] .calendar .cal-day.today:not(.selected) .num { background: var(--surface-2); color: #ffb86b; }

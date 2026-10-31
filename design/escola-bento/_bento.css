@@ -1,0 +1,33 @@
+/* Layout Bento (P3) para o modo Escola. Cada tema define os tokens; este arquivo só posiciona. */
+html[data-etheme] .hero { overflow: visible; }
+html[data-etheme] body[data-view="hoje"] .hero { padding-bottom: 70px; }
+html[data-etheme] .hero h1 { font-size: 1.4rem; }
+html[data-etheme] .week { display: none !important; }
+html[data-etheme] .kpis { display: grid; grid-template-columns: 1.2fr 1fr 1fr; grid-template-rows: auto auto; gap: 10px; position: absolute; left: 16px; right: 16px; bottom: -118px; z-index: 2; }
+html[data-etheme] .kpi { background: var(--surface); color: var(--text); border-radius: 22px; padding: 12px 14px; box-shadow: var(--shadow); }
+html[data-etheme] .kpi span { color: var(--muted); }
+html[data-etheme] .kpi:first-child { grid-row: span 2; display: grid; align-content: end; color: #fff; background: linear-gradient(150deg, var(--k1), var(--k2)); }
+html[data-etheme] .kpi:first-child b { font-size: 2.6rem; }
+html[data-etheme] .kpi:first-child span { color: rgba(255, 255, 255, .88); }
+html[data-etheme] .kpi:nth-child(4) { grid-column: span 2; }
+html[data-etheme] body[data-view="hoje"] main { padding-top: 136px; }
+html[data-etheme] .task { border-left: 5px solid var(--c); border-radius: 20px; }
+html[data-etheme] .bottom-nav { background: var(--nav-solid); }
+html[data-etheme] .tab { color: var(--tab-muted); }
+html[data-etheme] .tab.active { color: var(--tab-on); }
+html[data-etheme] .fab { color: #fff; background: linear-gradient(140deg, var(--k1), var(--k2)); box-shadow: 0 12px 24px -8px var(--k1), 0 0 0 6px var(--bg); }
+html[data-etheme] .spotlight { background: linear-gradient(135deg, var(--s1), var(--s2)); box-shadow: 0 16px 30px -16px var(--s2); }
+html[data-etheme] .countdown { background: rgba(255, 255, 255, .2); color: #fff; }
+html[data-etheme] .chip-btn.active { background: var(--accent); color: var(--accent-text); }
+html[data-etheme] .save-btn { background: linear-gradient(140deg, var(--accent), var(--accent-2)); color: var(--accent-text); }
+html[data-etheme] .cat-toggle input:checked + span { background: var(--accent); color: var(--accent-text); }
+html[data-etheme] .ring { background: conic-gradient(var(--ring) calc(var(--p) * 1%), rgba(255, 255, 255, .16) 0); }
+html[data-etheme] .ring-num { color: var(--hero-text); }
+html[data-etheme] .logo { background: var(--k1); color: #fff; }
+html[data-etheme] .version { background: rgba(255, 255, 255, .18); color: var(--hero-text); }
+/* sem xadrez, exceto no tema que é de xadrez */
+html[data-etheme]:not([data-etheme="mestre"]) .hero::before, html[data-etheme]:not([data-etheme="mestre"]) .logo::before,
+html[data-etheme]:not([data-etheme="mestre"]) .task .task-kicker::before, html[data-etheme]:not([data-etheme="mestre"]) .spot-kicker::before { content: none !important; }
+html[data-etheme]:not([data-etheme="mestre"]) .logo svg { display: block; }
+html[data-etheme]:not([data-etheme="mestre"]) .calendar .cal-day:nth-child(even):not(.other):not(.selected):not(.today) .num { background: transparent; }
+html[data-etheme] .calendar .cal-day.selected .num { background: var(--accent); color: var(--accent-text); }

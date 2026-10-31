@@ -1,0 +1,22 @@
+/* E2. Sakura Neon — anime: noite roxa com pétalas, bloco rosa de "Hoje", katakana nos títulos */
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&family=Unbounded:wght@600;700&display=swap');
+html[data-etheme="sakura"] {
+  --bg: #0e0a1c; --surface: #1a1431; --surface-2: #261d48; --text: #f6f1ff; --muted: #a79ccc; --line: rgba(255, 255, 255, .08);
+  --accent: #ff5fa2; --accent-2: #9b6bff; --accent-text: #fff;
+  --hero-bg: radial-gradient(circle at 90% 0%, rgba(255, 95, 162, .5), transparent 45%), radial-gradient(circle at 0% 100%, rgba(155, 107, 255, .45), transparent 50%), linear-gradient(160deg, #241056, #120a2b);
+  --hero-text: #fff; --hero-muted: rgba(255, 230, 245, .75); --dia: #4fd8ff; --escola: #ffc35c; --alta: #ff5f86; --media: #ffc35c; --baixa: #5ef2b6;
+  --k1: #ff5fa2; --k2: #9b6bff; --s1: #6a3df0; --s2: #3b1f8f; --ring: #ff5fa2; --nav-solid: #1a1431; --tab-muted: #8f84b8; --tab-on: #ff8cc0;
+  --shadow: 0 16px 34px -18px rgba(0, 0, 0, .8); --shadow-sm: 0 8px 22px -12px rgba(0, 0, 0, .7); --scrim: #0e0a1c;
+  --font-display: "Unbounded", sans-serif; --font-body: "Zen Maru Gothic", sans-serif; --display-weight: 700;
+  color-scheme: dark;
+}
+html[data-etheme="sakura"] .hero { border-radius: 0 0 34px 34px; }
+html[data-etheme="sakura"] .hero h1 { font-size: 1.2rem; }
+html[data-etheme="sakura"] .hero::after { content: "桜"; position: absolute; right: 110px; top: 50px; font-size: 6.5rem; line-height: 1; color: rgba(255, 255, 255, .06); pointer-events: none; }
+html[data-etheme="sakura"] .task, html[data-etheme="sakura"] .kpi:not(:first-child), html[data-etheme="sakura"] .month-card, html[data-etheme="sakura"] .subject-tile, html[data-etheme="sakura"] .search, html[data-etheme="sakura"] .chip-btn { border: 1px solid var(--line); }
+html[data-etheme="sakura"] .task { border-left: 5px solid var(--c); }
+html[data-etheme="sakura"] .group h2::after { content: "・タスク"; font-family: "Zen Maru Gothic"; font-size: .7rem; color: var(--muted); font-weight: 500; }
+html[data-etheme="sakura"] .bottom-nav { border: 1px solid var(--line); }
+html[data-etheme="sakura"] dialog.sheet { background: #160f2c; }
+html[data-etheme="sakura"] .choice input:checked + span { background: #f6f1ff; color: #0e0a1c; }
+html[data-etheme="sakura"] .calendar .cal-day.today:not(.selected) .num { background: var(--surface-2); color: #ff8cc0; }

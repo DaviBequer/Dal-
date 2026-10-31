@@ -1,0 +1,11 @@
+/* E1. Grande Mestre Bento — o tema atual (xadrez) no layout Bento: bloco dourado de "Hoje" e peças nas prioridades */
+html[data-etheme="mestre"] {
+  --k1: #d9a441; --k2: #b98325; --s1: #123d2f; --s2: #0b2a20; --ring: #e3b65b;
+  --nav-solid: #0b2a20; --tab-muted: rgba(253, 248, 234, .55); --tab-on: #e3b65b;
+}
+html[data-etheme="mestre"] .hero { border-radius: 0 0 34px 34px; }
+html[data-etheme="mestre"] .kpi:first-child { color: #0b2a20; }
+html[data-etheme="mestre"] .kpi:first-child span { color: rgba(11, 42, 32, .8); }
+html[data-etheme="mestre"] .kpi:first-child::before { content: "♞\FE0E"; font-size: 2rem; line-height: 1; opacity: .5; }
+html[data-etheme="mestre"] .fab { color: #0b2a20; }
+html[data-etheme="mestre"] .countdown { background: #e3b65b; color: #0b2a20; }

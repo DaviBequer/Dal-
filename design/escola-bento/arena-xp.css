@@ -1,0 +1,35 @@
+/* E3. Arena XP — gamer: preto com brilho RGB, o bloco grande vira "Missões de hoje", barra de nível e XP no lugar das provas */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&family=Exo+2:wght@500;600;700&display=swap');
+html[data-etheme="arena-xp"] {
+  --bg: #07080e; --surface: #11131d; --surface-2: #1a1d2b; --text: #eaf2ff; --muted: #8590b0; --line: rgba(255, 255, 255, .08);
+  --accent: #22e6ff; --accent-2: #b44dff; --accent-text: #05060b;
+  --hero-bg: radial-gradient(circle at 15% 0%, rgba(34, 230, 255, .35), transparent 45%), radial-gradient(circle at 100% 70%, rgba(180, 77, 255, .4), transparent 50%), #0c0e18;
+  --hero-text: #fff; --hero-muted: rgba(220, 230, 255, .7); --dia: #22e6ff; --escola: #ffcc33; --alta: #ff3da8; --media: #ffcc33; --baixa: #3dffa2;
+  --k1: #22e6ff; --k2: #b44dff; --s1: #b44dff; --s2: #5a1fa0; --ring: #3dffa2; --nav-solid: #11131d; --tab-muted: #6f7894; --tab-on: #22e6ff;
+  --shadow: 0 18px 40px -20px rgba(0, 0, 0, .9); --shadow-sm: 0 10px 24px -14px rgba(0, 0, 0, .9); --scrim: #07080e;
+  --font-display: "Orbitron", sans-serif; --font-body: "Exo 2", sans-serif; --display-weight: 800;
+  color-scheme: dark;
+}
+html[data-etheme="arena-xp"] .hero { border-radius: 0 0 30px 30px; border: 1px solid var(--line); border-top: 0; }
+html[data-etheme="arena-xp"] .hero h1 { font-size: 1.05rem; line-height: 1.4; }
+html[data-etheme="arena-xp"] .brand-name { font-size: .85rem; }
+html[data-etheme="arena-xp"] .kpi:first-child { color: #05060b; }
+html[data-etheme="arena-xp"] .kpi:first-child span { color: rgba(5, 6, 11, .75); font-size: 0; }
+html[data-etheme="arena-xp"] .kpi:first-child span::after { content: "MISSÕES HOJE"; font-size: .68rem; font-weight: 700; letter-spacing: .06em; }
+html[data-etheme="arena-xp"] .kpi:not(:first-child) { border: 1px solid var(--line); }
+html[data-etheme="arena-xp"] .kpi b { font-size: 1.2rem; }
+html[data-etheme="arena-xp"] .kpi:first-child b { font-size: 2.4rem; }
+html[data-etheme="arena-xp"] .kpi:nth-child(4) b, html[data-etheme="arena-xp"] .kpi:nth-child(4) span { font-size: 0; }
+html[data-etheme="arena-xp"] .kpi:nth-child(4)::after {
+  content: "NÍVEL 7 · 620/1000 XP"; display: block; font-size: .68rem; font-weight: 700; letter-spacing: .06em; color: #cfe8ff; padding-bottom: 12px;
+  background: linear-gradient(90deg, #22e6ff, #b44dff 62%, rgba(255, 255, 255, .1) 62%) bottom / 100% 6px no-repeat;
+}
+html[data-etheme="arena-xp"] .task { border: 1px solid var(--line); border-left: 5px solid var(--c); position: relative; }
+html[data-etheme="arena-xp"] .task-side::after { content: "+10 XP"; font-size: .66rem; font-weight: 700; color: #b44dff; }
+html[data-etheme="arena-xp"] .task.done .task-side::after { content: "XP ✓"; color: #3dffa2; }
+html[data-etheme="arena-xp"] .spot-kicker::after { content: " · CHEFÃO"; }
+html[data-etheme="arena-xp"] .group h2, html[data-etheme="arena-xp"] .section-title h3 { font-size: .85rem; letter-spacing: .06em; text-transform: uppercase; }
+html[data-etheme="arena-xp"] .month-card, html[data-etheme="arena-xp"] .subject-tile, html[data-etheme="arena-xp"] .search, html[data-etheme="arena-xp"] .chip-btn, html[data-etheme="arena-xp"] .bottom-nav { border: 1px solid var(--line); }
+html[data-etheme="arena-xp"] dialog.sheet { background: #0d0f18; }
+html[data-etheme="arena-xp"] .choice input:checked + span { background: #22e6ff; color: #05060b; }
+html[data-etheme="arena-xp"] .calendar .cal-day.today:not(.selected) .num { background: var(--surface-2); color: #22e6ff; }
