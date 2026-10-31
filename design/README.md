@@ -25,3 +25,8 @@ Cada modo guarda as próprias tarefas (`dal.v1` para Escola, `dal.pro` para Prof
 
 Cinco temas para o modo Escola sobre o layout Bento (`_bento.css`), aplicados com `data-etheme` no `<html>`:
 Grande Mestre Bento, Sakura Neon, Arena XP, Galáxia e Mundo Bloco.
+
+## Profissional no layout Bento (`pro-bento/`)
+
+Alternativas de cor para o modo Profissional publicado (Oceano), aplicadas com `data-btheme` no `<html>`:
+Grafite, Executivo, Papel Branco, Foco e Vinho.

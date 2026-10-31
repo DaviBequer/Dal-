@@ -1,0 +1,22 @@
+/* B3. Papel Branco — topo claro, bloco preto de "Hoje", azul só nos detalhes */
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap');
+html[data-mode="pro"][data-btheme="papel"] {
+  --bg: #f6f7f9; --surface: #fff; --surface-2: #f0f1f4; --text: #111318; --muted: #6b7180; --line: #e6e8ec;
+  --accent: #2563eb; --accent-2: #1d4ed8; --hero-bg: #ffffff; --hero-text: #111318; --hero-muted: #6b7180;
+  --coral: #111318; --coral-2: #2a2f3a; --scrim: #111318; --ring-hole: #fff; --dia: #10b981; --escola: #2563eb;
+  --font-display: "Onest", sans-serif; --font-body: "Onest", sans-serif; --display-weight: 800;
+}
+html[data-mode="pro"][data-btheme="papel"] .hero { border-radius: 0 0 30px 30px; box-shadow: 0 1px 0 var(--line); }
+html[data-mode="pro"][data-btheme="papel"] .hero h1 { letter-spacing: -.02em; }
+html[data-mode="pro"][data-btheme="papel"] .version { background: var(--surface-2); color: var(--muted); }
+html[data-mode="pro"][data-btheme="papel"] .icon-btn:not(.small) { background: var(--surface-2); color: var(--text); }
+html[data-mode="pro"][data-btheme="papel"] .ring { background: conic-gradient(#2563eb calc(var(--p) * 1%), #e8ebf0 0); }
+html[data-mode="pro"][data-btheme="papel"] .ring-num { color: var(--text); }
+html[data-mode="pro"][data-btheme="papel"] .ring-label { color: var(--muted); }
+html[data-mode="pro"][data-btheme="papel"] .kpi { border: 1px solid var(--line); box-shadow: none; }
+html[data-mode="pro"][data-btheme="papel"] .bottom-nav { background: #fff; border: 1px solid var(--line); }
+html[data-mode="pro"][data-btheme="papel"] .tab { color: #8a909d; }
+html[data-mode="pro"][data-btheme="papel"] .tab.active { color: #111318; }
+html[data-mode="pro"][data-btheme="papel"] .fab { box-shadow: 0 10px 20px -8px rgba(0, 0, 0, .4), 0 0 0 6px var(--bg); }
+html[data-mode="pro"][data-btheme="papel"] .chip-btn.active, html[data-mode="pro"][data-btheme="papel"] .cat-toggle input:checked + span { background: #111318; color: #fff; }
+html[data-mode="pro"][data-btheme="papel"] .save-btn { background: #111318; }

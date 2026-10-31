@@ -1,0 +1,22 @@
+/* B4. Foco — escuro, violeta e verde-limão */
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap');
+html[data-mode="pro"][data-btheme="foco"] {
+  --bg: #111015; --surface: #1a1920; --surface-2: #24222c; --text: #f2f0f7; --muted: #9a96a8; --line: rgba(255, 255, 255, .07);
+  --accent: #8b7bff; --accent-2: #6c5ce7; --accent-text: #fff;
+  --hero-bg: radial-gradient(circle at 100% 0%, rgba(139, 123, 255, .4), transparent 50%), radial-gradient(circle at 0% 100%, rgba(198, 243, 107, .14), transparent 45%), #17161d;
+  --hero-muted: #a9a5b8; --coral: #8b7bff; --coral-2: #5b4bd8; --scrim: #08070b; --dia: #c6f36b; --escola: #8b7bff;
+  --shadow: 0 16px 34px -20px rgba(0, 0, 0, .8); --shadow-sm: 0 8px 20px -14px rgba(0, 0, 0, .8);
+  --font-display: "Hanken Grotesk", sans-serif; --font-body: "Hanken Grotesk", sans-serif; --display-weight: 800; color-scheme: dark;
+}
+html[data-mode="pro"][data-btheme="foco"] .hero { border-radius: 0 0 30px 30px; border: 1px solid var(--line); border-top: 0; }
+html[data-mode="pro"][data-btheme="foco"] .kpi, html[data-mode="pro"][data-btheme="foco"] .task, html[data-mode="pro"][data-btheme="foco"] .month-card,
+html[data-mode="pro"][data-btheme="foco"] .subject-tile, html[data-mode="pro"][data-btheme="foco"] .search, html[data-mode="pro"][data-btheme="foco"] .chip-btn { border: 1px solid var(--line); }
+html[data-mode="pro"][data-btheme="foco"] .task { border-left: 5px solid var(--c); }
+html[data-mode="pro"][data-btheme="foco"] .logo { background: #c6f36b; color: #111015; }
+html[data-mode="pro"][data-btheme="foco"] .bottom-nav { background: #1a1920; border: 1px solid var(--line); }
+html[data-mode="pro"][data-btheme="foco"] .tab { color: #77738a; }
+html[data-mode="pro"][data-btheme="foco"] .tab.active { color: #c6f36b; }
+html[data-mode="pro"][data-btheme="foco"] .ring { background: conic-gradient(#c6f36b calc(var(--p) * 1%), rgba(255, 255, 255, .12) 0); }
+html[data-mode="pro"][data-btheme="foco"] .chip-btn.active { background: #c6f36b; color: #111015; }
+html[data-mode="pro"][data-btheme="foco"] dialog.sheet { background: #17161d; }
+html[data-mode="pro"][data-btheme="foco"] .choice input:checked + span { background: #c6f36b; color: #111015; }

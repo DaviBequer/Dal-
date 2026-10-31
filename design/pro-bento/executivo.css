@@ -1,0 +1,19 @@
+/* B2. Executivo — azul-noite escuro, azul elétrico nos destaques */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+html[data-mode="pro"][data-btheme="executivo"] {
+  --bg: #0b1120; --surface: #121a2c; --surface-2: #1a2438; --text: #e8eefc; --muted: #8b97b3; --line: rgba(255, 255, 255, .07);
+  --accent: #4c8dff; --accent-2: #3b6fe0; --hero-bg: linear-gradient(160deg, #111b33, #0b1120); --hero-muted: #8b97b3;
+  --coral: #4c8dff; --coral-2: #2f5fd0; --scrim: #05080f; --dia: #2dd4bf; --escola: #4c8dff;
+  --shadow: 0 16px 34px -20px rgba(0, 0, 0, .8); --shadow-sm: 0 8px 20px -14px rgba(0, 0, 0, .8);
+  --font-display: "IBM Plex Sans", sans-serif; --font-body: "IBM Plex Sans", sans-serif; --display-weight: 700; color-scheme: dark;
+}
+html[data-mode="pro"][data-btheme="executivo"] .hero { border-radius: 0 0 30px 30px; border-bottom: 1px solid var(--line); }
+html[data-mode="pro"][data-btheme="executivo"] .kpi, html[data-mode="pro"][data-btheme="executivo"] .task, html[data-mode="pro"][data-btheme="executivo"] .month-card,
+html[data-mode="pro"][data-btheme="executivo"] .subject-tile, html[data-mode="pro"][data-btheme="executivo"] .search, html[data-mode="pro"][data-btheme="executivo"] .chip-btn { border: 1px solid var(--line); }
+html[data-mode="pro"][data-btheme="executivo"] .task { border-left: 5px solid var(--c); }
+html[data-mode="pro"][data-btheme="executivo"] .bottom-nav { background: #121a2c; border: 1px solid var(--line); }
+html[data-mode="pro"][data-btheme="executivo"] .tab { color: #6f7b98; }
+html[data-mode="pro"][data-btheme="executivo"] .tab.active { color: #7fb0ff; }
+html[data-mode="pro"][data-btheme="executivo"] .ring { background: conic-gradient(#4c8dff calc(var(--p) * 1%), rgba(255, 255, 255, .12) 0); }
+html[data-mode="pro"][data-btheme="executivo"] dialog.sheet { background: #10182a; }
+html[data-mode="pro"][data-btheme="executivo"] .choice input:checked + span { background: #4c8dff; color: #fff; }

@@ -1,0 +1,12 @@
+/* B1. Grafite — o P3 original: topo grafite, laranja nos destaques */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
+html[data-mode="pro"][data-btheme="grafite"] {
+  --bg: #eceef1; --surface: #fff; --surface-2: #f1f2f5; --text: #17191f; --muted: #6a6f7c; --line: #e2e4e9;
+  --accent: #1c1f26; --accent-2: #2b2f38; --hero-bg: #1c1f26; --hero-muted: #a2a7b3; --coral: #ff6b2c; --coral-2: #e0471a; --scrim: #17191f;
+  --dia: #22b07d; --escola: #ff6b2c; --font-display: "Sora", sans-serif; --font-body: "DM Sans", sans-serif; --display-weight: 700;
+}
+html[data-mode="pro"][data-btheme="grafite"] .hero { border-radius: 0 0 34px 34px; }
+html[data-mode="pro"][data-btheme="grafite"] .bottom-nav { background: #1c1f26; }
+html[data-mode="pro"][data-btheme="grafite"] .tab { color: #8b909c; }
+html[data-mode="pro"][data-btheme="grafite"] .tab.active { color: #ff8a4c; }
+html[data-mode="pro"][data-btheme="grafite"] .ring { background: conic-gradient(#ff6b2c calc(var(--p) * 1%), rgba(255, 255, 255, .16) 0); }

@@ -1,0 +1,15 @@
+/* B5. Vinho — sofisticado: topo bordô, rosé nos destaques, fundo claro levemente rosado */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+html[data-mode="pro"][data-btheme="vinho"] {
+  --bg: #f7f2f4; --surface: #fff; --surface-2: #f2e8ec; --text: #2b1220; --muted: #7d6370; --line: #eadbe1;
+  --accent: #7a1f45; --accent-2: #5b1532;
+  --hero-bg: radial-gradient(ellipse 140% 60% at 50% 120%, rgba(255, 255, 255, .12), transparent 60%), linear-gradient(160deg, #5b1532, #8c2b55);
+  --hero-muted: rgba(255, 228, 238, .8); --coral: #e98aa5; --coral-2: #c9577a; --scrim: #2b1220; --dia: #c9577a; --escola: #7a1f45;
+  --shadow: 0 14px 30px -18px rgba(91, 21, 50, .35); --shadow-sm: 0 6px 16px -10px rgba(91, 21, 50, .28);
+  --font-display: "Plus Jakarta Sans", sans-serif; --font-body: "Plus Jakarta Sans", sans-serif; --display-weight: 800;
+}
+html[data-mode="pro"][data-btheme="vinho"] .bottom-nav { background: #5b1532; }
+html[data-mode="pro"][data-btheme="vinho"] .tab { color: rgba(255, 228, 238, .55); }
+html[data-mode="pro"][data-btheme="vinho"] .tab.active { color: #f6b8ca; }
+html[data-mode="pro"][data-btheme="vinho"] .ring { background: conic-gradient(#f6b8ca calc(var(--p) * 1%), rgba(255, 255, 255, .16) 0); }
+html[data-mode="pro"][data-btheme="vinho"] .save-btn { background: linear-gradient(140deg, #7a1f45, #5b1532); }
