@@ -271,7 +271,9 @@ function renderKpis() {
     ['Semana', pending.filter((t) => t.date && t.date > today && t.date <= addDays(today, 7)).length],
     [cap(M.examWord[1]), pending.filter((t) => t.kind === M.examKind && t.date && t.date >= today).length],
   ];
-  $('#kpis').innerHTML = items.map(([l, n], i) => `<div class="kpi ${i === 1 && n ? 'warn' : ''}"><b>${n}</b><span>${l}</span></div>`).join('');
+  const ocean = ['wave', 'anchor', 'compass', 'shell'];
+  $('#kpis').innerHTML = items.map(([l, n], i) =>
+    `<div class="kpi ${i === 1 && n ? 'warn' : ''}"><svg class="kico" aria-hidden="true"><use href="#o-${ocean[i]}"/></svg><b>${n}</b><span>${l}</span></div>`).join('');
 }
 
 function userName() {
@@ -335,6 +337,7 @@ function renderHoje() {
           <strong>${escapeHTML(s ? s.name : exam.title)}</strong>
           <span>${escapeHTML(exam.title)} · ${formatDate(exam.date, { weekday: 'short', day: 'numeric', month: 'short' })}</span>
         </div>
+        <svg class="spot-ico" aria-hidden="true"><use href="#o-lighthouse"/></svg>
         <div class="countdown"><b>${n}</b><span>${n === 1 ? 'dia' : 'dias'}</span></div>
       </article>`;
   } else {
@@ -1080,6 +1083,7 @@ function applyMode() {
   document.querySelector('meta[name="theme-color"]').content = MODE === 'pro' ? '#0f4c5c' : '#123d2f';
   document.querySelectorAll('[data-l]').forEach((el) => { el.textContent = M[el.dataset.l]; });
   document.querySelector('.tab[data-view="escola"] use').setAttribute('href', `#i-${M.tabIcon}`);
+  document.querySelector('.logo use').setAttribute('href', MODE === 'pro' ? '#o-wave' : '#i-check');
   document.querySelector('.cat-toggle label:nth-child(2) use').setAttribute('href', `#i-${M.tabIcon}`);
   form.title.placeholder = M.placeholder;
   $('#kindRow').innerHTML = Object.entries(M.kinds).map(([v, l]) =>

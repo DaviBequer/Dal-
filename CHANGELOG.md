@@ -2,6 +2,12 @@
 
 A partir da v1 a versão é um número inteiro que sobe a cada atualização.
 
+## v7 — 2026-10-31
+- Modo Profissional com o tema **Oceano** de verdade: cores em azul e turquesa (do fundo do mar à praia),
+  ondas que se movem no topo e no bloco de Hoje, bolhas subindo, logo de onda, ícones de mar nos números
+  (onda, âncora, bússola, concha), farol no próximo prazo e peixinho quando a lista está vazia.
+- Correção: no modo Escola a página rolava um pouco para o lado.
+
 ## v6 — 2026-10-31
 - Modo Escola com o layout Bento e o tema Grande Mestre (E1): bloco dourado de "Hoje" com o cavalo, números sobre o topo.
 - Todas as matérias do Ensino Fundamental já cadastradas (Matemática, Português, Redação, Inglês, Espanhol,
