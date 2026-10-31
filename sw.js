@@ -36,12 +36,26 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// Rede primeiro: com internet o app abre sempre na versão publicada mais recente;
+// sem internet (ou se a rede demorar), usa a cópia guardada.
 self.addEventListener('fetch', (event) => {
-  // Pedidos "no-store" (ex.: conferir a versão nova) vão sempre à rede
-  if (event.request.method !== 'GET' || event.request.cache === 'no-store') return;
-  event.respondWith(
-    caches.match(event.request, { ignoreSearch: true }).then((cached) => cached || fetch(event.request)),
-  );
+  const req = event.request;
+  if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
+  event.respondWith((async () => {
+    const cache = await caches.open(CACHE);
+    const fromNet = fetch(req, { cache: 'no-cache' }).then((res) => {
+      if (res.ok) cache.put(req, res.clone());
+      return res;
+    });
+    fromNet.catch(() => {});
+    const timeout = new Promise((resolve) => setTimeout(resolve, 3500));
+    try {
+      const res = await Promise.race([fromNet, timeout]);
+      if (res) return res;
+    } catch (e) { /* sem rede */ }
+    const cached = await caches.match(req, { ignoreSearch: true });
+    return cached || fromNet;
+  })());
 });
 
 // ---------- Lembretes ----------

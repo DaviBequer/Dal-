@@ -436,6 +436,7 @@ function openForm(task = null, defaults = {}) {
   setChoice('kind', data.kind || 'licao');
   form.date.value = data.date || '';
   form.time.value = data.time || '';
+  updatePickerLabels();
   setChoice('priority', data.priority || 'media');
   setChoice('repeat', data.repeat || '');
   setChoice('reminder', data.reminder || '');
@@ -443,7 +444,7 @@ function openForm(task = null, defaults = {}) {
   updateSchoolFields();
   dialog.returnValue = '';
   dialog.showModal();
-  form.title.focus();
+  if (!task) form.title.focus();
 }
 
 form.addEventListener('change', (e) => {
@@ -480,13 +481,160 @@ dialog.addEventListener('close', () => {
   render();
 });
 
-$('#deleteBtn').addEventListener('click', () => {
-  if (!editingId || !confirm('Excluir esta tarefa?')) return;
+$('#deleteBtn').addEventListener('click', async () => {
+  if (!editingId) return;
+  const t = state.tasks.find((x) => x.id === editingId);
+  if (!(await askConfirm({ title: 'Excluir tarefa?', text: `“${t ? t.title : ''}” será apagada. Não dá para desfazer.` }))) return;
   state.tasks = state.tasks.filter((t) => t.id !== editingId);
   save();
   dialog.close('deleted');
   toast('Tarefa excluída');
   render();
+});
+
+// ---------- Janelas próprias: confirmar, data, hora e cor ----------
+// Substituem confirm() e os seletores nativos do Android, que abrem com o visual do sistema.
+function openSheet(dlg) {
+  return new Promise((resolve) => {
+    const done = (value) => {
+      dlg.removeEventListener('close', onClose);
+      resolve(value);
+    };
+    const onClose = () => done(dlg.dataset.result ? JSON.parse(dlg.dataset.result) : null);
+    dlg.dataset.result = '';
+    dlg.addEventListener('close', onClose);
+    dlg.showModal();
+  });
+}
+
+function closeSheet(dlg, value) {
+  dlg.dataset.result = JSON.stringify(value);
+  dlg.close();
+}
+
+document.querySelectorAll('dialog.small-sheet').forEach((dlg) => {
+  // Toque fora da janela ou no X fecha sem escolher
+  dlg.addEventListener('click', (e) => {
+    if (e.target === dlg || e.target.closest('[data-close]')) dlg.close();
+  });
+});
+
+function askConfirm({ title, text = '', yes = 'Excluir' }) {
+  const dlg = $('#confirmDialog');
+  $('#confirmTitle').textContent = title;
+  $('#confirmText').textContent = text;
+  $('#confirmYes').textContent = yes;
+  return openSheet(dlg).then((v) => v === true);
+}
+$('#confirmYes').addEventListener('click', () => closeSheet($('#confirmDialog'), true));
+$('#confirmNo').addEventListener('click', () => closeSheet($('#confirmDialog'), false));
+
+function dateLabel(iso) {
+  if (!iso) return 'Sem data';
+  const n = diffDays(iso);
+  if (n === 0) return 'Hoje';
+  if (n === 1) return 'Amanhã';
+  return cap(formatDate(iso, { weekday: 'short', day: 'numeric', month: 'short' }).replace(/\./g, ''));
+}
+
+function updatePickerLabels() {
+  $('#dateLabel').textContent = dateLabel(form.date.value);
+  $('#timeLabel').textContent = form.time.value || 'Sem horário';
+  $('#dateBtn').classList.toggle('filled', !!form.date.value);
+  $('#timeBtn').classList.toggle('filled', !!form.time.value);
+}
+
+const picker = { year: 0, month: 0, value: '' };
+
+function renderDatePicker() {
+  const first = new Date(picker.year, picker.month, 1);
+  $('#pickMonth').textContent = cap(first.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }));
+  const today = todayISO();
+  let html = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((d) => `<div class="cal-dow">${d}</div>`).join('');
+  const start = new Date(first);
+  start.setDate(1 - first.getDay());
+  for (let i = 0; i < 42; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    const iso = toISO(d);
+    const cls = ['cal-day'];
+    if (d.getMonth() !== picker.month) cls.push('other');
+    if (iso === today) cls.push('today');
+    if (iso === picker.value) cls.push('selected');
+    html += `<button type="button" class="${cls.join(' ')}" data-pick="${iso}"><span class="num">${d.getDate()}</span></button>`;
+    if (i % 7 === 6 && i >= 27 && d.getMonth() !== picker.month) break;
+  }
+  $('#pickDays').innerHTML = html;
+
+  const today0 = fromISO(today);
+  const nextMonday = addDays(today, ((8 - today0.getDay()) % 7) || 7);
+  const quick = [['Hoje', today], ['Amanhã', addDays(today, 1)], ['Próx. segunda', nextMonday], ['Sem data', '']];
+  $('#dateQuick').innerHTML = quick.map(([label, iso]) =>
+    `<button type="button" class="choice-chip ${iso === picker.value ? 'on' : ''}" data-pick="${iso}">${label}</button>`).join('');
+}
+
+$('#dateBtn').addEventListener('click', async () => {
+  picker.value = form.date.value;
+  const base = fromISO(picker.value || todayISO());
+  picker.year = base.getFullYear();
+  picker.month = base.getMonth();
+  renderDatePicker();
+  const v = await openSheet($('#dateDialog'));
+  if (v !== null) { form.date.value = v; updatePickerLabels(); }
+});
+$('#dateDialog').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-pick]');
+  if (b) closeSheet($('#dateDialog'), b.dataset.pick);
+});
+const shiftPicker = (n) => {
+  const d = new Date(picker.year, picker.month + n, 1);
+  picker.year = d.getFullYear();
+  picker.month = d.getMonth();
+  renderDatePicker();
+};
+$('#pickPrev').addEventListener('click', () => shiftPicker(-1));
+$('#pickNext').addEventListener('click', () => shiftPicker(1));
+
+const timePick = { h: '', m: '' };
+
+function renderTimePicker() {
+  $('#pickHours').innerHTML = Array.from({ length: 18 }, (_, i) => String(i + 6).padStart(2, '0'))
+    .map((h) => `<button type="button" class="choice-chip ${h === timePick.h ? 'on' : ''}" data-h="${h}">${h}</button>`).join('');
+  $('#pickMinutes').innerHTML = ['00', '10', '15', '20', '30', '40', '45', '50']
+    .map((m) => `<button type="button" class="choice-chip ${m === timePick.m ? 'on' : ''}" data-m="${m}">:${m}</button>`).join('');
+  $('#timePreview').textContent = `${timePick.h || '--'}:${timePick.m || '--'}`;
+  $('#timeOk').disabled = !timePick.h;
+}
+
+$('#timeBtn').addEventListener('click', async () => {
+  const [h, m] = (form.time.value || ':').split(':');
+  timePick.h = h;
+  timePick.m = m;
+  renderTimePicker();
+  const v = await openSheet($('#timeDialog'));
+  if (v !== null) { form.time.value = v; updatePickerLabels(); }
+});
+$('#timeDialog').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-h], [data-m]');
+  if (!b) return;
+  if (b.dataset.h) { timePick.h = b.dataset.h; if (!timePick.m) timePick.m = '00'; }
+  if (b.dataset.m) { timePick.m = b.dataset.m; if (!timePick.h) timePick.h = '08'; }
+  renderTimePicker();
+});
+$('#timeOk').addEventListener('click', () => closeSheet($('#timeDialog'), `${timePick.h}:${timePick.m || '00'}`));
+$('#timeClear').addEventListener('click', () => closeSheet($('#timeDialog'), ''));
+
+const PALETTE = ['#4f6bff', '#2f7a5d', '#18b6a4', '#06b6d4', '#22c55e', '#84cc16', '#e3b65b', '#f59e0b',
+  '#f97316', '#ef4444', '#e11d48', '#ec4899', '#a855f7', '#7c5cff', '#8b5e3c', '#64748b'];
+
+function pickColor(current) {
+  $('#palette').innerHTML = PALETTE.map((c) =>
+    `<button type="button" class="color-dot big ${c === current ? 'on' : ''}" style="--dot:${c}" data-color="${c}" aria-label="Cor ${c}"></button>`).join('');
+  return openSheet($('#colorDialog'));
+}
+$('#palette').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-color]');
+  if (b) closeSheet($('#colorDialog'), b.dataset.color);
 });
 
 // ---------- Matérias ----------
@@ -495,7 +643,7 @@ const subjectsDialog = $('#subjectsDialog');
 function renderSubjectEditor() {
   $('#subjectEditList').innerHTML = state.subjects.map((s) => `
     <li data-id="${s.id}" style="--c:${escapeHTML(s.color)}">
-      <input type="color" value="${escapeHTML(s.color)}" data-subject-color aria-label="Cor de ${escapeHTML(s.name)}">
+      <button class="color-dot" type="button" data-subject-color style="--dot:${escapeHTML(s.color)}" aria-label="Mudar a cor de ${escapeHTML(s.name)}"></button>
       <span>${escapeHTML(s.name)}</span>
       <button class="icon-btn small" type="button" data-remove-subject aria-label="Remover ${escapeHTML(s.name)}"><svg><use href="#i-x"/></svg></button>
     </li>`).join('') || '<li class="empty">Nenhuma matéria cadastrada.</li>';
@@ -514,7 +662,7 @@ $('#addSubjectBtn').addEventListener('click', () => {
     toast('Essa matéria já existe');
     return;
   }
-  state.subjects.push({ id: uid(), name, color: $('#newSubjectColor').value });
+  state.subjects.push({ id: uid(), name, color: $('#newSubjectColor').dataset.color });
   input.value = '';
   save();
   renderSubjectEditor();
@@ -525,20 +673,31 @@ $('#newSubjectName').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') { e.preventDefault(); $('#addSubjectBtn').click(); }
 });
 
-$('#subjectEditList').addEventListener('input', (e) => {
-  if (!e.target.matches('[data-subject-color]')) return;
-  const s = subjectById(e.target.closest('li').dataset.id);
-  if (s) { s.color = e.target.value; save(); }
+$('#newSubjectColor').addEventListener('click', async (e) => {
+  const btn = e.currentTarget;
+  const color = await pickColor(btn.dataset.color);
+  if (color) { btn.dataset.color = color; btn.style.setProperty('--dot', color); }
 });
 
-$('#subjectEditList').addEventListener('click', (e) => {
-  if (!e.target.matches('[data-remove-subject]')) return;
-  const id = e.target.closest('li').dataset.id;
+$('#subjectEditList').addEventListener('click', async (e) => {
+  const colorBtn = e.target.closest('[data-subject-color]');
+  if (colorBtn) {
+    const s = subjectById(colorBtn.closest('li').dataset.id);
+    const color = s && await pickColor(s.color);
+    if (color) { s.color = color; save(); renderSubjectEditor(); }
+    return;
+  }
+  const removeBtn = e.target.closest('[data-remove-subject]');
+  if (!removeBtn) return;
+  const id = removeBtn.closest('li').dataset.id;
+  const subj = subjectById(id);
   const used = state.tasks.filter((t) => t.subject === id).length;
-  const msg = used
-    ? `Remover esta matéria? ${used} tarefa(s) ficarão como “Sem matéria”.`
-    : 'Remover esta matéria?';
-  if (!confirm(msg)) return;
+  const ok = await askConfirm({
+    title: `Remover ${subj ? subj.name : 'matéria'}?`,
+    text: used ? `${used} tarefa(s) dessa matéria ficarão como “Sem matéria”.` : 'A matéria sai da lista.',
+    yes: 'Remover',
+  });
+  if (!ok) return;
   state.subjects = state.subjects.filter((s) => s.id !== id);
   save();
   renderSubjectEditor();
@@ -626,9 +785,9 @@ $('#week').addEventListener('click', (e) => {
   switchView('agenda');
 });
 
-$('#clearDone').addEventListener('click', () => {
+$('#clearDone').addEventListener('click', async () => {
   const n = state.tasks.filter((t) => t.done).length;
-  if (!n || !confirm(`Apagar ${n} tarefa(s) concluída(s)?`)) return;
+  if (!n || !(await askConfirm({ title: 'Apagar concluídas?', text: `${n} tarefa(s) concluída(s) serão apagadas. Não dá para desfazer.`, yes: 'Apagar' }))) return;
   state.tasks = state.tasks.filter((t) => !t.done);
   save();
   render();
@@ -665,7 +824,7 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
     reloadWhenIdle();
   });
 
-  navigator.serviceWorker.register('sw.js').then((reg) => {
+  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then((reg) => {
     // Procura versão nova ao voltar para o app e a cada 30 minutos
     document.addEventListener('visibilitychange', () => { if (!document.hidden) reg.update(); });
     setInterval(() => reg.update(), 30 * 60000);

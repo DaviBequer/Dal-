@@ -142,8 +142,10 @@
       </div>
 
       <div class="when-row">
-        <label class="pill-field"><svg><use href="#i-cal"/></svg><input type="date" name="date" aria-label="Data"></label>
-        <label class="pill-field"><svg><use href="#i-clock"/></svg><input type="time" name="time" aria-label="Horário"></label>
+        <button class="pill-field" type="button" id="dateBtn"><svg><use href="#i-cal"/></svg><span id="dateLabel">Sem data</span></button>
+        <button class="pill-field" type="button" id="timeBtn"><svg><use href="#i-clock"/></svg><span id="timeLabel">Sem horário</span></button>
+        <input type="hidden" name="date">
+        <input type="hidden" name="time">
       </div>
 
       <p class="field-label">Prioridade</p>
@@ -188,12 +190,66 @@
       </div>
       <ul class="subject-edit-list" id="subjectEditList"></ul>
       <div class="add-subject">
-        <input id="newSubjectColor" type="color" value="#7c5cff" aria-label="Cor da matéria">
+        <button class="color-dot" type="button" id="newSubjectColor" data-color="#7c5cff" style="--dot:#7c5cff" aria-label="Escolher cor da matéria"></button>
         <input id="newSubjectName" placeholder="Nova matéria" maxlength="40">
         <button class="pill-btn" id="addSubjectBtn" type="button"><svg><use href="#i-plus"/></svg></button>
       </div>
       <button class="save-btn" type="submit">Pronto</button>
     </form>
+  </dialog>
+
+  <!-- Janelas próprias (no lugar das janelas do sistema) -->
+  <dialog id="confirmDialog" class="sheet small-sheet">
+    <div class="sheet-inner">
+      <span class="grabber" aria-hidden="true"></span>
+      <div class="confirm-icon" aria-hidden="true"><svg><use href="#i-x"/></svg></div>
+      <h2 id="confirmTitle"></h2>
+      <p class="confirm-text" id="confirmText"></p>
+      <div class="sheet-actions">
+        <button class="pill-btn soft big" type="button" id="confirmNo">Cancelar</button>
+        <button class="pill-btn danger-solid big" type="button" id="confirmYes">Excluir</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="dateDialog" class="sheet small-sheet">
+    <div class="sheet-inner">
+      <span class="grabber" aria-hidden="true"></span>
+      <div class="sheet-head"><h2>Escolher data</h2><button class="icon-btn small" type="button" data-close aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
+      <div class="choice-row" id="dateQuick"></div>
+      <div class="picker-cal">
+        <div class="cal-header">
+          <button class="icon-btn small" type="button" id="pickPrev" aria-label="Mês anterior"><svg><use href="#i-chev-l"/></svg></button>
+          <h3 id="pickMonth"></h3>
+          <button class="icon-btn small" type="button" id="pickNext" aria-label="Próximo mês"><svg><use href="#i-chev-r"/></svg></button>
+        </div>
+        <div class="calendar" id="pickDays"></div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="timeDialog" class="sheet small-sheet">
+    <div class="sheet-inner">
+      <span class="grabber" aria-hidden="true"></span>
+      <div class="sheet-head"><h2>Escolher horário</h2><button class="icon-btn small" type="button" data-close aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
+      <div class="time-preview" id="timePreview">--:--</div>
+      <p class="field-label">Hora</p>
+      <div class="time-grid hours" id="pickHours"></div>
+      <p class="field-label">Minutos</p>
+      <div class="time-grid minutes" id="pickMinutes"></div>
+      <div class="sheet-actions">
+        <button class="pill-btn soft big" type="button" id="timeClear">Sem horário</button>
+        <button class="save-btn" type="button" id="timeOk">Confirmar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="colorDialog" class="sheet small-sheet">
+    <div class="sheet-inner">
+      <span class="grabber" aria-hidden="true"></span>
+      <div class="sheet-head"><h2>Escolher cor</h2><button class="icon-btn small" type="button" data-close aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
+      <div class="palette" id="palette"></div>
+    </div>
   </dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>

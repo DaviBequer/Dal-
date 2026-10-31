@@ -2,6 +2,11 @@
 
 A partir da v1 a versão é um número inteiro que sobe a cada atualização.
 
+## v3 — 2026-10-31
+- Janelas novas no visual do app no lugar das janelas pretas do sistema: confirmar exclusão,
+  escolher data (atalhos + calendário), escolher horário (grade de horas e minutos) e escolher cor (paleta).
+- O app abre sempre na versão mais nova quando há internet (sem precisar atualizar nada).
+
 ## v2 — 2026-10-30
 - App renovado com o estilo **Grande Mestre** (xadrez): verde esmeralda, dourado e peças marcando a prioridade.
 - Navegação embaixo com botão + no centro; topo com saudação, progresso do dia e semana.

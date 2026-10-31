@@ -14,7 +14,11 @@ Toda alteração no app precisa aumentar a versão, que é um **número inteiro*
 
 A versão dá nome ao cache do service worker (`sw.js`); sem aumentá-la, quem já instalou o
 PWA não recebe a atualização. Se criar um arquivo novo que o app usa, inclua-o em `ASSETS`
-no `sw.js`. A atualização é automática no aparelho (sem botão).
+no `sw.js`. A atualização é automática no aparelho (sem botão): o service worker busca
+primeiro na rede (abre sempre a versão publicada) e usa o cache só sem internet.
+
+Não use `confirm()`, `alert()` nem inputs nativos de data, hora ou cor: no Android eles abrem
+janelas pretas do sistema. Use as janelas próprias do app (`askConfirm`, `#dateBtn`, `#timeBtn`, `pickColor`).
 
 ## Quando publicar direto e quando perguntar (pedido do usuário)
 
