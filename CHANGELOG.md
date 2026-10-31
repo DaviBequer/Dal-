@@ -2,6 +2,9 @@
 
 A partir da v1 a versão é um número inteiro que sobe a cada atualização.
 
+## v4 — 2026-10-31
+- Correção: o dia selecionado e o dia de hoje na Agenda perdiam o destaque em algumas posições do calendário.
+
 ## v3 — 2026-10-31
 - Janelas novas no visual do app no lugar das janelas pretas do sistema: confirmar exclusão,
   escolher data (atalhos + calendário), escolher horário (grade de horas e minutos) e escolher cor (paleta).
