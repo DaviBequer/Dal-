@@ -13,3 +13,10 @@ Protótipo funcionando do app com layout novo: navegação inferior com botão +
 anel de progresso e semana, destaque da próxima prova, agenda em linha do tempo, escola com carrossel de
 provas e blocos de matéria, formulários em bottom sheet. `renovado/base.css` é o layout; `renovado/temas/`
 traz cinco estilos premium (Sakura Noir, Grande Mestre, Mundo Bloco, Toon Pop, Arena RGB).
+
+## Modo Profissional (`pro/`)
+
+Protótipo do app com troca de modo em Configurações (Escola / Profissional). No modo Profissional:
+Casa + Trabalho, Projetos, tipos Tarefa/Reunião/Entrega/Ligação/Pagamento e destaque "Próximo prazo".
+Cada modo guarda as próprias tarefas (`dal.v1` para Escola, `dal.pro` para Profissional).
+`pro/temas/` traz cinco designs para adultos (Executivo, Papel Branco, Bento Grafite, Oceano, Foco).

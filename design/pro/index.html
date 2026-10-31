@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Dalê Tarefas</title>
+  <meta name="description" content="App de tarefas com agenda para o dia a dia e para a escola.">
+  <meta name="theme-color" content="#123d2f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/fraunces-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H15v-5h-6v5H5.5A1.5 1.5 0 0 1 4 19z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v15H7.5A2.5 2.5 0 0 0 5 20.5zM5 20.5A2.5 2.5 0 0 0 7.5 23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" transform="translate(0 -1.5)"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6.5h11M9 12h11M9 17.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="4.5" cy="6.5" r="1.4" fill="currentColor"/><circle cx="4.5" cy="12" r="1.4" fill="currentColor"/><circle cx="4.5" cy="17.5" r="1.4" fill="currentColor"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5.5 12.5 4 4 9-9.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15zM10 20.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 11V9.5A3.5 3.5 0 0 1 7.5 6H19m0 0-3-3m3 3-3 3M20 13v1.5a3.5 3.5 0 0 1-3.5 3.5H5m0 0 3 3m-3-3 3-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-house" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9.5h11V10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+    <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-brief" viewBox="0 0 24 24"><rect x="3.5" y="7" width="17" height="12.5" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3.5 12.5h17" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  </svg>
+
+  <header class="hero">
+    <div class="hero-top">
+      <div class="brand">
+        <span class="logo" aria-hidden="true"><svg><use href="#i-check"/></svg></span>
+        <span class="brand-name">Dalê Tarefas</span>
+        <span class="version" id="appVersion"></span>
+      </div>
+      <div class="hero-actions">
+        <button class="icon-btn" id="notifyBtn" type="button" aria-label="Ativar notificações"><svg><use href="#i-bell"/></svg></button>
+        <button class="icon-btn" id="settingsBtn" type="button" aria-label="Configurações"><svg><use href="#i-gear"/></svg></button>
+      </div>
+    </div>
+    <div class="hero-body">
+      <div class="hero-text">
+        <p class="hello" id="heroKicker"></p>
+        <h1 id="heroTitle"></h1>
+        <p class="hero-sub" id="heroSub"></p>
+      </div>
+      <div class="ring" id="ring" hidden><span class="ring-num" id="ringNum"></span><span class="ring-label">feitas</span></div>
+    </div>
+    <div class="kpis" id="kpis" hidden></div>
+    <div class="week" id="week" hidden></div>
+  </header>
+
+  <main>
+    <section class="view active" id="view-hoje">
+      <div id="spotlight"></div>
+      <div class="chips" id="hojeFilter">
+        <button class="chip-btn active" data-hf="" type="button">Tudo</button>
+        <button class="chip-btn" data-hf="dia" type="button" data-l="catA">Dia a dia</button>
+        <button class="chip-btn" data-hf="escola" type="button" data-l="catB">Escola</button>
+      </div>
+      <div id="hojeLists"></div>
+    </section>
+
+    <section class="view" id="view-agenda">
+      <div class="month-card">
+        <div class="cal-header">
+          <button class="icon-btn small" id="prevMonth" type="button" aria-label="Mês anterior"><svg><use href="#i-chev-l"/></svg></button>
+          <h2 id="monthTitle"></h2>
+          <button class="icon-btn small" id="nextMonth" type="button" aria-label="Próximo mês"><svg><use href="#i-chev-r"/></svg></button>
+        </div>
+        <div class="calendar" id="calendar"></div>
+        <button class="pill-btn soft" id="goToday" type="button">Voltar para hoje</button>
+      </div>
+      <div class="section-title">
+        <h3 id="dayTitle"></h3>
+        <button class="pill-btn" id="addOnDay" type="button"><svg><use href="#i-plus"/></svg>Adicionar</button>
+      </div>
+      <ol class="timeline" id="dayTasks"></ol>
+    </section>
+
+    <section class="view" id="view-escola">
+      <div class="section-title"><h3 data-l="carousel">Provas chegando</h3></div>
+      <div class="carousel" id="examsBox"></div>
+      <div class="section-title">
+        <h3 data-l="groups">Matérias</h3>
+        <button class="pill-btn soft" id="manageSubjects" type="button"><svg><use href="#i-gear"/></svg>Editar</button>
+      </div>
+      <div class="subject-tiles" id="subjectsGrid"></div>
+      <div class="section-title"><h3 id="schoolListTitle">Lições e trabalhos</h3></div>
+      <div id="schoolList"></div>
+    </section>
+
+    <section class="view" id="view-todas">
+      <label class="search"><svg><use href="#i-search"/></svg><input type="search" id="search" placeholder="Buscar tarefas" aria-label="Buscar tarefas"></label>
+      <div class="chips" id="statusChips">
+        <button class="chip-btn active" data-status="pendentes" type="button">Pendentes</button>
+        <button class="chip-btn" data-status="concluidas" type="button">Concluídas</button>
+        <button class="chip-btn" data-status="" type="button">Todas</button>
+        <span class="chip-sep"></span>
+        <button class="chip-btn" data-cat="dia" type="button" data-l="catA">Dia a dia</button>
+        <button class="chip-btn" data-cat="escola" type="button" data-l="catB">Escola</button>
+      </div>
+      <div id="allTasks"></div>
+      <button class="pill-btn danger" id="clearDone" type="button">Apagar concluídas</button>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" role="tablist">
+    <button class="tab active" data-view="hoje" role="tab" type="button"><svg><use href="#i-home"/></svg><span>Hoje</span></button>
+    <button class="tab" data-view="agenda" role="tab" type="button"><svg><use href="#i-cal"/></svg><span>Agenda</span></button>
+    <button class="fab" id="addBtn" type="button" aria-label="Nova tarefa"><svg><use href="#i-plus"/></svg></button>
+    <button class="tab" data-view="escola" role="tab" type="button"><svg><use href="#i-book"/></svg><span data-l="tabB">Escola</span></button>
+    <button class="tab" data-view="todas" role="tab" type="button"><svg><use href="#i-list"/></svg><span>Todas</span></button>
+  </nav>
+
+  <dialog id="taskDialog" class="sheet">
+    <form id="taskForm" method="dialog">
+      <span class="grabber" aria-hidden="true"></span>
+      <div class="sheet-head">
+        <h2 id="formTitle">Nova tarefa</h2>
+        <button class="icon-btn small" value="cancel" formnovalidate type="submit" aria-label="Fechar"><svg><use href="#i-x"/></svg></button>
+      </div>
+      <input class="title-input" name="title" required maxlength="120" placeholder="O que você precisa fazer?" aria-label="Título">
+
+      <div class="cat-toggle">
+        <label><input type="radio" name="category" value="dia" checked><span><svg><use href="#i-house"/></svg><b data-l="catA">Dia a dia</b></span></label>
+        <label><input type="radio" name="category" value="escola"><span><svg><use href="#i-book"/></svg><b data-l="catB">Escola</b></span></label>
+      </div>
+
+      <div class="school-fields" id="schoolFields">
+        <p class="field-label" data-l="group">Matéria</p>
+        <div class="choice-row" id="subjectSelect"></div>
+        <p class="field-label">Tipo</p>
+        <div class="choice-row" id="kindRow"></div>
+      </div>
+
+      <div class="when-row">
+        <button class="pill-field" type="button" id="dateBtn"><svg><use href="#i-cal"/></svg><span id="dateLabel">Sem data</span></button>
+        <button class="pill-field" type="button" id="timeBtn"><svg><use href="#i-clock"/></svg><span id="timeLabel">Sem horário</span></button>
+        <input type="hidden" name="date">
+        <input type="hidden" name="time">
+      </div>
+
+      <p class="field-label">Prioridade</p>
+      <div class="choice-row prio-row">
+        <label class="choice baixa"><input type="radio" name="priority" value="baixa"><span>Baixa</span></label>
+        <label class="choice media"><input type="radio" name="priority" value="media" checked><span>Média</span></label>
+        <label class="choice alta"><input type="radio" name="priority" value="alta"><span>Alta</span></label>
+      </div>
+
+      <p class="field-label">Lembrete</p>
+      <div class="choice-row">
+        <label class="choice"><input type="radio" name="reminder" value=""><span>Nenhum</span></label>
+        <label class="choice"><input type="radio" name="reminder" value="0" checked><span>Na hora</span></label>
+        <label class="choice"><input type="radio" name="reminder" value="10"><span>10 min</span></label>
+        <label class="choice"><input type="radio" name="reminder" value="30"><span>30 min</span></label>
+        <label class="choice"><input type="radio" name="reminder" value="60"><span>1 h</span></label>
+        <label class="choice"><input type="radio" name="reminder" value="1440"><span>1 dia</span></label>
+      </div>
+
+      <p class="field-label">Repetir</p>
+      <div class="choice-row">
+        <label class="choice"><input type="radio" name="repeat" value="" checked><span>Não</span></label>
+        <label class="choice"><input type="radio" name="repeat" value="diario"><span>Todo dia</span></label>
+        <label class="choice"><input type="radio" name="repeat" value="semanal"><span>Toda semana</span></label>
+      </div>
+
+      <textarea name="notes" rows="2" maxlength="1000" placeholder="Anotações, páginas, materiais…" aria-label="Anotações"></textarea>
+
+      <div class="sheet-actions">
+        <button class="pill-btn danger" id="deleteBtn" type="button" hidden>Excluir</button>
+        <button class="save-btn" value="save" type="submit">Salvar tarefa</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="subjectsDialog" class="sheet">
+    <form method="dialog" id="subjectsForm">
+      <span class="grabber" aria-hidden="true"></span>
+      <div class="sheet-head">
+        <h2 data-l="groups">Matérias</h2>
+        <button class="icon-btn small" type="submit" aria-label="Fechar"><svg><use href="#i-x"/></svg></button>
+      </div>
+      <ul class="subject-edit-list" id="subjectEditList"></ul>
+      <div class="add-subject">
+        <button class="color-dot" type="button" id="newSubjectColor" data-color="#7c5cff" style="--dot:#7c5cff" aria-label="Escolher cor da matéria"></button>
+        <input id="newSubjectName" placeholder="Nova matéria" maxlength="40">
+        <button class="pill-btn" id="addSubjectBtn" type="button"><svg><use href="#i-plus"/></svg></button>
+      </div>
+      <button class="save-btn" type="submit">Pronto</button>
+    </form>
+  </dialog>
+
+  <dialog id="settingsDialog" class="sheet small-sheet">
+    <div class="sheet-inner">
+      <span class="grabber" aria-hidden="true"></span>
+      <div class="sheet-head"><h2>Configurações</h2><button class="icon-btn small" type="button" data-close aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
+      <p class="field-label">Modo do app</p>
+      <div class="mode-switch" id="modeSwitch">
+        <button type="button" data-mode="escola"><svg><use href="#i-book"/></svg><b>Escola</b><small>Matérias, lições e provas</small></button>
+        <button type="button" data-mode="pro"><svg><use href="#i-brief"/></svg><b>Profissional</b><small>Projetos, prazos e casa</small></button>
+      </div>
+      <p class="field-label">Seu nome</p>
+      <input class="title-input" id="userName" maxlength="30" placeholder="Para a saudação no topo">
+      <div class="setting-row"><span><b>Notificações</b><small>Lembretes das tarefas</small></span><button type="button" class="switch" id="notifySwitch" role="switch" aria-checked="false"><i></i></button></div>
+      <div class="setting-row"><span><b>Versão</b><small>Atualiza sozinho</small></span><span class="version-pill" id="settingsVersion"></span></div>
+    </div>
+  </dialog>
+
+  <!-- Janelas próprias (no lugar das janelas do sistema) -->
+  <dialog id="confirmDialog" class="sheet small-sheet">
+    <div class="sheet-inner">
+      <span class="grabber" aria-hidden="true"></span>
+      <div class="confirm-icon" aria-hidden="true"><svg><use href="#i-x"/></svg></div>
+      <h2 id="confirmTitle"></h2>
+      <p class="confirm-text" id="confirmText"></p>
+      <div class="sheet-actions">
+        <button class="pill-btn soft big" type="button" id="confirmNo">Cancelar</button>
+        <button class="pill-btn danger-solid big" type="button" id="confirmYes">Excluir</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="dateDialog" class="sheet small-sheet">
+    <div class="sheet-inner">
+      <span class="grabber" aria-hidden="true"></span>
+      <div class="sheet-head"><h2>Escolher data</h2><button class="icon-btn small" type="button" data-close aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
+      <div class="choice-row" id="dateQuick"></div>
+      <div class="picker-cal">
+        <div class="cal-header">
+          <button class="icon-btn small" type="button" id="pickPrev" aria-label="Mês anterior"><svg><use href="#i-chev-l"/></svg></button>
+          <h3 id="pickMonth"></h3>
+          <button class="icon-btn small" type="button" id="pickNext" aria-label="Próximo mês"><svg><use href="#i-chev-r"/></svg></button>
+        </div>
+        <div class="calendar" id="pickDays"></div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="timeDialog" class="sheet small-sheet">
+    <div class="sheet-inner">
+      <span class="grabber" aria-hidden="true"></span>
+      <div class="sheet-head"><h2>Escolher horário</h2><button class="icon-btn small" type="button" data-close aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
+      <div class="time-preview" id="timePreview">--:--</div>
+      <p class="field-label">Hora</p>
+      <div class="time-grid hours" id="pickHours"></div>
+      <p class="field-label">Minutos</p>
+      <div class="time-grid minutes" id="pickMinutes"></div>
+      <div class="sheet-actions">
+        <button class="pill-btn soft big" type="button" id="timeClear">Sem horário</button>
+        <button class="save-btn" type="button" id="timeOk">Confirmar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="colorDialog" class="sheet small-sheet">
+    <div class="sheet-inner">
+      <span class="grabber" aria-hidden="true"></span>
+      <div class="sheet-head"><h2>Escolher cor</h2><button class="icon-btn small" type="button" data-close aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
+      <div class="palette" id="palette"></div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="version.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

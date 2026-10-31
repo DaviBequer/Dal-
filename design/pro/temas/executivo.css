@@ -1,0 +1,31 @@
+/* P1. Executivo — azul-noite com azul elétrico; topo com 4 números (sem anel); lista compacta em um único painel; barra presa embaixo */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+html[data-ptheme="executivo"] {
+  --bg: #0b1120; --surface: #121a2c; --surface-2: #1a2438; --text: #e8eefc; --muted: #8b97b3; --line: rgba(255, 255, 255, .07);
+  --accent: #4c8dff; --accent-2: #3b6fe0; --accent-text: #fff; --hero-bg: #0f1729; --hero-bg-solid: #0f1729; --hero-text: #e8eefc; --hero-muted: #8b97b3;
+  --nav-bg: #0f1729; --dia: #2dd4bf; --escola: #4c8dff; --alta: #ff6b6b; --media: #f5b942; --baixa: #2dd4bf;
+  --spot-a: #1d3a7a; --spot-b: #142853; --r-xl: 22px; --r-lg: 16px; --r-md: 12px;
+  --shadow: none; --shadow-sm: none; --font-display: "IBM Plex Sans", sans-serif; --font-body: "IBM Plex Sans", sans-serif; --display-weight: 700;
+  color-scheme: dark;
+}
+html[data-ptheme="executivo"] .hero { border-radius: 0; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+html[data-ptheme="executivo"] .ring { display: none; }
+html[data-ptheme="executivo"] .hero h1 { font-size: 1.35rem; }
+html[data-ptheme="executivo"] .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+html[data-ptheme="executivo"] .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; }
+html[data-ptheme="executivo"] .kpi b { font-size: 1.4rem; }
+html[data-ptheme="executivo"] .week { display: none !important; }
+html[data-ptheme="executivo"] .task-list { gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; }
+html[data-ptheme="executivo"] .task { border-radius: 0; background: transparent; border-bottom: 1px solid var(--line); padding: 12px 14px; }
+html[data-ptheme="executivo"] .task:last-child { border-bottom: 0; }
+html[data-ptheme="executivo"] .badge { width: 6px; height: 36px; border-radius: 6px; background: var(--c); font-size: 0; }
+html[data-ptheme="executivo"] .badge svg { display: none; }
+html[data-ptheme="executivo"] .check { width: 26px; height: 26px; border-radius: 8px; }
+html[data-ptheme="executivo"] .chip-btn { background: var(--surface); border: 1px solid var(--line); }
+html[data-ptheme="executivo"] .chip-btn.active { background: var(--accent); color: #fff; border-color: transparent; }
+html[data-ptheme="executivo"] .group h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+html[data-ptheme="executivo"] .bottom-nav { left: 0; right: 0; bottom: 0; border-radius: 0; height: 72px; max-width: none; border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); }
+html[data-ptheme="executivo"] .fab { width: 52px; height: 52px; border-radius: 16px; margin-top: 0; box-shadow: none; }
+html[data-ptheme="executivo"] .month-card, html[data-ptheme="executivo"] .subject-tile, html[data-ptheme="executivo"] .search { background: var(--surface); border: 1px solid var(--line); }
+html[data-ptheme="executivo"] dialog.sheet { background: #10182a; border-top: 1px solid var(--line); }
+html[data-ptheme="executivo"] .choice input:checked + span { background: var(--accent); color: #fff; }

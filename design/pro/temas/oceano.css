@@ -1,0 +1,24 @@
+/* P4. Oceano — calmo e acolhedor para casa e família: topo azul-petróleo em onda, coral de destaque, letras de alta legibilidade */
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap');
+html[data-ptheme="oceano"] {
+  --bg: #f1f6f7; --surface: #ffffff; --surface-2: #e7f0f2; --text: #0f2e36; --muted: #5d7880; --line: #dbe7ea;
+  --accent: #0f6f7c; --accent-2: #13909d; --accent-text: #fff;
+  --hero-bg: radial-gradient(ellipse 140% 60% at 50% 120%, rgba(255, 255, 255, .14), transparent 60%), linear-gradient(160deg, #0f4c5c, #138592);
+  --hero-bg-solid: #0f4c5c; --hero-text: #ffffff; --hero-muted: rgba(225, 245, 248, .82); --nav-bg: rgba(255, 255, 255, .95);
+  --dia: #ff7a59; --escola: #138592; --alta: #e5484d; --media: #f6a33a; --baixa: #2bb38c;
+  --spot-a: #ff7a59; --spot-b: #e9573a; --ring: #ffb4a0; --ring-hole: rgba(10, 50, 60, .45);
+  --shadow: 0 14px 30px -18px rgba(15, 76, 92, .35); --shadow-sm: 0 6px 16px -10px rgba(15, 76, 92, .28);
+  --font-display: "Lexend", sans-serif; --font-body: "Lexend", sans-serif; --display-weight: 600;
+  color-scheme: light;
+}
+html[data-ptheme="oceano"] body { font-weight: 400; }
+html[data-ptheme="oceano"] .hero { border-radius: 0 0 50% 50% / 0 0 34px 34px; padding-bottom: 30px; }
+html[data-ptheme="oceano"] .hero h1 { font-size: 1.45rem; }
+html[data-ptheme="oceano"] .task-title { font-weight: 500; }
+html[data-ptheme="oceano"] .badge { border-radius: 50%; }
+html[data-ptheme="oceano"] .check { border-radius: 50%; }
+html[data-ptheme="oceano"] .chip-btn.active { background: var(--accent); color: #fff; }
+html[data-ptheme="oceano"] .day-pill.today { color: #0f4c5c; }
+html[data-ptheme="oceano"] .subject-tile { border-radius: 26px; }
+html[data-ptheme="oceano"] .fab { background: linear-gradient(140deg, #ff7a59, #e9573a); box-shadow: 0 12px 24px -8px #ff7a59, 0 0 0 6px var(--bg); }
+html[data-ptheme="oceano"] .save-btn { background: linear-gradient(140deg, #0f6f7c, #0f4c5c); }

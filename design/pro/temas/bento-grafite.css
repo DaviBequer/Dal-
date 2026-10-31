@@ -1,0 +1,31 @@
+/* P3. Bento Grafite — painel de produtividade: topo grafite, números em blocos que sobem sobre o topo, laranja de destaque */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
+html[data-ptheme="bento-grafite"] {
+  --bg: #eceef1; --surface: #ffffff; --surface-2: #f1f2f5; --text: #17191f; --muted: #6a6f7c; --line: #e2e4e9;
+  --accent: #ff6b2c; --accent-2: #ff9248; --accent-text: #fff; --hero-bg: #1c1f26; --hero-bg-solid: #1c1f26; --hero-text: #f4f5f7; --hero-muted: #a2a7b3;
+  --nav-bg: rgba(28, 31, 38, .96); --dia: #22b07d; --escola: #ff6b2c; --alta: #f0443a; --media: #ffa53d; --baixa: #22b07d;
+  --spot-a: #ff6b2c; --spot-b: #e0471a; --ring: #ff6b2c; --ring-hole: #1c1f26;
+  --shadow: 0 14px 30px -18px rgba(23, 25, 31, .4); --shadow-sm: 0 6px 16px -10px rgba(23, 25, 31, .3);
+  --font-display: "Sora", sans-serif; --font-body: "DM Sans", sans-serif; --display-weight: 700;
+  color-scheme: light;
+}
+html[data-ptheme="bento-grafite"] .hero { padding-bottom: 70px; border-radius: 0 0 34px 34px; }
+html[data-ptheme="bento-grafite"] .hero h1 { font-size: 1.4rem; }
+html[data-ptheme="bento-grafite"] .week { display: none !important; }
+html[data-ptheme="bento-grafite"] .logo { background: var(--accent); color: #fff; }
+html[data-ptheme="bento-grafite"] .kpis { display: grid; grid-template-columns: 1.2fr 1fr 1fr; grid-template-rows: auto auto; gap: 10px; position: absolute; left: 16px; right: 16px; bottom: -118px; z-index: 2; }
+html[data-ptheme="bento-grafite"] .kpi { background: var(--surface); color: var(--text); border-radius: 20px; padding: 12px 14px; box-shadow: var(--shadow); }
+html[data-ptheme="bento-grafite"] .kpi span { color: var(--muted); }
+html[data-ptheme="bento-grafite"] .kpi:first-child { grid-row: span 2; background: var(--accent); color: #fff; display: grid; align-content: end; }
+html[data-ptheme="bento-grafite"] .kpi:first-child b { font-size: 2.6rem; }
+html[data-ptheme="bento-grafite"] .kpi:first-child span { color: rgba(255, 255, 255, .85); }
+html[data-ptheme="bento-grafite"] .kpi:nth-child(4) { grid-column: span 2; }
+html[data-ptheme="bento-grafite"] .hero { overflow: visible; }
+html[data-ptheme="bento-grafite"] body[data-view="hoje"] main { padding-top: 136px; }
+html[data-ptheme="bento-grafite"] .task { border-left: 5px solid var(--c); border-radius: 18px; }
+html[data-ptheme="bento-grafite"] .badge { border-radius: 12px; }
+html[data-ptheme="bento-grafite"] .chip-btn.active { background: #1c1f26; color: #fff; }
+html[data-ptheme="bento-grafite"] .bottom-nav { background: #1c1f26; }
+html[data-ptheme="bento-grafite"] .tab { color: #8b909c; }
+html[data-ptheme="bento-grafite"] .tab.active { color: #ff8a4c; }
+html[data-ptheme="bento-grafite"] .fab { box-shadow: 0 12px 24px -8px var(--accent), 0 0 0 6px var(--bg); }
