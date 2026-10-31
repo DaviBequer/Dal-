@@ -2,6 +2,11 @@
 
 A partir da v1 a versão é um número inteiro que sobe a cada atualização.
 
+## v8 — 2026-10-31
+- Modo Escola com animações de xadrez: numa faixa de tabuleiro no topo, o cavalo pula em "L", o peão avança, a torre desliza e o
+  bispo anda na diagonal; no bloco de Hoje o cavalo dá pulinhos e passa um brilho dourado; a contagem da
+  próxima prova brilha como uma coroa.
+
 ## v7 — 2026-10-31
 - Modo Profissional com o tema **Oceano** de verdade: cores em azul e turquesa (do fundo do mar à praia),
   ondas que se movem no topo e no bloco de Hoje, bolhas subindo, logo de onda, ícones de mar nos números
