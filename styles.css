@@ -511,3 +511,40 @@ html[data-mode="pro"] .fab { color: #fff; background: linear-gradient(140deg, va
 /* formulários */
 html[data-mode="pro"] .save-btn { background: linear-gradient(140deg, #0f6f7c, #0f4c5c); }
 html[data-mode="pro"] .cat-toggle input:checked + span { background: var(--accent); }
+
+/* ================================================================
+   MODO ESCOLA — layout "Bento" com o tema Grande Mestre (E1)
+   ================================================================ */
+html:not([data-mode="pro"]) {
+  --k1: #d9a441; --k2: #b98325; --nav-solid: #0b2a20; --tab-muted: rgba(253, 248, 234, .55); --tab-on: #e3b65b;
+}
+html:not([data-mode="pro"]) .hero { overflow: visible; border-radius: 0 0 34px 34px; }
+html:not([data-mode="pro"]) body[data-view="hoje"] .hero { padding-bottom: 70px; }
+html:not([data-mode="pro"]) .hero h1 { font-size: 1.4rem; }
+html:not([data-mode="pro"]) .week { display: none !important; }
+html:not([data-mode="pro"]) .kpis { display: grid; grid-template-columns: 1.2fr 1fr 1fr; grid-template-rows: auto auto; gap: 10px; position: absolute; left: 16px; right: 16px; bottom: -118px; z-index: 2; }
+html:not([data-mode="pro"]) .kpi { background: var(--surface); color: var(--text); border-radius: 22px; padding: 12px 14px; box-shadow: var(--shadow); }
+html:not([data-mode="pro"]) .kpi span { color: var(--muted); }
+html:not([data-mode="pro"]) .kpi:first-child { grid-row: span 2; display: grid; align-content: end; color: #0b2a20; background: linear-gradient(150deg, var(--k1), var(--k2)); }
+html:not([data-mode="pro"]) .kpi:first-child::before { content: "♞\FE0E"; font-size: 2rem; line-height: 1; opacity: .5; }
+html:not([data-mode="pro"]) .kpi:first-child b { font-size: 2.6rem; }
+html:not([data-mode="pro"]) .kpi:first-child span { color: rgba(11, 42, 32, .8); }
+html:not([data-mode="pro"]) .kpi:nth-child(4) { grid-column: span 2; }
+html:not([data-mode="pro"]) body[data-view="hoje"] main { padding-top: 136px; }
+html:not([data-mode="pro"]) .task { border-left: 5px solid var(--c); border-radius: 20px; }
+html:not([data-mode="pro"]) .bottom-nav { background: var(--nav-solid); }
+html:not([data-mode="pro"]) .tab { color: var(--tab-muted); }
+html:not([data-mode="pro"]) .tab.active { color: var(--tab-on); }
+html:not([data-mode="pro"]) .fab { color: #0b2a20; background: linear-gradient(140deg, var(--k1), var(--k2)); box-shadow: 0 12px 24px -8px var(--k1), 0 0 0 6px var(--bg); }
+
+/* Ícones das matérias */
+.sicon { width: 28px; height: 28px; }
+.badge .sicon { width: 30px; height: 30px; }
+.tile-badge .sicon { width: 30px; height: 30px; }
+html:not([data-mode="pro"]) .badge:has(.sicon) { background: color-mix(in srgb, var(--c) 10%, var(--surface)); }
+html:not([data-mode="pro"]) .tile-badge { width: 48px; height: 48px; border-radius: 16px; background: color-mix(in srgb, var(--c) 12%, var(--surface)); }
+html:not([data-mode="pro"]) .subject-tile.active .tile-badge { background: rgba(255, 255, 255, .92); }
+.choice.subj .sicon { width: 20px; height: 20px; margin-left: -4px; }
+.choice.subj input:checked + span .sicon { background: rgba(255, 255, 255, .92); border-radius: 50%; padding: 1px; }
+.subject-edit-list li span.subj-icon, .subj-icon { flex: none; width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: var(--surface); flex: none; }
+.subj-icon .sicon { width: 26px; height: 26px; }

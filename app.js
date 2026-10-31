@@ -32,14 +32,39 @@ const DEFAULT_PROJECTS = [
   { id: 'cur', name: 'Cursos', color: '#06b6d4' },
 ];
 
+// Todas as matérias do Ensino Fundamental; o aluno remove as que não tem.
 const DEFAULT_SUBJECTS_ESCOLA = [
-  { id: 'mat', name: 'Matemática', color: '#4f46e5' },
+  { id: 'mat', name: 'Matemática', color: '#4f6bff' },
   { id: 'por', name: 'Português', color: '#e11d48' },
-  { id: 'cie', name: 'Ciências', color: '#10b981' },
-  { id: 'his', name: 'História', color: '#f59e0b' },
-  { id: 'geo', name: 'Geografia', color: '#0ea5e9' },
+  { id: 'red', name: 'Redação', color: '#f59e0b' },
   { id: 'ing', name: 'Inglês', color: '#a855f7' },
+  { id: 'esp', name: 'Espanhol', color: '#f97316' },
+  { id: 'cie', name: 'Ciências', color: '#22c55e' },
+  { id: 'qui', name: 'Química', color: '#10b981' },
+  { id: 'fis', name: 'Física', color: '#0ea5e9' },
+  { id: 'bio', name: 'Biologia', color: '#84cc16' },
+  { id: 'his', name: 'História', color: '#b45309' },
+  { id: 'geo', name: 'Geografia', color: '#06b6d4' },
+  { id: 'art', name: 'Artes', color: '#ec4899' },
+  { id: 'edf', name: 'Educação Física', color: '#ef4444' },
+  { id: 'rel', name: 'Ensino Religioso', color: '#64748b' },
+  { id: 'tec', name: 'Tecnologia', color: '#475569' },
 ];
+
+// Ícone da matéria pelo nome (vale também para matérias criadas depois)
+const SUBJECT_ICONS = [
+  [/educa\w* fis|ed\.? ?fis/, 'edf'], [/matem/, 'mat'], [/portug|gramat|literat/, 'por'], [/reda/, 'red'],
+  [/ingl|english/, 'ing'], [/espanh|spanish/, 'esp'], [/quim/, 'qui'], [/fisic/, 'fis'], [/biolog/, 'bio'], [/cienc/, 'cie'],
+  [/hist/, 'his'], [/geog/, 'geo'], [/arte|desenho/, 'art'], [/relig/, 'rel'], [/tecnolog|informat|program|robot/, 'tec'],
+];
+function subjectIconKey(s) {
+  const n = s.name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const hit = SUBJECT_ICONS.find(([re]) => re.test(n));
+  return hit ? hit[1] : 'gen';
+}
+function subjectIcon(s, cls = 'sicon') {
+  return `<svg class="${cls}" aria-hidden="true"><use href="#s-${subjectIconKey(s)}"/></svg>`;
+}
 
 const DEFAULT_SUBJECTS = MODE === 'pro' ? DEFAULT_PROJECTS : DEFAULT_SUBJECTS_ESCOLA;
 
@@ -59,20 +84,37 @@ const REMINDER_LABELS = {
 const PRIORITY_LABELS = { alta: 'Alta', media: 'Média', baixa: 'Baixa' };
 const PRIORITY_ORDER = { alta: 0, media: 1, baixa: 2 };
 
+// Uma única vez: quem já usava o app recebe as matérias novas (sem mexer nas que já tem)
+function addMissingSubjects(data) {
+  if (MODE !== 'escola') return;
+  try {
+    if (localStorage.getItem('dal.subjects2')) return;
+    localStorage.setItem('dal.subjects2', '1');
+  } catch (e) { return; }
+  const has = new Set(data.subjects.map((x) => x.name.toLowerCase()));
+  for (const d of DEFAULT_SUBJECTS_ESCOLA) {
+    if (!has.has(d.name.toLowerCase()) && !data.subjects.some((x) => x.id === d.id)) data.subjects.push({ ...d });
+  }
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { /* ignora */ }
+}
+
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const data = JSON.parse(raw);
-      return {
+      const loaded = {
         tasks: Array.isArray(data.tasks) ? data.tasks : [],
         subjects: Array.isArray(data.subjects) ? data.subjects : DEFAULT_SUBJECTS.slice(),
       };
+      addMissingSubjects(loaded);
+      return loaded;
     }
   } catch (e) {
     console.warn('Não foi possível carregar os dados salvos.', e);
   }
-  return { tasks: [], subjects: DEFAULT_SUBJECTS.slice() };
+  try { localStorage.setItem('dal.subjects2', '1'); } catch (e) { /* ignora */ }
+  return { tasks: [], subjects: DEFAULT_SUBJECTS.map((x) => ({ ...x })) };
 }
 
 function save() {
@@ -181,7 +223,7 @@ function taskHTML(t, { showDate = true } = {}) {
   const label = t.category === 'escola'
     ? `${subj ? escapeHTML(subj.name) : M.catB} · ${M.kinds[t.kind] || KIND_LABELS[t.kind] || 'Outro'}`
     : M.catA;
-  const badge = subj ? escapeHTML(subj.name.slice(0, 2)) : (t.category === 'escola' ? icon('book') : icon('house'));
+  const badge = subj ? (MODE === 'escola' ? subjectIcon(subj) : escapeHTML(subj.name.slice(0, 2))) : (t.category === 'escola' ? icon('book') : icon('house'));
   const meta = [];
   if (showDate && t.date) meta.push(`<span class="${late ? 'late' : ''}">${icon('cal')}${relativeDate(t.date)}</span>`);
   if (t.date && t.reminder) meta.push(`<span>${icon('bell')}${REMINDER_LABELS[t.reminder] || ''}</span>`);
@@ -379,7 +421,7 @@ function renderEscola() {
     const open = all.filter((t) => !t.done).length;
     const pct = all.length ? Math.round(((all.length - open) / all.length) * 100) : 0;
     return `<button type="button" class="subject-tile ${escolaSubject === s.id ? 'active' : ''}" data-subject="${s.id}" style="--c:${escapeHTML(s.color)}">
-      <span class="tile-badge">${escapeHTML(s.name.slice(0, 2))}</span>
+      <span class="tile-badge">${MODE === 'escola' ? subjectIcon(s) : escapeHTML(s.name.slice(0, 2))}</span>
       <span class="tile-name">${escapeHTML(s.name)}</span>
       <span class="tile-count">${open ? `${open} pendente${open > 1 ? 's' : ''}` : 'Em dia'}</span>
       <span class="tile-bar"><i style="width:${pct}%"></i></span>
@@ -463,7 +505,7 @@ let editingId = null;
 function fillSubjectSelect(selected) {
   const sel = selected || (state.subjects[0] && state.subjects[0].id);
   $('#subjectSelect').innerHTML = state.subjects.length
-    ? state.subjects.map((s) => `<label class="choice subj" style="--c:${escapeHTML(s.color)}"><input type="radio" name="subject" value="${s.id}" ${s.id === sel ? 'checked' : ''}><span><i></i>${escapeHTML(s.name)}</span></label>`).join('')
+    ? state.subjects.map((s) => `<label class="choice subj" style="--c:${escapeHTML(s.color)}"><input type="radio" name="subject" value="${s.id}" ${s.id === sel ? 'checked' : ''}><span>${MODE === 'escola' ? subjectIcon(s) : '<i></i>'}${escapeHTML(s.name)}</span></label>`).join('')
     : `<p class="hint">Cadastre ${M.group === 'Projeto' ? 'um projeto' : 'uma matéria'} na aba ${M.tabB}.</p>`;
 }
 
@@ -696,6 +738,7 @@ const subjectsDialog = $('#subjectsDialog');
 function renderSubjectEditor() {
   $('#subjectEditList').innerHTML = state.subjects.map((s) => `
     <li data-id="${s.id}" style="--c:${escapeHTML(s.color)}">
+      ${MODE === 'escola' ? `<span class="subj-icon">${subjectIcon(s)}</span>` : ''}
       <button class="color-dot" type="button" data-subject-color style="--dot:${escapeHTML(s.color)}" aria-label="Mudar a cor de ${escapeHTML(s.name)}"></button>
       <span>${escapeHTML(s.name)}</span>
       <button class="icon-btn small" type="button" data-remove-subject aria-label="Remover ${escapeHTML(s.name)}"><svg><use href="#i-x"/></svg></button>

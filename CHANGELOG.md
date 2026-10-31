@@ -2,6 +2,13 @@
 
 A partir da v1 a versão é um número inteiro que sobe a cada atualização.
 
+## v6 — 2026-10-31
+- Modo Escola com o layout Bento e o tema Grande Mestre (E1): bloco dourado de "Hoje" com o cavalo, números sobre o topo.
+- Todas as matérias do Ensino Fundamental já cadastradas (Matemática, Português, Redação, Inglês, Espanhol,
+  Ciências, Química, Física, Biologia, História, Geografia, Artes, Educação Física, Ensino Religioso, Tecnologia).
+  Quem já usava recebe as que faltavam, sem perder as suas.
+- Ícone ilustrado para cada matéria (calculadora, livro, frasco borbulhando, pirâmide, globo…), reconhecido pelo nome.
+
 ## v5 — 2026-10-31
 - Novo **modo Profissional** (Configurações → Modo do app): Casa + Trabalho, Projetos, tipos Tarefa,
   Reunião, Entrega, Ligação e Pagamento, destaque "Próximo prazo". Visual próprio: layout Bento com as
