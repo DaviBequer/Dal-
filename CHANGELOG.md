@@ -2,6 +2,10 @@
 
 A partir da v1 a versão é um número inteiro que sobe a cada atualização.
 
+## v11 — 2026-11-03
+- Removido o modo Profissional: o app agora é só o modo Escola (tema Grande Mestre com xadrez).
+  A opção "Modo do app" saiu das Configurações.
+
 ## v10 — 2026-10-31
 - Modo Profissional com o Oceano **Marinha** (O5): fundo claro, mais azul-marinho e detalhes em latão
   (amarelo queimado), logo de âncora, leme de navio girando no topo e âncora balançando no bloco de Hoje.

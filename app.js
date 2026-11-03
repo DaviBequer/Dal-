@@ -1,36 +1,17 @@
 'use strict';
 
 // ---------- Armazenamento ----------
-// Dois mundos: Escola (padrão) e Profissional. Cada modo guarda as próprias tarefas e grupos.
-const MODE_KEY = 'dal.mode';
-function getMode() {
-  try { return localStorage.getItem(MODE_KEY) === 'pro' ? 'pro' : 'escola'; } catch (e) { return 'escola'; }
-}
-const MODE = getMode();
-const STORAGE_KEY = MODE === 'pro' ? 'dal.pro' : 'dal.v1';
+const STORAGE_KEY = 'dal.v1';
+// O modo Profissional foi removido: o app é só Escola.
+try { localStorage.removeItem('dal.mode'); } catch (e) { /* ignora */ }
 
-const MODES = {
-  escola: {
-    catA: 'Dia a dia', catB: 'Escola', tabB: 'Escola', tabIcon: 'book', group: 'Matéria', groups: 'Matérias',
-    kinds: { licao: 'Lição', trabalho: 'Trabalho', prova: 'Prova', estudo: 'Estudar', outro: 'Outro' }, defaultKind: 'licao',
-    examKind: 'prova', examTag: 'PROVA', spotlight: 'Próxima prova', carousel: 'Provas chegando', noExam: 'Nenhuma prova marcada.',
-    heroB: 'Seus estudos', examWord: ['prova', 'provas'], listTitle: 'Lições e trabalhos', placeholder: 'O que você precisa fazer?',
-  },
-  pro: {
-    catA: 'Casa', catB: 'Trabalho', tabB: 'Trabalho', tabIcon: 'brief', group: 'Projeto', groups: 'Projetos',
-    kinds: { tarefa: 'Tarefa', reuniao: 'Reunião', entrega: 'Entrega', ligacao: 'Ligação', pagamento: 'Pagamento' }, defaultKind: 'tarefa',
-    examKind: 'entrega', examTag: 'PRAZO', spotlight: 'Próximo prazo', carousel: 'Prazos chegando', noExam: 'Nenhum prazo marcado.',
-    heroB: 'Seu trabalho', examWord: ['prazo', 'prazos'], listTitle: 'Tarefas de trabalho', placeholder: 'Qual é a próxima ação?',
-  },
+// Textos do app
+const M = {
+  catA: 'Dia a dia', catB: 'Escola', tabB: 'Escola', tabIcon: 'book', group: 'Matéria', groups: 'Matérias',
+  kinds: { licao: 'Lição', trabalho: 'Trabalho', prova: 'Prova', estudo: 'Estudar', outro: 'Outro' }, defaultKind: 'licao',
+  examKind: 'prova', examTag: 'PROVA', spotlight: 'Próxima prova', carousel: 'Provas chegando', noExam: 'Nenhuma prova marcada.',
+  heroB: 'Seus estudos', examWord: ['prova', 'provas'], listTitle: 'Lições e trabalhos', placeholder: 'O que você precisa fazer?',
 };
-const M = MODES[MODE];
-
-const DEFAULT_PROJECTS = [
-  { id: 'cli', name: 'Clientes', color: '#4f6bff' },
-  { id: 'equ', name: 'Equipe', color: '#f59e0b' },
-  { id: 'fin', name: 'Financeiro', color: '#2f7a5d' },
-  { id: 'cur', name: 'Cursos', color: '#06b6d4' },
-];
 
 // Todas as matérias do Ensino Fundamental; o aluno remove as que não tem.
 const DEFAULT_SUBJECTS_ESCOLA = [
@@ -66,10 +47,9 @@ function subjectIcon(s, cls = 'sicon') {
   return `<svg class="${cls}" aria-hidden="true"><use href="#s-${subjectIconKey(s)}"/></svg>`;
 }
 
-const DEFAULT_SUBJECTS = MODE === 'pro' ? DEFAULT_PROJECTS : DEFAULT_SUBJECTS_ESCOLA;
+const DEFAULT_SUBJECTS = DEFAULT_SUBJECTS_ESCOLA;
 
 const KIND_LABELS = {
-  ...MODES.pro.kinds,
   licao: 'Lição de casa',
   trabalho: 'Trabalho',
   prova: 'Prova',
@@ -86,7 +66,6 @@ const PRIORITY_ORDER = { alta: 0, media: 1, baixa: 2 };
 
 // Uma única vez: quem já usava o app recebe as matérias novas (sem mexer nas que já tem)
 function addMissingSubjects(data) {
-  if (MODE !== 'escola') return;
   try {
     if (localStorage.getItem('dal.subjects2')) return;
     localStorage.setItem('dal.subjects2', '1');
@@ -223,7 +202,7 @@ function taskHTML(t, { showDate = true } = {}) {
   const label = t.category === 'escola'
     ? `${subj ? escapeHTML(subj.name) : M.catB} · ${M.kinds[t.kind] || KIND_LABELS[t.kind] || 'Outro'}`
     : M.catA;
-  const badge = subj ? (MODE === 'escola' ? subjectIcon(subj) : escapeHTML(subj.name.slice(0, 2))) : (t.category === 'escola' ? icon('book') : icon('house'));
+  const badge = subj ? subjectIcon(subj) : (t.category === 'escola' ? icon('book') : icon('house'));
   const meta = [];
   if (showDate && t.date) meta.push(`<span class="${late ? 'late' : ''}">${icon('cal')}${relativeDate(t.date)}</span>`);
   if (t.date && t.reminder) meta.push(`<span>${icon('bell')}${REMINDER_LABELS[t.reminder] || ''}</span>`);
@@ -271,9 +250,8 @@ function renderKpis() {
     ['Semana', pending.filter((t) => t.date && t.date > today && t.date <= addDays(today, 7)).length],
     [cap(M.examWord[1]), pending.filter((t) => t.kind === M.examKind && t.date && t.date >= today).length],
   ];
-  const ocean = ['wave', 'anchor', 'compass', 'shell'];
   $('#kpis').innerHTML = items.map(([l, n], i) =>
-    `<div class="kpi ${i === 1 && n ? 'warn' : ''}"><svg class="kico" aria-hidden="true"><use href="#o-${ocean[i]}"/></svg><b>${n}</b><span>${l}</span></div>`).join('');
+    `<div class="kpi ${i === 1 && n ? 'warn' : ''}"><b>${n}</b><span>${l}</span></div>`).join('');
 }
 
 function userName() {
@@ -337,7 +315,6 @@ function renderHoje() {
           <strong>${escapeHTML(s ? s.name : exam.title)}</strong>
           <span>${escapeHTML(exam.title)} · ${formatDate(exam.date, { weekday: 'short', day: 'numeric', month: 'short' })}</span>
         </div>
-        <svg class="spot-ico" aria-hidden="true"><use href="#o-lighthouse"/></svg>
         <div class="countdown"><b>${n}</b><span>${n === 1 ? 'dia' : 'dias'}</span></div>
       </article>`;
   } else {
@@ -424,7 +401,7 @@ function renderEscola() {
     const open = all.filter((t) => !t.done).length;
     const pct = all.length ? Math.round(((all.length - open) / all.length) * 100) : 0;
     return `<button type="button" class="subject-tile ${escolaSubject === s.id ? 'active' : ''}" data-subject="${s.id}" style="--c:${escapeHTML(s.color)}">
-      <span class="tile-badge">${MODE === 'escola' ? subjectIcon(s) : escapeHTML(s.name.slice(0, 2))}</span>
+      <span class="tile-badge">${subjectIcon(s)}</span>
       <span class="tile-name">${escapeHTML(s.name)}</span>
       <span class="tile-count">${open ? `${open} pendente${open > 1 ? 's' : ''}` : 'Em dia'}</span>
       <span class="tile-bar"><i style="width:${pct}%"></i></span>
@@ -508,7 +485,7 @@ let editingId = null;
 function fillSubjectSelect(selected) {
   const sel = selected || (state.subjects[0] && state.subjects[0].id);
   $('#subjectSelect').innerHTML = state.subjects.length
-    ? state.subjects.map((s) => `<label class="choice subj" style="--c:${escapeHTML(s.color)}"><input type="radio" name="subject" value="${s.id}" ${s.id === sel ? 'checked' : ''}><span>${MODE === 'escola' ? subjectIcon(s) : '<i></i>'}${escapeHTML(s.name)}</span></label>`).join('')
+    ? state.subjects.map((s) => `<label class="choice subj" style="--c:${escapeHTML(s.color)}"><input type="radio" name="subject" value="${s.id}" ${s.id === sel ? 'checked' : ''}><span>${subjectIcon(s)}${escapeHTML(s.name)}</span></label>`).join('')
     : `<p class="hint">Cadastre ${M.group === 'Projeto' ? 'um projeto' : 'uma matéria'} na aba ${M.tabB}.</p>`;
 }
 
@@ -741,7 +718,7 @@ const subjectsDialog = $('#subjectsDialog');
 function renderSubjectEditor() {
   $('#subjectEditList').innerHTML = state.subjects.map((s) => `
     <li data-id="${s.id}" style="--c:${escapeHTML(s.color)}">
-      ${MODE === 'escola' ? `<span class="subj-icon">${subjectIcon(s)}</span>` : ''}
+      <span class="subj-icon">${subjectIcon(s)}</span>
       <button class="color-dot" type="button" data-subject-color style="--dot:${escapeHTML(s.color)}" aria-label="Mudar a cor de ${escapeHTML(s.name)}"></button>
       <span>${escapeHTML(s.name)}</span>
       <button class="icon-btn small" type="button" data-remove-subject aria-label="Remover ${escapeHTML(s.name)}"><svg><use href="#i-x"/></svg></button>
@@ -1078,13 +1055,10 @@ if (notifyEnabled() && 'serviceWorker' in navigator && location.protocol !== 'fi
 setInterval(checkReminders, 20000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) checkReminders(); });
 
-// ---------- Modo (Escola / Profissional) e configurações ----------
-function applyMode() {
-  document.documentElement.dataset.mode = MODE;
-  document.querySelector('meta[name="theme-color"]').content = MODE === 'pro' ? '#07142a' : '#123d2f';
+// ---------- Textos e configurações ----------
+function applyTexts() {
   document.querySelectorAll('[data-l]').forEach((el) => { el.textContent = M[el.dataset.l]; });
   document.querySelector('.tab[data-view="escola"] use').setAttribute('href', `#i-${M.tabIcon}`);
-  document.querySelector('.logo use').setAttribute('href', MODE === 'pro' ? '#o-anchor' : '#i-check');
   document.querySelector('.cat-toggle label:nth-child(2) use').setAttribute('href', `#i-${M.tabIcon}`);
   form.title.placeholder = M.placeholder;
   $('#kindRow').innerHTML = Object.entries(M.kinds).map(([v, l]) =>
@@ -1092,7 +1066,6 @@ function applyMode() {
 }
 
 function renderSettings() {
-  document.querySelectorAll('#modeSwitch [data-mode]').forEach((b) => b.classList.toggle('on', b.dataset.mode === MODE));
   $('#userName').value = userName();
   const on = notifyEnabled();
   $('#notifySwitch').classList.toggle('on', on);
@@ -1104,20 +1077,6 @@ $('#settingsBtn').addEventListener('click', () => {
   renderSettings();
   $('#settingsDialog').showModal();
 });
-$('#modeSwitch').addEventListener('click', async (e) => {
-  const b = e.target.closest('[data-mode]');
-  if (!b || b.dataset.mode === MODE) return;
-  const pro = b.dataset.mode === 'pro';
-  const ok = await askConfirm({
-    title: pro ? 'Mudar para o modo Profissional?' : 'Mudar para o modo Escola?',
-    text: 'Cada modo tem as próprias tarefas. As do modo atual ficam guardadas e voltam quando você trocar de novo.',
-    yes: 'Mudar',
-    tone: 'neutral',
-  });
-  if (!ok) return;
-  try { localStorage.setItem(MODE_KEY, b.dataset.mode); } catch (err) { /* ignora */ }
-  location.reload();
-});
 $('#userName').addEventListener('input', (e) => {
   try { localStorage.setItem('dal.name', e.target.value.trim()); } catch (err) { /* ignora */ }
   if (currentView === 'hoje') renderHoje();
@@ -1127,7 +1086,7 @@ $('#notifySwitch').addEventListener('click', async () => {
   setTimeout(renderSettings, 300);
 });
 
-applyMode();
+applyTexts();
 
 // ---------- Teclado: a janela fica acima dele ----------
 // Em navegadores que não encolhem a página com o teclado, empurra a janela para cima.
@@ -1189,7 +1148,7 @@ function formDraft() {
 
 function saveUI() {
   const ui = {
-    t: Date.now(), mode: MODE, view: currentView, scroll: Math.round(window.scrollY),
+    t: Date.now(), view: currentView, scroll: Math.round(window.scrollY),
     cal: { year: cal.year, month: cal.month, selected: cal.selected },
     hojeFilter, escolaSubject, todas: { ...todasFilter, q: $('#search').value },
     draft: formDraft(),
@@ -1202,7 +1161,7 @@ window.addEventListener('pagehide', saveUI);
 function restoreUI() {
   let ui = null;
   try { ui = JSON.parse(localStorage.getItem(UI_KEY)); } catch (e) { /* ignora */ }
-  if (!ui || ui.mode !== MODE || Date.now() - ui.t > UI_MAX_AGE) return false;
+  if (!ui || (ui.mode && ui.mode !== 'escola') || Date.now() - ui.t > UI_MAX_AGE) return false;
   if (ui.cal) Object.assign(cal, ui.cal);
   hojeFilter = ui.hojeFilter || '';
   document.querySelectorAll('#hojeFilter .chip-btn').forEach((x) => x.classList.toggle('active', x.dataset.hf === hojeFilter));

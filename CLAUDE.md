@@ -20,11 +20,11 @@ primeiro na rede (abre sempre a versão publicada) e usa o cache só sem interne
 Não use `confirm()`, `alert()` nem inputs nativos de data, hora ou cor: no Android eles abrem
 janelas pretas do sistema. Use as janelas próprias do app (`askConfirm`, `#dateBtn`, `#timeBtn`, `pickColor`).
 
-## Dois modos (Configurações → Modo do app)
+## Um modo só: Escola
 
-- **Escola** (padrão): dados em `localStorage['dal.v1']`, tema Grande Mestre (`:root` no `styles.css`).
-- **Profissional**: dados em `localStorage['dal.pro']`, tema em `html[data-mode="pro"]` no fim do `styles.css`
-  (layout Bento + Oceano "Marinha": azul-marinho e latão, baleia e leme no topo — bloco no fim do arquivo). Textos e tipos de cada modo ficam em `MODES` no `app.js`.
+O app tem apenas o modo Escola: dados em `localStorage['dal.v1']`, tema Grande Mestre (`:root` e
+`html:root` no `styles.css`, com as animações de xadrez). Os textos ficam no objeto `M` do `app.js`.
+O antigo modo Profissional foi removido na v11 (não recriar sem o usuário pedir).
 
 ## Quando publicar direto e quando perguntar (pedido do usuário)
 

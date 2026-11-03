@@ -415,20 +415,12 @@ dialog.small-sheet { max-height: 88vh; }
 .color-dot.big { width: 54px; height: 54px; }
 .color-dot.on { box-shadow: 0 0 0 3px var(--surface), 0 0 0 6px var(--dot); }
 
-/* ---------- Configurações e modo ---------- */
+/* ---------- Configurações ---------- */
 .hero-actions { display: flex; gap: 8px; }
 .kpis { display: none; }
 .kpi b { font-family: var(--font-display); font-weight: var(--display-weight); font-size: 1.5rem; line-height: 1; display: block; }
 .kpi span { font-size: .72rem; color: var(--hero-muted); font-weight: 600; }
 .kpi.warn b { color: var(--alta); }
-.mode-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.mode-switch button {
-  border: 2px solid transparent; border-radius: var(--r-lg); padding: 14px; display: grid; gap: 4px; justify-items: start; text-align: left; cursor: pointer;
-  background: var(--surface-2); color: var(--text);
-}
-.mode-switch button small { color: var(--muted); font-size: .76rem; }
-.mode-switch button.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
-.mode-switch button.on svg { color: var(--accent); }
 .setting-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: var(--r-md); background: var(--surface-2); }
 .setting-row span { display: grid; }
 .setting-row small { color: var(--muted); font-size: .78rem; }
@@ -456,182 +448,44 @@ dialog.sheet[open]::backdrop { animation: scrim-in .25s ease-out; }
 @media (prefers-reduced-motion: reduce) { dialog.sheet[open], dialog.sheet[open]::backdrop { animation: none; } }
 
 /* ================================================================
-   MODO PROFISSIONAL — layout "Bento" com o tema Oceano
-   Azul do fundo do mar ao turquesa da praia, ondas que se movem no topo,
-   bolhas subindo, ícones de mar (onda, âncora, bússola, concha, farol, peixe).
-   Ativo quando <html data-mode="pro">.
-   ================================================================ */
-html[data-mode="pro"] {
-  --bg: #eef7fb; --surface: #ffffff; --surface-2: #e2f1f8; --text: #082b45; --muted: #557286; --line: #d3e7f0;
-  --accent: #0b74b8; --accent-2: #0a5d8f; --accent-text: #ffffff;
-  --sea-deep: #052a4d; --sea-mid: #0a5d8f; --sea-light: #13a8c8; --aqua: #5ee0f0; --foam: #c9f4fb;
-  --hero-bg: radial-gradient(ellipse 70% 50% at 85% 0%, rgba(150, 235, 255, .28), transparent 70%), linear-gradient(170deg, var(--sea-deep) 0%, var(--sea-mid) 55%, var(--sea-light) 100%);
-  --hero-text: #ffffff; --hero-muted: rgba(214, 242, 252, .85); --nav-bg: var(--sea-deep);
-  --dia: #14b8a6; --escola: #0b74b8; --alta: #e5484d; --media: #f6a33a; --baixa: #14b8a6;
-  --coral: #19c3d6; --coral-2: #0b74b8; --scrim: #03213d; --ring-hole: rgba(3, 33, 61, .45);
-  --shadow: 0 14px 30px -18px rgba(5, 42, 77, .4); --shadow-sm: 0 6px 16px -10px rgba(5, 42, 77, .3);
-  --font-display: "Lexend", system-ui, sans-serif; --font-body: "Lexend", system-ui, sans-serif; --display-weight: 600;
-}
-html[data-mode="pro"] body {
-  font-weight: 400;
-  background: linear-gradient(180deg, #e6f4fa 0, var(--bg) 340px, var(--bg) 100%);
-}
-/* sem enfeites de xadrez */
-html[data-mode="pro"] .logo::before,
-html[data-mode="pro"] .task .task-kicker::before, html[data-mode="pro"] .spot-kicker::before { content: none !important; }
-html[data-mode="pro"] .logo { background: linear-gradient(140deg, var(--aqua), var(--sea-light)); color: var(--sea-deep); }
-html[data-mode="pro"] .logo svg { display: block; }
-html[data-mode="pro"] .version { background: rgba(255, 255, 255, .18); color: #fff; }
-
-/* ---- Topo: mar com ondas que se movem e bolhas subindo ---- */
-html[data-mode="pro"] .hero { overflow: visible; border-radius: 0 0 36px 36px; isolation: isolate; }
-html[data-mode="pro"] .hero { padding-bottom: 46px; }
-html[data-mode="pro"] body[data-view="hoje"] .hero { padding-bottom: 70px; }
-html[data-mode="pro"] .hero h1 { font-size: 1.4rem; }
-html[data-mode="pro"] .hero::before { content: none; }
-html[data-mode="pro"] .ocean-fx::before, html[data-mode="pro"] .ocean-fx::after {
-  content: ""; position: absolute; left: 0; bottom: 0; width: 200%; pointer-events: none;
-  background-repeat: repeat-x; background-position: left bottom;
-}
-html[data-mode="pro"] .ocean-fx::before {
-  height: 58px; opacity: .55; animation: ocean-wave 16s linear infinite;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='74' viewBox='0 0 400 74' preserveAspectRatio='none'%3E%3Cpath d='M0 30c50 0 50-22 100-22s50 22 100 22 50-22 100-22 50 22 100 22v44H0z' fill='%2313a8c8'/%3E%3C/svg%3E");
-  background-size: 400px 58px;
-}
-html[data-mode="pro"] .ocean-fx::after {
-  height: 40px; opacity: .45; animation: ocean-wave 10s linear infinite reverse;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='52' viewBox='0 0 300 52' preserveAspectRatio='none'%3E%3Cpath d='M0 22c37 0 37-16 75-16s38 16 75 16 38-16 75-16 38 16 75 16v30H0z' fill='%235ee0f0'/%3E%3C/svg%3E");
-  background-size: 300px 40px;
-}
-@keyframes ocean-wave { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-.ocean-fx { display: none; }
-html[data-mode="pro"] .ocean-fx { display: block; position: absolute; inset: 0; overflow: hidden; border-radius: 0 0 36px 36px; pointer-events: none; z-index: -1; }
-html[data-mode="pro"] .ocean-fx i {
-  position: absolute; bottom: -12px; width: 10px; height: 10px; border-radius: 50%;
-  border: 1.5px solid rgba(214, 248, 255, .7); background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .7), rgba(255, 255, 255, .08) 60%);
-  animation: ocean-bubble 9s ease-in infinite;
-}
-html[data-mode="pro"] .ocean-fx i:nth-child(1) { left: 8%; animation-delay: 0s; }
-html[data-mode="pro"] .ocean-fx i:nth-child(2) { left: 22%; width: 6px; height: 6px; animation-delay: 2.5s; animation-duration: 7s; }
-html[data-mode="pro"] .ocean-fx i:nth-child(3) { left: 41%; width: 14px; height: 14px; animation-delay: 5s; animation-duration: 11s; }
-html[data-mode="pro"] .ocean-fx i:nth-child(4) { left: 58%; width: 7px; height: 7px; animation-delay: 1.2s; }
-html[data-mode="pro"] .ocean-fx i:nth-child(5) { left: 73%; width: 11px; height: 11px; animation-delay: 6.5s; animation-duration: 10s; }
-html[data-mode="pro"] .ocean-fx i:nth-child(6) { left: 88%; width: 5px; height: 5px; animation-delay: 3.8s; animation-duration: 6.5s; }
-html[data-mode="pro"] .ocean-fx i:nth-child(7) { left: 33%; width: 8px; height: 8px; animation-delay: 7.6s; }
-@keyframes ocean-bubble {
-  0% { transform: translate(0, 0); opacity: 0; }
-  10% { opacity: 1; }
-  50% { transform: translate(6px, -120px); }
-  90% { opacity: .8; }
-  100% { transform: translate(-4px, -260px); opacity: 0; }
-}
-html[data-mode="pro"] .ring { background: conic-gradient(var(--aqua) calc(var(--p) * 1%), rgba(255, 255, 255, .16) 0); }
-html[data-mode="pro"] .ring-num { color: #fff; }
-html[data-mode="pro"] .week { display: none !important; }
-
-/* ---- Blocos de números com ícones do mar ---- */
-.kico { display: none; }
-html[data-mode="pro"] .kpis { display: grid; grid-template-columns: 1.2fr 1fr 1fr; grid-template-rows: auto auto; gap: 10px; position: absolute; left: 16px; right: 16px; bottom: -118px; z-index: 2; }
-html[data-mode="pro"] .kpi { position: relative; overflow: hidden; background: var(--surface); color: var(--text); border-radius: 22px; padding: 12px 14px; box-shadow: var(--shadow); }
-html[data-mode="pro"] .kico { display: block; position: absolute; right: 10px; top: 10px; width: 22px; height: 22px; color: var(--sea-light); opacity: .55; }
-html[data-mode="pro"] .kpi.warn .kico { color: var(--alta); opacity: .7; }
-html[data-mode="pro"] .kpi span { color: var(--muted); }
-html[data-mode="pro"] .kpi:first-child {
-  grid-row: span 2; display: grid; align-content: end; color: #fff;
-  background: radial-gradient(circle at 80% 15%, rgba(255, 255, 255, .25), transparent 40%), linear-gradient(160deg, var(--sea-light), var(--sea-mid) 70%, var(--sea-deep));
-}
-html[data-mode="pro"] .kpi:first-child .kico { width: 34px; height: 34px; color: #fff; opacity: .5; animation: ocean-bob 4s ease-in-out infinite; }
-html[data-mode="pro"] .kpi:first-child::after {
-  content: ""; position: absolute; left: -10%; right: -10%; bottom: -6px; height: 30px; opacity: .35; animation: ocean-wave 9s linear infinite; width: 220%;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='30' viewBox='0 0 120 30'%3E%3Cpath d='M0 12c15 0 15-9 30-9s15 9 30 9 15-9 30-9 15 9 30 9v18H0z' fill='%23ffffff'/%3E%3C/svg%3E") repeat-x left bottom / 120px 30px;
-}
-html[data-mode="pro"] .kpi:first-child b, html[data-mode="pro"] .kpi:first-child span { position: relative; z-index: 1; }
-html[data-mode="pro"] .kpi:first-child b { font-size: 2.6rem; }
-html[data-mode="pro"] .kpi:first-child span { color: rgba(255, 255, 255, .9); }
-html[data-mode="pro"] .kpi:nth-child(4) { grid-column: span 2; }
-@keyframes ocean-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-html[data-mode="pro"] body[data-view="hoje"] main { padding-top: 136px; }
-
-/* ---- Tarefas, destaques e listas ---- */
-html[data-mode="pro"] .task { border-left: 5px solid var(--c); border-radius: 20px; }
-html[data-mode="pro"] .task-title { font-weight: 500; }
-html[data-mode="pro"] .badge { border-radius: 14px; }
-html[data-mode="pro"] .task.done .check { background: linear-gradient(140deg, var(--aqua), var(--sea-light)); border-color: transparent; }
-html[data-mode="pro"] .subject-tile { border-radius: 24px; }
-html[data-mode="pro"] .chip-btn.active { background: var(--sea-mid); color: #fff; }
-html[data-mode="pro"] .group h2 { color: var(--sea-deep); }
-html[data-mode="pro"] .spotlight { background: radial-gradient(circle at 15% 120%, rgba(94, 224, 240, .35), transparent 50%), linear-gradient(135deg, var(--sea-mid), var(--sea-deep)); box-shadow: 0 16px 30px -16px var(--sea-deep); }
-.spot-ico { display: none; }
-html[data-mode="pro"] .spot-ico { display: block; position: relative; z-index: 1; width: 52px; height: 52px; flex: none; margin-right: -6px; }
-html[data-mode="pro"] .countdown { background: rgba(255, 255, 255, .16); color: #fff; }
-html[data-mode="pro"] .exam-tag { background: var(--sea-mid); }
-html[data-mode="pro"] .exam-card { background: linear-gradient(140deg, var(--c), color-mix(in srgb, var(--c) 45%, var(--sea-deep))); }
-html[data-mode="pro"] .empty {
-  padding-top: 70px; background: var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='40' viewBox='0 0 64 40'%3E%3Cpath d='M6 20c8-12 26-14 38-4l12-8v24l-12-8C32 34 14 32 6 20z' fill='%237fd3ea'/%3E%3Ccircle cx='17' cy='17' r='2.5' fill='%23063a5a'/%3E%3Cpath d='M28 12c3 4 3 12 0 16' fill='none' stroke='%233aa6c9' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center 18px / 54px 34px;
-}
-/* agenda sem quadriculado */
-html[data-mode="pro"] .calendar .cal-day:nth-child(even):not(.other):not(.selected):not(.today) .num { background: transparent; }
-html[data-mode="pro"] .calendar .cal-day.today:not(.selected) .num { background: var(--surface-2); color: var(--accent); }
-html[data-mode="pro"] .calendar .cal-day.selected .num { background: var(--accent); color: #fff; }
-html[data-mode="pro"] .month-card { background: linear-gradient(180deg, #fff, #f6fbfd); }
-
-/* ---- Navegação: fundo do mar com o + turquesa ---- */
-html[data-mode="pro"] .bottom-nav { background: linear-gradient(180deg, #073a63, var(--sea-deep)); }
-html[data-mode="pro"] .tab { color: rgba(214, 242, 252, .55); }
-html[data-mode="pro"] .tab.active { color: var(--aqua); }
-html[data-mode="pro"] .fab { color: var(--sea-deep); background: linear-gradient(140deg, var(--aqua), var(--sea-light)); box-shadow: 0 12px 24px -8px var(--sea-light), 0 0 0 6px var(--bg); }
-
-/* ---- Formulários ---- */
-html[data-mode="pro"] .save-btn { background: linear-gradient(140deg, var(--sea-light), var(--sea-mid) 60%, var(--sea-deep)); }
-html[data-mode="pro"] .cat-toggle input:checked + span { background: var(--sea-mid); }
-html[data-mode="pro"] .choice input:checked + span { background: var(--sea-mid); color: #fff; }
-html[data-mode="pro"] dialog.sheet { background: linear-gradient(180deg, #ffffff, #f3fafd); }
-
-@media (prefers-reduced-motion: reduce) {
-  html[data-mode="pro"] .ocean-fx::before, html[data-mode="pro"] .ocean-fx::after, html[data-mode="pro"] .ocean-fx i,
-  html[data-mode="pro"] .kpi:first-child::after, html[data-mode="pro"] .kpi:first-child .kico { animation: none; }
-  html[data-mode="pro"] .ocean-fx i { opacity: .5; bottom: 30%; }
-}
-
-/* ================================================================
    MODO ESCOLA — layout "Bento" com o tema Grande Mestre (E1)
    ================================================================ */
-html:not([data-mode="pro"]) {
+html:root {
   --k1: #d9a441; --k2: #b98325; --nav-solid: #0b2a20; --tab-muted: rgba(253, 248, 234, .55); --tab-on: #e3b65b;
 }
-html:not([data-mode="pro"]) .hero { overflow: visible; border-radius: 0 0 34px 34px; }
-html:not([data-mode="pro"]) body[data-view="hoje"] .hero { padding-bottom: 70px; }
-html:not([data-mode="pro"]) .hero h1 { font-size: 1.4rem; }
-html:not([data-mode="pro"]) .week { display: none !important; }
-html:not([data-mode="pro"]) .kpis { display: grid; grid-template-columns: 1.2fr 1fr 1fr; grid-template-rows: auto auto; gap: 10px; position: absolute; left: 16px; right: 16px; bottom: -118px; z-index: 2; }
-html:not([data-mode="pro"]) .kpi { background: var(--surface); color: var(--text); border-radius: 22px; padding: 12px 14px; box-shadow: var(--shadow); }
-html:not([data-mode="pro"]) .kpi span { color: var(--muted); }
-html:not([data-mode="pro"]) .kpi:first-child { grid-row: span 2; display: grid; align-content: end; color: #0b2a20; background: linear-gradient(150deg, var(--k1), var(--k2)); }
-html:not([data-mode="pro"]) .kpi:first-child::before { content: "♞\FE0E"; font-size: 2rem; line-height: 1; opacity: .5; }
-html:not([data-mode="pro"]) .kpi:first-child b { font-size: 2.6rem; }
-html:not([data-mode="pro"]) .kpi:first-child span { color: rgba(11, 42, 32, .8); }
-html:not([data-mode="pro"]) .kpi:nth-child(4) { grid-column: span 2; }
-html:not([data-mode="pro"]) body[data-view="hoje"] main { padding-top: 136px; }
-html:not([data-mode="pro"]) .task { border-left: 5px solid var(--c); border-radius: 20px; }
-html:not([data-mode="pro"]) .bottom-nav { background: var(--nav-solid); }
-html:not([data-mode="pro"]) .tab { color: var(--tab-muted); }
-html:not([data-mode="pro"]) .tab.active { color: var(--tab-on); }
-html:not([data-mode="pro"]) .fab { color: #0b2a20; background: linear-gradient(140deg, var(--k1), var(--k2)); box-shadow: 0 12px 24px -8px var(--k1), 0 0 0 6px var(--bg); }
+html:root .hero { overflow: visible; border-radius: 0 0 34px 34px; }
+html:root body[data-view="hoje"] .hero { padding-bottom: 70px; }
+html:root .hero h1 { font-size: 1.4rem; }
+html:root .week { display: none !important; }
+html:root .kpis { display: grid; grid-template-columns: 1.2fr 1fr 1fr; grid-template-rows: auto auto; gap: 10px; position: absolute; left: 16px; right: 16px; bottom: -118px; z-index: 2; }
+html:root .kpi { background: var(--surface); color: var(--text); border-radius: 22px; padding: 12px 14px; box-shadow: var(--shadow); }
+html:root .kpi span { color: var(--muted); }
+html:root .kpi:first-child { grid-row: span 2; display: grid; align-content: end; color: #0b2a20; background: linear-gradient(150deg, var(--k1), var(--k2)); }
+html:root .kpi:first-child::before { content: "♞\FE0E"; font-size: 2rem; line-height: 1; opacity: .5; }
+html:root .kpi:first-child b { font-size: 2.6rem; }
+html:root .kpi:first-child span { color: rgba(11, 42, 32, .8); }
+html:root .kpi:nth-child(4) { grid-column: span 2; }
+html:root body[data-view="hoje"] main { padding-top: 136px; }
+html:root .task { border-left: 5px solid var(--c); border-radius: 20px; }
+html:root .bottom-nav { background: var(--nav-solid); }
+html:root .tab { color: var(--tab-muted); }
+html:root .tab.active { color: var(--tab-on); }
+html:root .fab { color: #0b2a20; background: linear-gradient(140deg, var(--k1), var(--k2)); box-shadow: 0 12px 24px -8px var(--k1), 0 0 0 6px var(--bg); }
 
 /* Ícones das matérias */
 .sicon { width: 28px; height: 28px; }
 .badge .sicon { width: 30px; height: 30px; }
 .tile-badge .sicon { width: 30px; height: 30px; }
-html:not([data-mode="pro"]) .badge:has(.sicon) { background: color-mix(in srgb, var(--c) 10%, var(--surface)); }
-html:not([data-mode="pro"]) .tile-badge { width: 48px; height: 48px; border-radius: 16px; background: color-mix(in srgb, var(--c) 12%, var(--surface)); }
-html:not([data-mode="pro"]) .subject-tile.active .tile-badge { background: rgba(255, 255, 255, .92); }
+html:root .badge:has(.sicon) { background: color-mix(in srgb, var(--c) 10%, var(--surface)); }
+html:root .tile-badge { width: 48px; height: 48px; border-radius: 16px; background: color-mix(in srgb, var(--c) 12%, var(--surface)); }
+html:root .subject-tile.active .tile-badge { background: rgba(255, 255, 255, .92); }
 .choice.subj .sicon { width: 20px; height: 20px; margin-left: -4px; }
 .choice.subj input:checked + span .sicon { background: rgba(255, 255, 255, .92); border-radius: 50%; padding: 1px; }
 .subject-edit-list li span.subj-icon, .subj-icon { flex: none; width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: var(--surface); flex: none; }
 .subj-icon .sicon { width: 26px; height: 26px; }
 
 /* O xadrez decorativo do topo fica dentro do topo (antes vazava pela direita e a página rolava para o lado) */
-html:not([data-mode="pro"]) .hero::before { top: 0; right: 0; width: 210px; height: 100%; transform: none; border-radius: 0 0 34px 0; }
+html:root .hero::before { top: 0; right: 0; width: 210px; height: 100%; transform: none; border-radius: 0 0 34px 0; }
 body { overflow-x: clip; }
 
 /* ================================================================
@@ -641,21 +495,21 @@ body { overflow-x: clip; }
    e um brilho dourado passa de tempos em tempos.
    ================================================================ */
 .chess-fx { display: none; }
-html:not([data-mode="pro"]) .hero { isolation: isolate; }
-html:not([data-mode="pro"]) body:not([data-view="hoje"]) .hero { padding-bottom: 70px; }
+html:root .hero { isolation: isolate; }
+html:root body:not([data-view="hoje"]) .hero { padding-bottom: 70px; }
 /* tabuleiro em faixa (2 fileiras) no pé do topo, abaixo dos textos */
-html:not([data-mode="pro"]) .chess-fx {
+html:root .chess-fx {
   display: block; position: absolute; left: 0; right: 0; bottom: 12px; height: 52px; overflow: hidden; pointer-events: none; z-index: -1;
   background: conic-gradient(rgba(255, 255, 255, .07) 25%, transparent 0 50%, rgba(255, 255, 255, .07) 0 75%, transparent 0) 0 0 / 52px 52px;
   -webkit-mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
-html:not([data-mode="pro"]) body[data-view="hoje"] .chess-fx { bottom: 26px; }
-html:not([data-mode="pro"]) .chess-fx .pc {
+html:root body[data-view="hoje"] .chess-fx { bottom: 26px; }
+html:root .chess-fx .pc {
   position: absolute; font-style: normal; font-size: 21px; line-height: 26px; width: 26px; text-align: center;
   color: rgba(227, 182, 91, .7); text-shadow: 0 2px 6px rgba(0, 0, 0, .35);
 }
 /* cavalo: atravessa o tabuleiro pulando em "L" (2 casas + 1) e volta */
-html:not([data-mode="pro"]) .chess-fx .knight { left: 52px; top: 0; color: rgba(242, 213, 140, .95); animation: chess-knight 12s ease-in-out infinite; }
+html:root .chess-fx .knight { left: 52px; top: 0; color: rgba(242, 213, 140, .95); animation: chess-knight 12s ease-in-out infinite; }
 @keyframes chess-knight {
   0%, 10% { transform: translate(0, 0) scale(1); }
   13% { transform: translate(26px, 4px) scale(1.4); }
@@ -672,7 +526,7 @@ html:not([data-mode="pro"]) .chess-fx .knight { left: 52px; top: 0; color: rgba(
   96%, 100% { transform: translate(0, 0) scale(1); }
 }
 /* peão: avança uma casa, some e volta */
-html:not([data-mode="pro"]) .chess-fx .pawn { left: 26px; top: 26px; animation: chess-pawn 8s ease-in-out infinite; }
+html:root .chess-fx .pawn { left: 26px; top: 26px; animation: chess-pawn 8s ease-in-out infinite; }
 @keyframes chess-pawn {
   0%, 30% { transform: translateY(0); opacity: .9; }
   40%, 70% { transform: translateY(-26px); opacity: .9; }
@@ -681,15 +535,15 @@ html:not([data-mode="pro"]) .chess-fx .pawn { left: 26px; top: 26px; animation: 
   100% { transform: translateY(0); opacity: .9; }
 }
 /* torre: desliza pela fileira e volta */
-html:not([data-mode="pro"]) .chess-fx .rook { left: 260px; top: 26px; animation: chess-rook 10s ease-in-out infinite; }
+html:root .chess-fx .rook { left: 260px; top: 26px; animation: chess-rook 10s ease-in-out infinite; }
 @keyframes chess-rook { 0%, 20% { transform: translateX(0); } 45%, 70% { transform: translateX(78px); } 95%, 100% { transform: translateX(0); } }
 /* bispo: vai e volta na diagonal */
-html:not([data-mode="pro"]) .chess-fx .bishop { left: 312px; top: 0; animation: chess-bishop 9s ease-in-out infinite; }
+html:root .chess-fx .bishop { left: 312px; top: 0; animation: chess-bishop 9s ease-in-out infinite; }
 @keyframes chess-bishop { 0%, 30% { transform: translate(0, 0); } 45%, 75% { transform: translate(-26px, 26px); } 90%, 100% { transform: translate(0, 0); } }
 
 /* bloco de Hoje: cavalo pulando e brilho dourado */
-html:not([data-mode="pro"]) .kpi:first-child { position: relative; overflow: hidden; }
-html:not([data-mode="pro"]) .kpi:first-child::before { display: inline-block; transform-origin: 50% 100%; animation: chess-hop 3.2s ease-in-out infinite; }
+html:root .kpi:first-child { position: relative; overflow: hidden; }
+html:root .kpi:first-child::before { display: inline-block; transform-origin: 50% 100%; animation: chess-hop 3.2s ease-in-out infinite; }
 @keyframes chess-hop {
   0%, 60%, 100% { transform: translateY(0) rotate(0); }
   70% { transform: translateY(-12px) rotate(-12deg); }
@@ -697,20 +551,20 @@ html:not([data-mode="pro"]) .kpi:first-child::before { display: inline-block; tr
   86% { transform: translateY(-5px) rotate(6deg); }
   92% { transform: translateY(0); }
 }
-html:not([data-mode="pro"]) .kpi:first-child::after {
+html:root .kpi:first-child::after {
   content: ""; position: absolute; top: -20%; bottom: -20%; width: 40%; left: -60%; pointer-events: none;
   background: linear-gradient(100deg, transparent, rgba(255, 248, 220, .55), transparent); transform: skewX(-18deg);
   animation: chess-shine 5s ease-in-out infinite;
 }
 @keyframes chess-shine { 0%, 65% { left: -60%; } 90%, 100% { left: 130%; } }
-html:not([data-mode="pro"]) .kpi:first-child b, html:not([data-mode="pro"]) .kpi:first-child span { position: relative; z-index: 1; }
+html:root .kpi:first-child b, html:root .kpi:first-child span { position: relative; z-index: 1; }
 /* destaque da próxima prova: coroa brilhando */
-html:not([data-mode="pro"]) .countdown { animation: chess-glow 3s ease-in-out infinite; }
+html:root .countdown { animation: chess-glow 3s ease-in-out infinite; }
 @keyframes chess-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(227, 182, 91, .0); } 50% { box-shadow: 0 0 22px 2px rgba(227, 182, 91, .55); } }
 
 @media (prefers-reduced-motion: reduce) {
-  html:not([data-mode="pro"]) .chess-fx .pc, html:not([data-mode="pro"]) .kpi:first-child::before,
-  html:not([data-mode="pro"]) .kpi:first-child::after, html:not([data-mode="pro"]) .countdown { animation: none; }
+  html:root .chess-fx .pc, html:root .kpi:first-child::before,
+  html:root .kpi:first-child::after, html:root .countdown { animation: none; }
 }
 
 /* Barra de ações das janelas sempre visível (presa no rodapé, acima do teclado) */
@@ -719,80 +573,5 @@ dialog.sheet .sheet-actions {
   background: var(--surface); box-shadow: 0 -10px 18px -12px rgba(0, 0, 0, .25);
 }
 dialog.sheet .sheet-inner > .sheet-actions { margin-bottom: -24px; }
-html[data-mode="pro"] dialog.sheet .sheet-actions { background: #fbfdfe; }
 .title-input:focus, dialog textarea:focus, .add-subject input:focus, .search input:focus { outline: 2px solid color-mix(in srgb, var(--accent) 70%, transparent); outline-offset: 1px; }
 .search input:focus { outline: none; }
-
-/* ================================================================
-   MODO PROFISSIONAL — Oceano "Marinha" (O5, escolhido)
-   Claro, com azul-marinho e latão (amarelo queimado): leme girando, âncora balançando,
-   bolhas subindo e uma baleia gigante passando ao fundo do topo.
-   ================================================================ */
-html[data-mode="pro"] {
-  --bg: #e9eef5; --surface: #ffffff; --surface-2: #dde5ef; --text: #0b1a2e; --muted: #50607a; --line: #d2dbe7;
-  --accent: #14365f; --accent-2: #0b1f3a;
-  --sea-deep: #07142a; --sea-mid: #0b1f3a; --sea-light: #14365f; --aqua: #d4ac52; --foam: #f3e3b8;
-  --brass: #c8a24a; --brass-hi: #e3c06a; --brass-lo: #a8812e;
-  --hero-bg: radial-gradient(ellipse 70% 50% at 85% 0%, rgba(227, 192, 106, .14), transparent 70%), linear-gradient(170deg, #07142a 0%, #0b1f3a 55%, #14365f 100%);
-  --dia: #c8a24a; --escola: #14365f; --coral: #c8a24a; --coral-2: #14365f; --scrim: #040b18; --ring-hole: rgba(4, 11, 24, .45);
-  --shadow: 0 14px 30px -18px rgba(7, 20, 42, .45); --shadow-sm: 0 6px 16px -10px rgba(7, 20, 42, .35);
-}
-html[data-mode="pro"] body { background: linear-gradient(180deg, #dfe6f0 0, var(--bg) 340px, var(--bg) 100%); }
-html[data-mode="pro"] .logo { background: linear-gradient(140deg, var(--brass-hi), var(--brass-lo)); color: var(--sea-deep); }
-html[data-mode="pro"] .version { background: rgba(227, 192, 106, .18); color: var(--brass-hi); }
-
-/* topo: ondas em tons de marinha e latão */
-html[data-mode="pro"] .ocean-fx::before { filter: hue-rotate(18deg) saturate(.7) brightness(.62); }
-html[data-mode="pro"] .ocean-fx::after { filter: sepia(1) saturate(1.6) hue-rotate(-10deg) brightness(.9); opacity: .28; }
-html[data-mode="pro"] .ocean-fx i { border-color: rgba(243, 227, 184, .55); }
-html[data-mode="pro"] .ring { background: conic-gradient(var(--brass) calc(var(--p) * 1%), rgba(255, 255, 255, .14) 0); }
-
-/* baleia gigante nadando ao fundo e leme de navio girando */
-.whale, .helm { display: none; }
-html[data-mode="pro"] .whale, html[data-mode="pro"] .helm { display: block; position: absolute; pointer-events: none; }
-html[data-mode="pro"] .whale {
-  left: 0; top: 34px; width: 340px; height: 144px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 110' fill='rgba%28175%2C205%2C238%2C.32%29'%3E%3Cpath d='M6 54C8 36 36 26 78 25c52-1 100 8 134 22l22-16c7-5 16-3 14 5l-8 18 12 15c4 7-4 11-11 7l-25-12c-34 14-86 22-136 20C40 82 6 72 6 54z'/%3E%3Cpath d='M74 70c6 16 22 30 44 36 4 1 6-2 3-5C108 92 98 80 94 70z'/%3E%3Cpath d='M150 28c4-6 10-10 18-11-2 5-3 9-2 14z'/%3E%3Cg fill='none' stroke='rgba%28255%2C255%2C255%2C.28%29' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M12 60c18 8 40 12 64 12'/%3E%3Cpath d='M16 65c18 7 38 11 58 11'/%3E%3Cpath d='M22 70c16 5 32 8 48 9'/%3E%3C/g%3E%3Ccircle cx='34' cy='50' r='2.6' fill='rgba%28255%2C255%2C255%2C.55%29'/%3E%3Cg fill='rgba%28255%2C255%2C255%2C.22%29'%3E%3Ccircle cx='20' cy='40' r='1.6'/%3E%3Ccircle cx='28' cy='34' r='1.4'/%3E%3Ccircle cx='40' cy='31' r='1.5'/%3E%3Ccircle cx='52' cy='30' r='1.3'/%3E%3C/g%3E%3C/svg%3E") no-repeat center / contain;
-  animation: whale-swim 46s linear infinite, whale-bob 7s ease-in-out infinite;
-}
-html[data-mode="pro"] body[data-view="hoje"] .whale { top: 70px; }
-html[data-mode="pro"] .helm { width: 170px; height: 170px; top: -40px; right: -46px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-62 -62 124 124' fill='rgba%28200%2C162%2C74%2C.22%29'%3E%3Ccircle r='36' fill='none' stroke='rgba%28200%2C162%2C74%2C.22%29' stroke-width='7'/%3E%3Ccircle r='26' fill='none' stroke='rgba%28200%2C162%2C74%2C.22%29' stroke-width='3'/%3E%3Ccircle r='9'/%3E%3Cg transform='rotate%280%29'%3E%3Cpath d='M0 0V52' stroke='rgba%28200%2C162%2C74%2C.22%29' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cy='55' r='6'/%3E%3C/g%3E%3Cg transform='rotate%2845%29'%3E%3Cpath d='M0 0V52' stroke='rgba%28200%2C162%2C74%2C.22%29' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cy='55' r='6'/%3E%3C/g%3E%3Cg transform='rotate%2890%29'%3E%3Cpath d='M0 0V52' stroke='rgba%28200%2C162%2C74%2C.22%29' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cy='55' r='6'/%3E%3C/g%3E%3Cg transform='rotate%28135%29'%3E%3Cpath d='M0 0V52' stroke='rgba%28200%2C162%2C74%2C.22%29' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cy='55' r='6'/%3E%3C/g%3E%3Cg transform='rotate%28180%29'%3E%3Cpath d='M0 0V52' stroke='rgba%28200%2C162%2C74%2C.22%29' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cy='55' r='6'/%3E%3C/g%3E%3Cg transform='rotate%28225%29'%3E%3Cpath d='M0 0V52' stroke='rgba%28200%2C162%2C74%2C.22%29' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cy='55' r='6'/%3E%3C/g%3E%3Cg transform='rotate%28270%29'%3E%3Cpath d='M0 0V52' stroke='rgba%28200%2C162%2C74%2C.22%29' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cy='55' r='6'/%3E%3C/g%3E%3Cg transform='rotate%28315%29'%3E%3Cpath d='M0 0V52' stroke='rgba%28200%2C162%2C74%2C.22%29' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cy='55' r='6'/%3E%3C/g%3E%3C/svg%3E") no-repeat center / contain; animation: o-spin 30s linear infinite; }
-@keyframes whale-swim { from { transform: translateX(110vw); } to { transform: translateX(-120%); } }
-@keyframes whale-bob { 0%, 100% { translate: 0 0; rotate: -2deg; } 50% { translate: 0 14px; rotate: 2deg; } }
-@keyframes o-spin { to { transform: rotate(360deg); } }
-@keyframes o-swing { 0%, 100% { transform: rotate(-10deg); } 50% { transform: rotate(10deg); } }
-
-/* números: Hoje em latão com âncora balançando, um bloco em azul-marinho */
-html[data-mode="pro"] .kpi:first-child { color: var(--sea-deep); background: radial-gradient(circle at 80% 15%, rgba(255, 255, 255, .3), transparent 40%), linear-gradient(160deg, var(--brass-hi), var(--brass) 55%, var(--brass-lo)); }
-html[data-mode="pro"] .kpi:first-child span { color: rgba(7, 20, 42, .75); }
-html[data-mode="pro"] .kpi:first-child .kico { display: none; }
-html[data-mode="pro"] .kpi:first-child::before { content: ""; position: absolute; width: 46px; height: 46px; top: 10px; right: 10px; transform-origin: 50% 8%; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' fill='rgba%287%2C20%2C42%2C.55%29'%3E%3Cg fill='none' stroke='rgba%287%2C20%2C42%2C.55%29' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='9' r='4.5'/%3E%3Cpath d='M24 13.5V43M16 21h16M8 29c0 7.7 7.2 14 16 14s16-6.3 16-14M8 29 5 32M8 29l4 2.2M40 29l3 3M40 29l-4 2.2'/%3E%3C/g%3E%3C/svg%3E") no-repeat center / contain; animation: o-swing 4s ease-in-out infinite; }
-html[data-mode="pro"] .kpi:first-child::after { filter: sepia(1) brightness(1.2); opacity: .25; }
-html[data-mode="pro"] .kico { color: var(--brass-lo); }
-html[data-mode="pro"] .kpi:nth-child(4) { color: #fff; background: linear-gradient(140deg, #14365f, #0b1f3a); }
-html[data-mode="pro"] .kpi:nth-child(4) span { color: rgba(243, 227, 184, .85); }
-html[data-mode="pro"] .kpi:nth-child(4) .kico { color: var(--brass-hi); opacity: .8; }
-
-/* listas e destaques */
-html[data-mode="pro"] .group h2 { color: var(--sea-mid); }
-html[data-mode="pro"] .spotlight { background: radial-gradient(circle at 15% 120%, rgba(227, 192, 106, .22), transparent 50%), linear-gradient(135deg, #14365f, #07142a); box-shadow: 0 16px 30px -16px #07142a; }
-html[data-mode="pro"] .countdown { background: var(--brass); color: var(--sea-deep); }
-html[data-mode="pro"] .exam-tag { background: var(--sea-mid); }
-html[data-mode="pro"] .task.done .check { background: linear-gradient(140deg, var(--brass-hi), var(--brass-lo)); }
-html[data-mode="pro"] .chip-btn.active, html[data-mode="pro"] .cat-toggle input:checked + span, html[data-mode="pro"] .choice input:checked + span { background: var(--sea-mid); color: #fff; }
-html[data-mode="pro"] .calendar .cal-day.today:not(.selected) .num { color: var(--brass-lo); }
-html[data-mode="pro"] .month-card { background: linear-gradient(180deg, #fff, #f3f6fa); }
-
-/* navegação azul-marinho com o + de latão */
-html[data-mode="pro"] .bottom-nav { background: linear-gradient(180deg, #0b1f3a, #07142a); }
-html[data-mode="pro"] .tab { color: rgba(220, 228, 240, .55); }
-html[data-mode="pro"] .tab.active { color: var(--brass-hi); }
-html[data-mode="pro"] .fab { color: var(--sea-deep); background: linear-gradient(140deg, var(--brass-hi), var(--brass-lo)); box-shadow: 0 12px 24px -8px var(--brass-lo), 0 0 0 6px var(--bg); }
-html[data-mode="pro"] .save-btn { background: linear-gradient(140deg, #14365f, #0b1f3a); }
-html[data-mode="pro"] dialog.sheet { background: linear-gradient(180deg, #ffffff, #f2f5f9); }
-
-@media (prefers-reduced-motion: reduce) {
-  html[data-mode="pro"] .whale, html[data-mode="pro"] .helm, html[data-mode="pro"] .kpi:first-child::before { animation: none; }
-  html[data-mode="pro"] .whale { transform: translateX(40px); }
-}
-html[data-mode="pro"] .empty { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='40' viewBox='0 0 64 40'%3E%3Cpath d='M6 20c8-12 26-14 38-4l12-8v24l-12-8C32 34 14 32 6 20z' fill='%23c8a24a'/%3E%3Ccircle cx='17' cy='17' r='2.5' fill='%2307142a'/%3E%3Cpath d='M28 12c3 4 3 12 0 16' fill='none' stroke='%23a8812e' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E"); }

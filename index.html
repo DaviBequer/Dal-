@@ -11,7 +11,6 @@
   <link rel="preload" href="fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/fraunces-700.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
-  <script>try { if (localStorage.getItem('dal.mode') === 'pro') document.documentElement.dataset.mode = 'pro'; } catch (e) {}</script>
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -29,7 +28,6 @@
     <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-x" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
-    <symbol id="i-brief" viewBox="0 0 24 24"><rect x="3.5" y="7" width="17" height="12.5" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3.5 12.5h17" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
     <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <!-- Ícones das matérias (coloridos, 32x32) -->
     <symbol id="s-mat" viewBox="0 0 32 32"><rect x="6" y="3" width="20" height="26" rx="4" fill="#4f6bff"/><rect x="9" y="6" width="14" height="6" rx="1.5" fill="#e6ecff"/><path d="M18 9h3" stroke="#4f6bff" stroke-width="1.6" stroke-linecap="round"/><g fill="#fff"><rect x="9" y="15" width="4" height="4" rx="1"/><rect x="14" y="15" width="4" height="4" rx="1"/><rect x="9" y="21" width="4" height="4" rx="1"/><rect x="14" y="21" width="4" height="4" rx="1"/></g><rect x="19" y="15" width="4" height="10" rx="1" fill="#ffc83d"/><path d="M10 17h2M11 16v2M15 17h2M10 23h2M15 22l2 2M17 22l-2 2" stroke="#4f6bff" stroke-width="1" stroke-linecap="round"/></symbol>
@@ -49,16 +47,9 @@
     <symbol id="s-tec" viewBox="0 0 32 32"><rect x="5" y="6" width="22" height="15" rx="2.5" fill="#334155"/><rect x="7.5" y="8.5" width="17" height="10" rx="1" fill="#0f172a"/><path d="m11 11.5-2 2 2 2M21 11.5l2 2-2 2M17 10.5l-2 6" stroke="#5eead4" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 23h26l-2 3H5z" fill="#64748b"/></symbol>
     <symbol id="s-gen" viewBox="0 0 32 32"><rect x="6" y="19" width="20" height="6" rx="1.5" fill="#60a5fa"/><rect x="8" y="13" width="18" height="6" rx="1.5" fill="#f472b6"/><rect x="5" y="7" width="19" height="6" rx="1.5" fill="#34d399"/><path d="M8 10h10M10 16h10M9 22h10" stroke="#fff" stroke-width="1.2" opacity=".7"/></symbol>
     <!-- Ícones do tema Oceano (modo Profissional) -->
-    <symbol id="o-wave" viewBox="0 0 24 24"><path d="M2 9c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M2 14c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M2 19c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
-    <symbol id="o-anchor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.2" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M12 7.2V21M8 11h8M4.5 14.5c0 3.6 3.4 6.5 7.5 6.5s7.5-2.9 7.5-6.5M4.5 14.5 3 16M4.5 14.5 6.3 15.6M19.5 14.5 21 16M19.5 14.5l-1.8 1.1" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-    <symbol id="o-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="m15.5 8.5-2 5-5 2 2-5z" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
-    <symbol id="o-shell" viewBox="0 0 24 24"><path d="M12 3c5 0 9 4 9 9 0 3-1 5-2.5 6.5H5.5C4 17 3 15 3 12c0-5 4-9 9-9z" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 3v15.5M12 3 7 18.5M12 3l5 15.5M12 3 4 15M12 3l8 12M9 21h6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
-    <symbol id="o-lighthouse" viewBox="0 0 48 48"><path d="M18 14h12l3 28H15z" fill="#fff"/><path d="M17.2 21h13.6l.7 6H16.5zM16 33h16l.6 5H15.4z" fill="#ff6b6b"/><rect x="17" y="9" width="14" height="5" rx="1.5" fill="#ffd166"/><path d="M16 9h16l-8-6z" fill="#e2f3fb"/><path d="M31 11 46 6v10zM17 11 2 6v10z" fill="#ffe8a3" opacity=".55"/><path d="M8 44c3 0 3-2 6-2s3 2 6 2 3-2 6-2 3 2 6 2 3-2 6-2 3 2 6 2" fill="none" stroke="#bfefff" stroke-width="2" stroke-linecap="round"/></symbol>
-    <symbol id="o-fish" viewBox="0 0 64 40"><path d="M6 20c8-12 26-14 38-4l12-8v24l-12-8C32 34 14 32 6 20z" fill="#7fd3ea"/><path d="M6 20c8-12 26-14 38-4" fill="none" stroke="#3aa6c9" stroke-width="2"/><circle cx="17" cy="17" r="2.5" fill="#063a5a"/><path d="M28 12c3 4 3 12 0 16" fill="none" stroke="#3aa6c9" stroke-width="2" stroke-linecap="round"/><circle cx="4" cy="8" r="2" fill="none" stroke="#7fd3ea" stroke-width="1.5"/><circle cx="9" cy="3" r="1.3" fill="none" stroke="#7fd3ea" stroke-width="1.2"/></symbol>
   </svg>
 
   <header class="hero">
-    <div class="ocean-fx" aria-hidden="true"><b class="whale"></b><b class="helm"></b><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <div class="chess-fx" aria-hidden="true"><i class="pc knight">♞&#xFE0E;</i><i class="pc pawn">♟&#xFE0E;</i><i class="pc rook">♜&#xFE0E;</i><i class="pc bishop">♝&#xFE0E;</i></div>
     <div class="hero-top">
       <div class="brand">
@@ -228,11 +219,6 @@
     <div class="sheet-inner">
       <span class="grabber" aria-hidden="true"></span>
       <div class="sheet-head"><h2>Configurações</h2><button class="icon-btn small" type="button" data-close aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
-      <p class="field-label">Modo do app</p>
-      <div class="mode-switch" id="modeSwitch">
-        <button type="button" data-mode="escola"><svg><use href="#i-book"/></svg><b>Escola</b><small>Matérias, lições e provas</small></button>
-        <button type="button" data-mode="pro"><svg><use href="#i-brief"/></svg><b>Profissional</b><small>Projetos, prazos e casa</small></button>
-      </div>
       <p class="field-label">Seu nome</p>
       <input class="title-input" id="userName" maxlength="30" placeholder="Para a saudação no topo">
       <div class="setting-row"><span><b>Notificações</b><small>Lembretes das tarefas</small></span><button type="button" class="switch" id="notifySwitch" role="switch" aria-checked="false"><i></i></button></div>
