@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover,interactive-widget=resizes-content">
+<title>Orbe</title>
+<meta name="description" content="Tarefas, agenda e diário das áreas da vida.">
+<meta name="theme-color" content="#111214">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&family=Geist+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block">
+<link rel="stylesheet" href="styles.css">
+<script src="version.js"></script>
+</head>
+<body>
+<div class="app" id="app">
+  <main class="screens">
+    <section class="screen on" data-s="home"></section>
+    <section class="screen" data-s="agenda"></section>
+    <section class="screen" data-s="areas"></section>
+    <section class="screen" data-s="stats"></section>
+  </main>
+  <div class="detail" aria-live="polite"></div>
+  <button class="fab" aria-label="Nova tarefa"><span class="ms">add</span></button>
+  <nav class="nav">
+    <button data-go="home" class="on"><span class="ms">home</span><span>Hoje</span></button>
+    <button data-go="agenda"><span class="ms">calendar_month</span><span>Agenda</span></button>
+    <button data-go="areas"><span class="ms">auto_stories</span><span>Vida</span></button>
+    <button data-go="stats"><span class="ms">monitoring</span><span>Números</span></button>
+  </nav>
+  <div class="sheet full" data-sh="task"></div>
+  <div class="sheet" data-sh="area"></div>
+  <div class="sheet" data-sh="set"></div>
+  <div class="pop"></div>
+  <div class="toast" role="status"></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

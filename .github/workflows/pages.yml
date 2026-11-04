@@ -55,6 +55,9 @@ jobs:
         run: |
           mkdir _site
           cp -r index.html styles.css app.js sw.js version.js manifest.webmanifest icons fonts _site/
+          # Orbe: app separado, publicado em /orbe/
+          mkdir _site/orbe
+          cp -r orbe/index.html orbe/styles.css orbe/app.js orbe/sw.js orbe/version.js orbe/manifest.webmanifest orbe/icons _site/orbe/
           touch _site/.nojekyll
 
       - uses: actions/configure-pages@v5
