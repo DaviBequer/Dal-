@@ -98,7 +98,8 @@ function home() {
     <h2>${greeting()}${DB.name ? ', ' + esc(DB.name) : ''}</h2><p>${WDF[d.getDay()][0].toUpperCase() + WDF[d.getDay()].slice(1)}, ${d.getDate()} de ${MOF[d.getMonth()].toLowerCase()} · ${pl(open, 'aberta', 'abertas')} hoje</p>
     <div class="pl"><span>Progresso de hoje</span><b>${done} de ${td.length}</b></div><div class="prog"><i style="width:${p}%"></i></div>
     <div class="ht">${[1, 2, 3, 4].map((q) => `<button class="q${q}${UI.qf === q ? ' on' : ''}" data-qf="${q}"><span class="tn">${mini(q)}<b>${cnt(q)}</b></span><small>${Q[q].s}</small></button>`).join('')}</div></div>`;
-  if (n) h += `<div class="next" data-id="${n.id}"><span class="ni">${ic('schedule', 22)}</span><div><small>Próximo importante</small><b>${n.time} · ${esc(n.t)}</b></div><span class="in">${inTxt(n.time)}</span></div>`;
+  const nextH = n ? `<div class="next" data-id="${n.id}"><span class="ni">${ic('schedule', 22)}</span><div><small>Próximo importante</small><b>${n.time} · ${esc(n.t)}</b></div><span class="in">${inTxt(n.time)}</span></div>` : '';
+  h += nextH.replace('class="next"', 'class="next m-only"') + '<div class="cols"><div class="ca">';
   h += `<div class="sec-h">Hoje por prioridade<small>${UI.qf ? 'filtrado · toque de novo para ver tudo' : pl(open, 'aberta', 'abertas')}</small></div>`;
   let any = false;
   [1, 2, 3, 4].filter((q) => !UI.qf || UI.qf === q).forEach((q) => {
@@ -106,6 +107,7 @@ function home() {
     h += `<div class="qgroup q${q}"><h5>${mini(q)}${Q[q].k}<span>· ${Q[q].d}</span><span class="cnt">${l.filter((t) => !t.done).length}</span></h5>${l.map(row).join('')}</div>`;
   });
   if (!any) h += `<div class="empty-big">${ic('wb_sunny')}${UI.qf ? 'Nada nesta prioridade hoje.' : 'Nada para hoje.<br>Toque no + para criar uma tarefa.'}</div>`;
+  h += '</div><div class="cb">' + nextH.replace('class="next"', 'class="next d-only"');
   const tmw = addDays(t0, 1), tm = DB.tasks.filter((t) => t.date === tmw).sort(byQ);
   if (tm.length) h += `<div class="sec-h">Amanhã<small>${fmtDate(tmw, true).split(' · ')[1]} · ${tm.length}</small></div><div class="qgroup plain">${tm.map(row).join('')}</div>`;
   else {
@@ -114,7 +116,7 @@ function home() {
   }
   const nd = DB.tasks.filter((t) => !t.date && !t.done).sort(byQ);
   if (nd.length) h += `<div class="sec-h">Sem data<small>${nd.length}</small></div><div class="qgroup plain">${nd.map(row).join('')}</div>`;
-  return h;
+  return h + '</div></div>';
 }
 
 /* ---------- AGENDA ---------- */
@@ -143,14 +145,15 @@ function agenda() {
   const sub = sem ? `${parse(wk[0]).getDate()} ${MO[parse(wk[0]).getMonth()]} a ${parse(wk[6]).getDate()} ${MO[parse(wk[6]).getMonth()]}` : String(sel.getFullYear());
   let h = `<div class="ag-h"><b>${title}</b><div class="seg"><button data-view="semana" class="${sem ? 'on' : ''}">Semana</button><button data-view="mes" class="${!sem ? 'on' : ''}">Mês</button></div></div>
   <div class="ag-nav"><p class="sub-h">${sub}</p>${UI.sel !== today() ? `<button data-gotoday aria-label="Ir para hoje">${ic('today', 18)}</button>` : ''}<button data-agnav="-1" aria-label="Anterior">${ic('chevron_left', 20)}</button><button data-agnav="1" aria-label="Próximo">${ic('chevron_right', 20)}</button></div>`;
-  h += monthGrid();
+  h = '<div class="cols ag"><div class="ca">' + h + monthGrid();
   if (!sem) {
     const l = dayTasks(UI.sel);
     h += `<div class="sec-h">${fmtDate(UI.sel, true)}<small>${l.length}</small></div><div class="qgroup plain">${l.map(row).join('') || '<p class="empty">Dia livre. Toque no + para criar algo neste dia.</p>'}</div>`;
   }
+  h += '</div><div class="cb">';
   h += `<div class="sec-h">Semana ${weekNo(UI.sel)}<small>${matchMedia('(pointer:fine)').matches ? 'arraste para mudar o dia' : 'toque para editar'}</small></div>` + spread();
   h += `<div class="legend"><span>• tarefa</span><span>○ compromisso</span><span>× feita</span><span><b>•</b> fazer agora</span></div>`;
-  return h;
+  return h + '</div></div>';
 }
 
 /* ---------- VIDA ---------- */
@@ -166,7 +169,7 @@ function visual() {
   return `<div class="vis"><svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Equilíbrio entre as áreas">${circ}${lab}</svg><p class="cap">${tot ? 'Quanto das tarefas desta semana foi para cada área' : 'Quando tiver tarefas nesta semana, aqui aparece o equilíbrio entre as áreas'}</p></div>`;
 }
 function areas() {
-  let h = `<div class="ag-h"><b>Vida</b><span class="muted" style="font-size:12px">${pl(DB.areas.length, 'área', 'áreas')}</span></div>` + visual();
+  let h = `<div class="ag-h"><b>Vida</b><span class="muted" style="font-size:12px">${pl(DB.areas.length, 'área', 'áreas')}</span></div>` + '<div class="cols vida"><div class="ca">' + visual() + '</div><div class="cb">';
   DB.areas.forEach((a) => {
     const op = DB.tasks.filter((t) => t.a === a.k && !t.done).length, nts = DB.notes.filter((n) => n.a === a.k).length;
     h += `<div class="acc${UI.open.has(a.k) ? ' open' : ''}" data-acc="${a.k}"><button><span class="ai2" style="--c:${a.c}">${ic(a.i, 20)}</span><div><b>${esc(a.n)}</b><small>${pl(a.subs.length, 'parte', 'partes')} · ${pl(op, 'aberta', 'abertas')} · ${pl(nts, 'anotação', 'anotações')}</small></div>${ic('chevron_right', 18).replace('class="ms"', 'class="ms chev"')}</button><div class="in"><div>
@@ -176,7 +179,7 @@ function areas() {
     </div></div></div>`;
   });
   h += `<button class="newarea" data-newarea>${ic('add', 18)}Nova área</button>`;
-  return h;
+  return h + '</div></div>';
 }
 function detail() {
   if (!UI.det) return '';
@@ -236,6 +239,7 @@ function stats() {
   h += `<div class="kpis"><div class="kpi dk"><small>No dia certo</small><b>${f(S.ok)}</b></div><div class="kpi"><small>Remarcadas</small><b>${f(S.rem)}</b></div><div class="kpi"><small>Atrasadas</small><b>${f(S.late)}</b></div><div class="kpi"><small>Tempo até fazer</small><b>${S.avg === null ? '–' : S.avg.toFixed(1).replace('.', ',')}<span> dias</span></b></div></div>`;
   let delta = '';
   if (S.ok !== null && P.ok !== null) { const dd = S.ok - P.ok; delta = `${dd >= 0 ? '+' : ''}${dd}% que ${per ? 'a semana passada' : 'o mês passado'}`; }
+  h += '<div class="sgrid">';
   h += `<div class="card"><h6><span>Feitas no dia certo</span><b>${delta}</b></h6>${lineSvg(lineData(UI.sview))}</div>`;
   if (S.total) {
     const top = S.qs[1] >= S.qs[0];
@@ -244,7 +248,7 @@ function stats() {
   const rep = DB.tasks.filter((t) => t.hist && t.hist.length).sort((x, y) => y.hist.length - x.hist.length).slice(0, 3);
   h += `<div class="card"><h6>Tarefas que mais voltam</h6>${rep.map((t) => `<div class="rep"><span>${esc(t.t)}</span><b>${t.hist.length}×</b></div>`).join('') || '<p class="empty" style="padding:4px 0">Nenhuma tarefa remarcada até agora.</p>'}${S.avg !== null ? `<p class="ins">Uma tarefa leva em média <b>${S.avg.toFixed(1).replace('.', ',')} dias</b> entre ser criada e ser feita.</p>` : ''}</div>`;
   h += `<div class="card"><h6>Por área</h6><div class="bars">${S.ar.map(([n, p]) => `<div><div class="bar-l"><span>${esc(n)}</span><b>${p === null ? '–' : p + '%'}</b></div><div class="bar"><i data-w="${p || 0}"></i></div></div>`).join('')}</div></div>`;
-  return h;
+  return h + '</div>';
 }
 
 /* ---------- render ---------- */
@@ -429,7 +433,7 @@ APP.addEventListener('click', (e) => {
   if (c('[data-saveset]')) { DB.name = $('#uname').value.trim(); save(); closeSheet('set'); render('home'); return; }
   // navegação
   if ((x = c('[data-go]'))) { go(x.dataset.go); return; }
-  if (c('.fab')) {
+  if (c('.fab') || c('[data-new]')) {
     const over = {};
     if (UI.det) { over.a = UI.det[0]; over.s = UI.det[1]; }
     else if (UI.tab === 'agenda') over.date = UI.sel;
@@ -485,6 +489,11 @@ function addNote() {
   DB.notes.push({ id: uid(), a: UI.det[0], s: UI.det[1], t: v, at: new Date().toISOString() });
   save(); UI.dtab = UI.dtab === 'tarefas' ? 'tudo' : UI.dtab; renderDet(); render('areas'); toast('Anotação salva.');
 }
+document.addEventListener('keydown', (e) => {
+  const typing = /INPUT|TEXTAREA/.test((document.activeElement || {}).tagName || '');
+  if (e.key === 'Escape' && layers.length) { e.preventDefault(); history.back(); return; }
+  if (!typing && !layers.length && (e.key === 'n' || e.key === 'N') && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); $('.fab').click(); }
+});
 APP.addEventListener('keydown', (e) => {
   if (e.key !== 'Enter') return;
   if (e.target.id === 'newpart') { e.preventDefault(); addPart(UI.adding); }
