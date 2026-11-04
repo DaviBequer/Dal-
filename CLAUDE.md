@@ -39,12 +39,7 @@ O workflow `.github/workflows/pages.yml` (GitHub Actions) publica a branch padr�
 GitHub Pages a cada push (Settings → Pages → Source: GitHub Actions) e cria a tag
 `v<versão>` quando a versão é nova. Ele falha se o app mudou sem a versão ter sido alterada.
 
-## Orbe (app separado, pasta `orbe/`)
+## Orbe (mudou de repositório)
 
-Outro PWA do mesmo usuário, independente do Dalê Tarefas: https://davibequer.github.io/Dal-/orbe/
-Tarefas com matriz de Eisenhower, agenda, áreas da vida (Vida) com partes e anotações, e Números.
-Visual: preto, branco e petróleo (#0F5463), fonte Outfit fina, ícones Material Symbols Rounded (peso 200).
-Dados em `localStorage['orbe.v1']`. O workflow copia a pasta para `_site/orbe/`.
-Versão própria: some 1 em `orbe/version.js` e registre em `orbe/CHANGELOG.md` a cada mudança no Orbe
-(o cache do `orbe/sw.js` usa essa versão). Mesmas regras de janelas próprias (sem `confirm()`/inputs nativos de data e hora).
-O Supabase fica para depois, quando o usuário pedir.
+O Orbe agora vive no repositório próprio `DaviBequer/orbe` (https://davibequer.github.io/orbe/).
+A pasta `orbe/` daqui só tem um aviso que redireciona para o endereço novo e remove o service worker antigo.

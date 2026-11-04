@@ -55,9 +55,9 @@ jobs:
         run: |
           mkdir _site
           cp -r index.html styles.css app.js sw.js version.js manifest.webmanifest icons fonts _site/
-          # Orbe: app separado, publicado em /orbe/
+          # Orbe mudou para o próprio repositório; aqui só fica o aviso que leva ao endereço novo
           mkdir _site/orbe
-          cp -r orbe/index.html orbe/styles.css orbe/app.js orbe/sw.js orbe/version.js orbe/manifest.webmanifest orbe/icons _site/orbe/
+          cp orbe/index.html orbe/sw.js _site/orbe/
           touch _site/.nojekyll
 
       - uses: actions/configure-pages@v5
